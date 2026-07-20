@@ -52,7 +52,7 @@ export interface CardDef {
   kind: string
   desc: string
   archetype?: string
-  protagonist?: 'Yugi' | 'Kaiba' | 'Joey' | 'Classic'
+  protagonist?: 'Yugi' | 'Kaiba' | 'Joey' | 'Mai' | 'Pegasus' | 'Marik' | 'Rex' | 'Weevil' | 'Bakura' | 'Classic'
 
   // Monster-only fields
   attribute?: Attribute

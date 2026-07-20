@@ -18,7 +18,7 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
   const buySingle = useGameStore((s) => s.buySingle)
   const buyStarterDeck = useGameStore((s) => s.buyStarterDeck)
   const cardDbVersion = useCardDbStore((s) => s.version)
-  const [filter, setFilter] = useState<'Alle' | 'Yugi' | 'Kaiba' | 'Joey' | 'Classic'>('Alle')
+  const [filter, setFilter] = useState<'Alle' | 'Yugi' | 'Kaiba' | 'Joey' | 'Mai' | 'Pegasus' | 'Marik' | 'Rex' | 'Weevil' | 'Bakura' | 'Classic'>('Alle')
 
   const singles = useMemo(() => {
     void cardDbVersion // recompute once live card data merges in
@@ -129,7 +129,7 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
         {tab === 'singles' && (
           <div>
             <div className="mb-3 flex gap-1 overflow-x-auto">
-              {(['Alle', 'Yugi', 'Kaiba', 'Joey', 'Classic'] as const).map((f) => (
+              {(['Alle', 'Yugi', 'Kaiba', 'Joey', 'Mai', 'Pegasus', 'Marik', 'Rex', 'Weevil', 'Bakura', 'Classic'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}

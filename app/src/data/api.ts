@@ -105,6 +105,19 @@ export async function fetchCardsByArchetype(archetype: string): Promise<CardDef[
   return json.data.map(toCardDef)
 }
 
+/** Looks up a curated list of specific card names — used for classic duelists whose signature
+ * cards aren't grouped under one named Konami archetype (e.g. Rex Raptor's Dinosaurs, Marik's
+ * Egyptian God cards). Each name is looked up individually so one bad/renamed entry can't fail
+ * the whole batch. */
+export async function fetchCardsByNames(names: string[]): Promise<CardDef[]> {
+  const results = await Promise.allSettled(names.map((name) => fetchCardByName(name)))
+  const cards: CardDef[] = []
+  for (const r of results) {
+    if (r.status === 'fulfilled' && r.value) cards.push(r.value)
+  }
+  return cards
+}
+
 export async function fetchCardByName(name: string): Promise<CardDef | null> {
   const res = await fetch(`${API_BASE}/cardinfo.php?name=${encodeURIComponent(name)}`)
   if (!res.ok) return null

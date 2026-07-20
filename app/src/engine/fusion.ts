@@ -9,4 +9,7 @@ export const fusionRecipes: FusionRecipe[] = [
   { resultCardId: 74, materialCardIds: [3, 75] }, // Meteor Black Dragon <- Red-Eyes B. Dragon + Meteor Dragon
   { resultCardId: 91, materialCardIds: [1, 100] }, // Magician of Black Chaos <- Dark Magician + Sorcerer of Dark Magic
   { resultCardId: 120, materialCardIds: [3, 1] }, // Red-Eyes Dark Dragoon <- Red-Eyes B. Dragon + Dark Magician
+  { resultCardId: 221, materialCardIds: [220, 220, 220] }, // Harpie Lady Sisters <- 3x Harpie Lady
+  { resultCardId: 273, materialCardIds: [270, 271, 272] }, // Valkyrion the Magna Warrior <- Alpha + Beta + Gamma
+  { resultCardId: 200, materialCardIds: [202, 203] }, // Serpent Night Dragon <- Two-Headed King Rex + Uraby
 ]

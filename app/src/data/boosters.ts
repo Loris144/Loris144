@@ -25,7 +25,7 @@ export const boosterSets: BoosterSet[] = [
   withBoxEconomics({
     id: 'legend-of-duelists',
     name: 'Legend of the Duelists',
-    cardPool: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 130, 131, 132],
+    cardPool: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 130, 131, 132, 260, 261],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({
@@ -51,6 +51,42 @@ export const boosterSets: BoosterSet[] = [
     name: 'Forbidden Relics',
     cardPool: [16, 17, 18, 19, 20, 21, 22, 23, 24],
     rarityWeights: { Common: 40, Rare: 30, 'Super Rare': 15, 'Ultra Rare': 10, 'Secret Rare': 5 },
+  }),
+  withBoxEconomics({
+    id: 'jurassic-duel',
+    name: 'Jurassic Duel',
+    cardPool: [200, 201, 202, 203, 204],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'swarm-of-insects',
+    name: 'Swarm of Insects',
+    cardPool: [15, 24, 210, 211, 212, 213],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'harpies-nest',
+    name: "Harpie's Nest",
+    cardPool: [220, 221, 222, 223, 224, 225, 226, 132],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'toon-carnival',
+    name: 'Toon Carnival',
+    cardPool: [230, 231, 232, 233, 234, 235],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'millennium-rare-hunter',
+    name: 'Millennium Rare Hunter',
+    cardPool: [240, 241, 242, 243, 244, 250, 251],
+    rarityWeights: { Common: 20, Rare: 30, 'Super Rare': 25, 'Ultra Rare': 15, 'Secret Rare': 10 },
+  }),
+  withBoxEconomics({
+    id: 'magnet-force',
+    name: 'Magnet Force',
+    cardPool: [270, 271, 272, 273],
+    rarityWeights: defaultWeights,
   }),
 ]
 

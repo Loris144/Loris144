@@ -10,6 +10,11 @@ const ARCHETYPE_PROTAGONIST: Record<string, CardDef['protagonist']> = {
   'Blue-Eyes': 'Kaiba',
   'Red-Eyes': 'Joey',
   Exodia: 'Yugi',
+  'Magnet Warrior': 'Yugi',
+  Harpie: 'Mai',
+  Toon: 'Pegasus',
+  'Egyptian God': 'Marik',
+  Orichalcos: 'Classic',
 }
 
 /**
