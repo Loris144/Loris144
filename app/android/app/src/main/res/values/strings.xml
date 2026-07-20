@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Duel Vault</string>
+    <string name="title_activity_main">Duel Vault</string>
+    <string name="package_name">com.duelvault.app</string>
+    <string name="custom_url_scheme">com.duelvault.app</string>
+</resources>
