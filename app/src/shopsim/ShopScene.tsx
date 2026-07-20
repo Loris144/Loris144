@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import { Suspense } from 'react'
+import type { ReactElement } from 'react'
 import { DOOR_CELL, GRID_H, GRID_W, furnitureDefs } from '../data/furniture'
 import type { Customer, PlacedFurniture } from './types'
 
@@ -8,13 +9,20 @@ function toWorld(x: number, y: number): [number, number] {
   return [x - GRID_W / 2, y - GRID_H / 2]
 }
 
+const FLOOR_TILE_A = '#f8f6f0'
+const FLOOR_TILE_B = '#e9e4d6'
+const FLOOR_DOOR_MAT = '#d8c9a3'
+const WALL_COLOR = '#ecdfbd'
+const WALL_HEIGHT = 1.5
+const WALL_THICKNESS = 0.15
+
 function Floor({ onSelectCell }: { onSelectCell: (x: number, y: number) => void }) {
   const tiles = []
   for (let x = 0; x < GRID_W; x++) {
     for (let y = 0; y < GRID_H; y++) {
       const [wx, wz] = toWorld(x + 0.5, y + 0.5)
       const isDoor = x === DOOR_CELL.x && y === DOOR_CELL.y
-      const dark = (x + y) % 2 === 0
+      const alt = (x + y) % 2 === 0
       tiles.push(
         <mesh
           key={`${x}-${y}`}
@@ -26,12 +34,39 @@ function Floor({ onSelectCell }: { onSelectCell: (x: number, y: number) => void 
           }}
         >
           <planeGeometry args={[0.96, 0.96]} />
-          <meshStandardMaterial color={isDoor ? '#5b4a2f' : dark ? '#20242f' : '#262b38'} />
+          <meshStandardMaterial color={isDoor ? FLOOR_DOOR_MAT : alt ? FLOOR_TILE_A : FLOOR_TILE_B} />
         </mesh>,
       )
     }
   }
   return <group>{tiles}</group>
+}
+
+function Walls() {
+  const segments: ReactElement[] = []
+
+  for (let x = 0; x < GRID_W; x++) {
+    if (x === DOOR_CELL.x) continue
+    const [wx, wz] = toWorld(x + 0.5, 0)
+    segments.push(
+      <mesh key={`back-${x}`} position={[wx, WALL_HEIGHT / 2, wz - WALL_THICKNESS / 2]}>
+        <boxGeometry args={[1, WALL_HEIGHT, WALL_THICKNESS]} />
+        <meshStandardMaterial color={WALL_COLOR} />
+      </mesh>,
+    )
+  }
+
+  for (let y = 0; y < GRID_H; y++) {
+    const [wx, wz] = toWorld(0, y + 0.5)
+    segments.push(
+      <mesh key={`left-${y}`} position={[wx - WALL_THICKNESS / 2, WALL_HEIGHT / 2, wz]}>
+        <boxGeometry args={[WALL_THICKNESS, WALL_HEIGHT, 1]} />
+        <meshStandardMaterial color={WALL_COLOR} />
+      </mesh>,
+    )
+  }
+
+  return <group>{segments}</group>
 }
 
 function ShelfMesh({ f }: { f: PlacedFurniture }) {
@@ -43,7 +78,15 @@ function ShelfMesh({ f }: { f: PlacedFurniture }) {
     <group>
       <mesh position={[0, 0.5, 0]}>
         <boxGeometry args={[0.8, 1, 0.6]} />
-        <meshStandardMaterial color="#6b4423" />
+        <meshStandardMaterial color="#c99a5f" />
+      </mesh>
+      <mesh position={[0, 0.72, 0.31]}>
+        <boxGeometry args={[0.84, 0.04, 0.02]} />
+        <meshStandardMaterial color="#a97c46" />
+      </mesh>
+      <mesh position={[0, 0.4, 0.31]}>
+        <boxGeometry args={[0.84, 0.04, 0.02]} />
+        <meshStandardMaterial color="#a97c46" />
       </mesh>
       {Array.from({ length: boxCount }).map((_, i) => (
         <mesh key={i} position={[-0.24 + (i % 2) * 0.48, 0.85 + Math.floor(i / 2) * 0.28, 0]}>
@@ -188,8 +231,9 @@ export function ShopScene({
           maxPolarAngle={Math.PI / 2.6}
           target={[0, 0, 0.4]}
         />
-        <ambientLight intensity={0.75} />
+        <ambientLight intensity={0.85} />
         <directionalLight position={[6, 10, 4]} intensity={0.9} />
+        <Walls />
         <Floor
           onSelectCell={(x, y) => {
             if (!occupied.has(`${x}-${y}`)) onSelectCell(x, y)
