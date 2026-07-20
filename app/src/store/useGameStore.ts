@@ -3,11 +3,13 @@ import { persist } from 'zustand/middleware'
 import { boosterSets, CARDS_PER_PACK } from '../data/boosters'
 import { cardDb } from '../data/cardDb'
 import { COUNTER_CELL, DOOR_CELL, GRID_H, GRID_W, furnitureDefs, type FurnitureType } from '../data/furniture'
+import { buildMainDeckIds, cpuPresets, type CpuPreset } from '../engine/cpuDecks'
 import type { CaseSlot, PlacedFurniture } from '../shopsim/types'
 import type { Deck, OwnedCard, Rarity } from '../data/types'
 
-const STARTING_DP = 2000
+const STARTING_DP = 5000
 const COUNTER_ID = 'counter-1'
+export const STARTER_DECK_PRICE = 1500
 
 function uid(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
@@ -68,6 +70,7 @@ interface GameState {
   deleteDeck: (deckId: string) => void
   setDeckCards: (deckId: string, main: number[], extra: number[]) => void
   setActiveDeck: (deckId: string) => void
+  buyStarterDeck: (presetId: CpuPreset['id']) => boolean
 
   recordDuelResult: (won: boolean) => void
 
@@ -208,6 +211,25 @@ export const useGameStore = create<GameState>()(
       },
 
       setActiveDeck: (deckId) => set({ activeDeckId: deckId }),
+
+      buyStarterDeck: (presetId) => {
+        const preset = cpuPresets.find((p) => p.id === presetId)
+        if (!preset) return false
+        if (get().duelPoints < STARTER_DECK_PRICE) return false
+
+        const main = buildMainDeckIds(preset)
+        const newCards: OwnedCard[] = [...main, ...preset.extra].map((cardId) => ({ instanceId: uid(), cardId }))
+        const deckId = uid()
+        const deck: Deck = { id: deckId, name: `Starter: ${preset.name}`, main, extra: preset.extra }
+
+        set((s) => ({
+          duelPoints: s.duelPoints - STARTER_DECK_PRICE,
+          ownedCards: [...s.ownedCards, ...newCards],
+          decks: [...s.decks, deck],
+          activeDeckId: s.activeDeckId ?? deckId,
+        }))
+        return true
+      },
 
       recordDuelResult: (won) => {
         set((s) => ({

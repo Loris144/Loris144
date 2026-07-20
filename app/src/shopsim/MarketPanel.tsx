@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react'
 import { boosterSets } from '../data/boosters'
 import { cardDb } from '../data/cardDb'
 import { CardTile } from '../components/CardTile'
-import { useGameStore } from '../store/useGameStore'
+import { cpuPresets } from '../engine/cpuDecks'
+import { STARTER_DECK_PRICE, useGameStore } from '../store/useGameStore'
 
-type Tab = 'boxes' | 'warehouse' | 'singles'
+type Tab = 'boxes' | 'warehouse' | 'singles' | 'starters'
 
 export function MarketPanel({ onClose }: { onClose: () => void }) {
   const [tab, setTab] = useState<Tab>('boxes')
@@ -14,6 +15,7 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
   const buyBoxWholesale = useGameStore((s) => s.buyBoxWholesale)
   const breakBoxForPersonalUse = useGameStore((s) => s.breakBoxForPersonalUse)
   const buySingle = useGameStore((s) => s.buySingle)
+  const buyStarterDeck = useGameStore((s) => s.buyStarterDeck)
   const [filter, setFilter] = useState<'Alle' | 'Yugi' | 'Kaiba' | 'Joey' | 'Classic'>('Alle')
 
   const singles = useMemo(() => {
@@ -32,14 +34,17 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="mb-3 flex gap-2">
-          <button onClick={() => setTab('boxes')} className={`flex-1 rounded-lg py-2 text-xs font-semibold ${tab === 'boxes' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
+        <div className="mb-3 flex gap-1.5 overflow-x-auto">
+          <button onClick={() => setTab('boxes')} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold ${tab === 'boxes' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
             Boxen kaufen
           </button>
-          <button onClick={() => setTab('warehouse')} className={`flex-1 rounded-lg py-2 text-xs font-semibold ${tab === 'warehouse' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
+          <button onClick={() => setTab('warehouse')} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold ${tab === 'warehouse' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
             Mein Lager
           </button>
-          <button onClick={() => setTab('singles')} className={`flex-1 rounded-lg py-2 text-xs font-semibold ${tab === 'singles' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
+          <button onClick={() => setTab('starters')} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold ${tab === 'starters' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
+            Starterdecks
+          </button>
+          <button onClick={() => setTab('singles')} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-semibold ${tab === 'singles' ? 'bg-duel-blue text-white' : 'bg-neutral-800 text-neutral-300'}`}>
             Einzelkarten
           </button>
         </div>
@@ -92,6 +97,29 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
               </div>
             ))}
             {boosterSets.every((b) => (warehouseBoxes[b.id] ?? 0) === 0) && <p className="text-xs text-neutral-500">Lager ist leer.</p>}
+          </div>
+        )}
+
+        {tab === 'starters' && (
+          <div className="flex flex-col gap-2">
+            <p className="mb-1 text-[11px] text-neutral-500">
+              Ein Starterdeck legt dir sofort ein fertiges 40-Karten-Deck (plus Extra Deck) in Binder und Deckbuilder.
+            </p>
+            {cpuPresets.map((preset) => (
+              <div key={preset.id} className="flex items-center justify-between rounded bg-neutral-800/60 p-2">
+                <div>
+                  <div className="text-xs font-semibold text-neutral-100">Starterdeck: {preset.name}</div>
+                  <div className="text-[11px] text-neutral-400">40 Hauptdeck-Karten{preset.extra.length > 0 ? ` + ${preset.extra.length} Extra Deck` : ''}</div>
+                </div>
+                <button
+                  onClick={() => buyStarterDeck(preset.id)}
+                  disabled={dp < STARTER_DECK_PRICE}
+                  className="shrink-0 rounded bg-duel-gold px-3 py-1.5 text-xs font-bold text-black disabled:opacity-40"
+                >
+                  Kaufen · {STARTER_DECK_PRICE} DP
+                </button>
+              </div>
+            ))}
           </div>
         )}
 

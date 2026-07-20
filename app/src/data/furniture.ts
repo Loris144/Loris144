@@ -14,7 +14,7 @@ export const furnitureDefs: Record<FurnitureType, FurnitureDef> = {
   shelf: {
     type: 'shelf',
     name: 'Booster-Regal',
-    cost: 400,
+    cost: 300,
     footprintW: 1,
     footprintH: 1,
     capacity: 4, // boxes
@@ -23,7 +23,7 @@ export const furnitureDefs: Record<FurnitureType, FurnitureDef> = {
   case: {
     type: 'case',
     name: 'Vitrine',
-    cost: 500,
+    cost: 400,
     footprintW: 1,
     footprintH: 1,
     capacity: 6, // single cards
