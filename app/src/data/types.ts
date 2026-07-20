@@ -74,10 +74,13 @@ export interface OwnedCard {
 export interface BoosterSet {
   id: string
   name: string
+  /** suggested retail price per pack; players can override this in their own shop */
   price: number
   cardPool: number[]
   /** relative pull weights by rarity within this set */
   rarityWeights: Record<Rarity, number>
+  packsPerBox: number
+  wholesalePricePerBox: number
 }
 
 export interface Deck {

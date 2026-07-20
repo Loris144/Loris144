@@ -1,6 +1,6 @@
 import { Navigate, Route, HashRouter, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
-import { ShopScreen } from './screens/ShopScreen'
+import { MyShopScreen } from './screens/MyShopScreen'
 import { BoosterScreen } from './screens/BoosterScreen'
 import { BinderScreen } from './screens/BinderScreen'
 import { DeckBuilderScreen } from './screens/DeckBuilderScreen'
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/shop" replace />} />
-          <Route path="/shop" element={<ShopScreen />} />
+          <Route path="/shop" element={<MyShopScreen />} />
           <Route path="/boosters" element={<BoosterScreen />} />
           <Route path="/binder" element={<BinderScreen />} />
           <Route path="/deck" element={<DeckBuilderScreen />} />
