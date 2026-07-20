@@ -13,7 +13,7 @@ npm run dev
 
 ## Kartendaten
 
-Die App nutzt zur Laufzeit die öffentliche [YGOPRODeck API](https://ygoprodeck.com/api-guide/) für echte Kartendaten und offizielle Bilder (`src/data/api.ts`). Das funktioniert automatisch, sobald das Gerät normalen Internetzugang hat. Für den Offline-Start ist außerdem ein kleines, handkuratiertes Basis-Kartenset eingebaut (`src/data/fixtureCards.ts`), das nur bei fehlendem Netzwerk als Fallback dient und dessen Karten-Text/Werte als vorläufig zu betrachten sind.
+Beim Start lädt die App live den offiziellen Kartenpool für Dark Magician, Blue-Eyes, Red-Eyes und Exodia von der öffentlichen [YGOPRODeck API](https://ygoprodeck.com/api-guide/) (`src/data/api.ts`, angestoßen in `App.tsx` über `loadLiveCardData()`) und merged ihn in die Kartendatenbank (`src/data/cardDb.ts`): bereits vorhandene Karten werden mit echtem Text/Werten und echtem Artwork aktualisiert, komplett neue Support-Karten werden zusätzlich aufgenommen. Ohne Internet (z. B. in dieser Cloud-Entwicklungsumgebung) bleibt es beim handkuratierten Offline-Basisset (`src/data/fixtureCards.ts`, 81 Karten), dessen Kartentexte/-werte als vorläufig zu betrachten sind, bis echte Daten nachgeladen werden konnten.
 
 ## Als Android-APK bauen
 

@@ -25,25 +25,25 @@ export const boosterSets: BoosterSet[] = [
   withBoxEconomics({
     id: 'legend-of-duelists',
     name: 'Legend of the Duelists',
-    cardPool: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
+    cardPool: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 130, 131, 132],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({
     id: 'eyes-of-blue',
     name: 'Eyes of Blue',
-    cardPool: [2, 60, 61, 62, 63, 64, 65, 66, 67, 68, 90],
+    cardPool: [2, 60, 61, 62, 63, 64, 65, 66, 67, 68, 90, 110, 111, 112, 113, 114],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({
     id: 'dragons-roar',
     name: "Dragon's Roar",
-    cardPool: [3, 70, 71, 72, 73, 74, 75, 76, 77, 78],
+    cardPool: [3, 70, 71, 72, 73, 74, 75, 76, 77, 78, 120, 121, 122, 123],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({
     id: 'mystic-mages',
     name: 'Mystic Mages',
-    cardPool: [1, 50, 51, 52, 53, 54, 55, 56, 91],
+    cardPool: [1, 50, 51, 52, 53, 54, 55, 56, 91, 100, 101, 102, 103, 104],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({

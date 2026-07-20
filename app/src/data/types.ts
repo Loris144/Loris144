@@ -42,6 +42,10 @@ export type Rarity =
 
 export interface CardDef {
   id: number
+  /** Real Konami passcode, when known from the live API. Used for the official card image so
+   * a card keeps its stable local `id` (referenced by boosters/decks) while still being able to
+   * show the correct artwork once live data has been merged in. */
+  officialId?: number
   name: string
   category: CardCategory
   /** For monsters: Effect/Fusion/Synchro/etc. For spell/trap: Normal/Continuous/etc. */
@@ -96,4 +100,9 @@ export function cardImageUrl(cardId: number): string {
 
 export function cardImageUrlSmall(cardId: number): string {
   return `https://images.ygoprodeck.com/images/cards_small/${cardId}.jpg`
+}
+
+/** The id to use for fetching official artwork: the real Konami passcode when known, else the local id. */
+export function cardImageId(card: CardDef): number {
+  return card.officialId ?? card.id
 }

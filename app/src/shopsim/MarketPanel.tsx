@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { boosterSets } from '../data/boosters'
 import { cardDb } from '../data/cardDb'
+import { useCardDbStore } from '../data/cardDbStore'
 import { CardTile } from '../components/CardTile'
 import { cpuPresets } from '../engine/cpuDecks'
 import { STARTER_DECK_PRICE, useGameStore } from '../store/useGameStore'
@@ -16,13 +17,15 @@ export function MarketPanel({ onClose }: { onClose: () => void }) {
   const breakBoxForPersonalUse = useGameStore((s) => s.breakBoxForPersonalUse)
   const buySingle = useGameStore((s) => s.buySingle)
   const buyStarterDeck = useGameStore((s) => s.buyStarterDeck)
+  const cardDbVersion = useCardDbStore((s) => s.version)
   const [filter, setFilter] = useState<'Alle' | 'Yugi' | 'Kaiba' | 'Joey' | 'Classic'>('Alle')
 
   const singles = useMemo(() => {
+    void cardDbVersion // recompute once live card data merges in
     const all = cardDb.all().sort((a, b) => a.price - b.price)
     if (filter === 'Alle') return all
     return all.filter((c) => c.protagonist === filter || (filter === 'Classic' && !c.protagonist))
-  }, [filter])
+  }, [filter, cardDbVersion])
 
   return (
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/70" onClick={onClose}>

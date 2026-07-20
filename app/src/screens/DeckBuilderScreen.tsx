@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { cardDb } from '../data/cardDb'
+import { useCardDbStore } from '../data/cardDbStore'
 import { CardFace } from '../components/CardFace'
 import { isExtraDeckCard, validateDeck } from '../engine/deckRules'
 import { useGameStore } from '../store/useGameStore'
@@ -13,6 +14,7 @@ export function DeckBuilderScreen() {
   const deleteDeck = useGameStore((s) => s.deleteDeck)
   const setActiveDeck = useGameStore((s) => s.setActiveDeck)
   const setDeckCards = useGameStore((s) => s.setDeckCards)
+  const cardDbVersion = useCardDbStore((s) => s.version)
 
   const [newDeckName, setNewDeckName] = useState('')
 
@@ -32,11 +34,12 @@ export function DeckBuilderScreen() {
   }, [deck])
 
   const ownedUniqueCards = useMemo(() => {
+    void cardDbVersion // recompute once live card data merges in
     return Array.from(ownedCounts.keys())
       .map((id) => cardDb.byId(id))
       .filter((c): c is CardDef => !!c)
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [ownedCounts])
+  }, [ownedCounts, cardDbVersion])
 
   function addToDeck(card: CardDef) {
     if (!deck) return

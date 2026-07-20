@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { cardDb } from '../data/cardDb'
+import { useCardDbStore } from '../data/cardDbStore'
 import { CardFace } from '../components/CardFace'
 import { useGameStore } from '../store/useGameStore'
 import type { CardCategory, CardDef } from '../data/types'
@@ -26,11 +27,13 @@ const RARITY_TEXT_COLOR: Record<string, string> = {
 export function BinderScreen() {
   const ownedCards = useGameStore((s) => s.ownedCards)
   const sellCard = useGameStore((s) => s.sellCard)
+  const cardDbVersion = useCardDbStore((s) => s.version)
   const [sort, setSort] = useState<SortMode>('rarity')
   const [category, setCategory] = useState<CategoryFilter>('Alle')
   const [selected, setSelected] = useState<CardDef | null>(null)
 
   const grouped = useMemo(() => {
+    void cardDbVersion // recompute once live card data merges in
     const map = new Map<number, { card: CardDef; instanceIds: string[] }>()
     for (const oc of ownedCards) {
       const card = cardDb.byId(oc.cardId)
@@ -47,7 +50,7 @@ export function BinderScreen() {
       return RARITY_ORDER[b.card.rarity] - RARITY_ORDER[a.card.rarity]
     })
     return list
-  }, [ownedCards, sort, category])
+  }, [ownedCards, sort, category, cardDbVersion])
 
   return (
     <div className="min-h-full bg-gradient-to-b from-neutral-950 to-duel-dark px-3 py-3">

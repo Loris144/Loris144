@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { cardImageUrl } from '../data/types'
+import { cardImageId, cardImageUrl } from '../data/types'
 import type { CardDef } from '../data/types'
 
 interface FrameStyle {
@@ -57,7 +57,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
       <div className={`relative aspect-[59/86] w-full overflow-hidden rounded-md border-2 ${frame.border} bg-neutral-900 shadow-lg ${className}`}>
         {!imgFailed ? (
           <img
-            src={cardImageUrl(card.id)}
+            src={cardImageUrl(cardImageId(card))}
             alt=""
             aria-hidden="true"
             onError={() => setImgFailed(true)}
@@ -93,7 +93,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
   if (!imgFailed) {
     return (
       <img
-        src={cardImageUrl(card.id)}
+        src={cardImageUrl(cardImageId(card))}
         alt={card.name}
         onError={() => setImgFailed(true)}
         className={`aspect-[59/86] w-full rounded-md object-cover shadow-lg ${glowClass} ${className}`}

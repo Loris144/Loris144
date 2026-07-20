@@ -85,6 +85,31 @@ export const fixtureCards: CardDef[] = [
   // ---- Extra deck / iconic fusions ----
   { id: 90, name: 'Blue-Eyes Ultimate Dragon', category: 'Monster', kind: 'Fusion', desc: 'Fusion Summoned using 3 "Blue-Eyes White Dragon" as material.', archetype: 'Blue-Eyes', attribute: 'LIGHT', race: 'Dragon', level: 12, atk: 4500, def: 3800, rarity: 'Secret Rare', price: 2000 },
   { id: 91, name: 'Magician of Black Chaos', category: 'Monster', kind: 'Fusion', desc: 'Fusion Summoned using "Dark Magician" + "Sorcerer of Dark Magic". Can destroy a Spell/Trap and inflict 800 damage when Special Summoned.', archetype: 'Dark Magician', attribute: 'DARK', race: 'Spellcaster', level: 8, atk: 2800, def: 2600, rarity: 'Ultra Rare', price: 850 },
+
+  // ---- More Dark Magician support (Yugi) ----
+  { id: 100, name: 'Sorcerer of Dark Magic', category: 'Monster', kind: 'Effect', desc: 'Once per turn, you can send 1 Spellcaster monster from your hand to the GY; add 1 Spell Card from your Deck to your hand. Used as Fusion Material for "Magician of Black Chaos".', archetype: 'Dark Magician', attribute: 'DARK', race: 'Spellcaster', level: 8, atk: 2400, def: 1000, rarity: 'Rare', price: 180 },
+  { id: 101, name: 'Magician Navigation', category: 'Spell', kind: 'Continuous', desc: 'Once per turn, when a Spellcaster monster is Normal or Special Summoned to your field, you can add 1 "Dark Magician" or Dark Magician support card from your Deck to your hand.', archetype: 'Dark Magician', rarity: 'Rare', price: 150 },
+  { id: 102, name: 'Apprentice Illusion Magician', category: 'Monster', kind: 'Tuner', desc: 'You can send this card from your hand to the GY; add 1 "Dark Magician" or Dark Magician support card from your Deck to your hand, except this card.', archetype: 'Dark Magician', attribute: 'DARK', race: 'Spellcaster', level: 2, atk: 800, def: 2000, rarity: 'Rare', price: 160 },
+  { id: 103, name: 'Dark Renewal', category: 'Spell', kind: 'Normal', desc: 'Tribute 1 monster; target 1 monster in either GY, Special Summon it in Defense Position and equip it with this card.', rarity: 'Rare', price: 130 },
+  { id: 104, name: 'Dark Magic Curtain', category: 'Spell', kind: 'Normal', desc: 'Pay half your LP; Special Summon 1 "Dark Magician" from your Deck. If you do, you can Fusion Summon 1 Fusion Monster that lists "Dark Magician" as material, using cards from your hand/field as material.', archetype: 'Dark Magician', rarity: 'Rare', price: 170 },
+
+  // ---- More Blue-Eyes support (Kaiba) ----
+  { id: 110, name: 'Blue-Eyes Chaos MAX Dragon', category: 'Monster', kind: 'Fusion', desc: 'Fusion Summoned using "Blue-Eyes White Dragon" + a LIGHT or DARK monster. Cannot be destroyed by battle or targeted by opponent\'s card effects.', archetype: 'Blue-Eyes', attribute: 'LIGHT', race: 'Dragon', level: 12, atk: 4000, def: 3000, rarity: 'Secret Rare', price: 2400 },
+  { id: 111, name: 'Cards of Consonance', category: 'Spell', kind: 'Normal', desc: 'Discard 1 Level 1 Tuner monster or Normal Monster; draw 2 cards.', rarity: 'Rare', price: 110 },
+  { id: 112, name: 'Melody of Awakening Dragon', category: 'Spell', kind: 'Normal', desc: 'Add up to 2 Normal Monster Dragon-Type monsters with different names from your Deck to your hand.', rarity: 'Rare', price: 120 },
+  { id: 113, name: "Silver's Cry", category: 'Spell', kind: 'Normal', desc: 'Add 1 "Blue-Eyes White Dragon" or Blue-Eyes support Spell/Trap from your Deck to your hand.', archetype: 'Blue-Eyes', rarity: 'Rare', price: 140 },
+  { id: 114, name: 'The White Stone of Ancients', category: 'Monster', kind: 'Effect', desc: 'When this card is sent to the GY: Add 1 Level 8 or lower "Blue-Eyes" monster from your Deck to your hand, except "The White Stone of Ancients".', archetype: 'Blue-Eyes', attribute: 'LIGHT', race: 'Dragon', level: 1, atk: 300, def: 250, rarity: 'Rare', price: 150 },
+
+  // ---- More Red-Eyes support (Joey) ----
+  { id: 120, name: 'Red-Eyes Dark Dragoon', category: 'Monster', kind: 'Fusion', desc: 'Fusion Summoned using "Red-Eyes B. Dragon" or "Dark Magician" + 1 Dragon or Spellcaster monster. Gains 400 ATK for each material used. Can negate a monster effect and destroy it.', archetype: 'Red-Eyes', attribute: 'DARK', race: 'Dragon', level: 8, atk: 3000, def: 2000, rarity: 'Secret Rare', price: 2600 },
+  { id: 121, name: 'Red-Eyes Transmigration', category: 'Spell', kind: 'Normal', desc: 'Fusion Summon 1 "Red-Eyes" Fusion Monster from your Extra Deck, using monsters from your GY as material, banishing them instead.', archetype: 'Red-Eyes', rarity: 'Rare', price: 150 },
+  { id: 122, name: 'Vice Dragon', category: 'Monster', kind: 'Effect', desc: 'This card can be Tribute Summoned with 1 Tribute. If this card was Tribute Summoned using only 1 monster, destroy it during the End Phase.', attribute: 'DARK', race: 'Dragon', level: 7, atk: 2000, def: 2400, rarity: 'Rare', price: 140 },
+  { id: 123, name: 'Red-Eyes Spirit', category: 'Trap', kind: 'Normal', desc: 'Special Summon 1 "Red-Eyes B. Dragon" from your GY in Defense Position, but banish it when it leaves the field.', archetype: 'Red-Eyes', rarity: 'Rare', price: 130 },
+
+  // ---- More classic staples ----
+  { id: 130, name: 'Change of Heart', category: 'Spell', kind: 'Normal', desc: 'Target 1 monster on the field; take control of it until the End Phase.', rarity: 'Ultra Rare', price: 750 },
+  { id: 131, name: 'Card Destruction', category: 'Spell', kind: 'Normal', desc: 'Both players discard their entire hand, then each player draws the same number of cards they discarded.', rarity: 'Rare', price: 120 },
+  { id: 132, name: "Harpie's Feather Duster", category: 'Spell', kind: 'Normal', desc: 'Destroy all Spell/Trap Cards your opponent controls.', rarity: 'Ultra Rare', price: 780 },
 ]
 
 export const fixtureCardsById: Record<number, CardDef> = Object.fromEntries(
