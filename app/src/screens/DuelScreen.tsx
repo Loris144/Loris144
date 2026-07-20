@@ -49,6 +49,7 @@ export function DuelScreen() {
   const [pendingTargetPick, setPendingTargetPick] = useState<{ cardName: string; resolve: (target?: string) => void } | null>(null)
   const [attackPickMode, setAttackPickMode] = useState<string | null>(null)
   const [infoCard, setInfoCard] = useState<CardDef | null>(null)
+  const [zoneView, setZoneView] = useState<{ title: string; cards: DuelCard[] } | null>(null)
 
   const deck = decks.find((d) => d.id === chosenDeckId)
   const validation = deck ? validateDeck(deck) : null
@@ -240,14 +241,15 @@ export function DuelScreen() {
   }
 
   return (
-    <div className="flex flex-col gap-2 px-2 py-2">
+    <div className="flex flex-col gap-1.5 px-1.5 py-1.5">
       <PlayerBar name={opponent.name} state={duel.cpu} />
-      <FieldRow
-        slots={duel.cpu.monsterZones}
-        spellTrap={duel.cpu.spellTrapZones}
+      <PlayerMat
+        playerState={duel.cpu}
         onTapMonster={(id) => setInfoCard(cardOf(duel, id))}
         onTapSpellTrap={(id, faceDown) => !faceDown && setInfoCard(cardOf(duel, id))}
         onInfo={(id) => setInfoCard(cardOf(duel, id))}
+        onGraveyard={() => setZoneView({ title: `${opponent.name} · Friedhof`, cards: duel.cpu.graveyard })}
+        onExtraDeck={undefined}
         hideFaceDown
       />
 
@@ -260,12 +262,13 @@ export function DuelScreen() {
         )}
       </div>
 
-      <FieldRow
-        slots={duel.player.monsterZones}
-        spellTrap={duel.player.spellTrapZones}
+      <PlayerMat
+        playerState={duel.player}
         onTapMonster={handleFieldMonsterTap}
         onTapSpellTrap={(id, faceDown) => (faceDown ? setSelectedFieldCard(id) : undefined)}
         onInfo={(id) => setSelectedFieldCard(id)}
+        onGraveyard={() => setZoneView({ title: 'Dein Friedhof', cards: duel.player.graveyard })}
+        onExtraDeck={() => setZoneView({ title: 'Dein Extra Deck', cards: duel.player.extraDeck })}
       />
       <PlayerBar name="Du" state={duel.player} />
 
@@ -381,6 +384,23 @@ export function DuelScreen() {
         </Sheet>
       )}
 
+      {/* Graveyard / Extra Deck browser */}
+      {zoneView && (
+        <Sheet onClose={() => setZoneView(null)}>
+          <div className="mb-2 text-xs font-semibold text-neutral-300">
+            {zoneView.title} ({zoneView.cards.length})
+          </div>
+          <div className="grid max-h-80 grid-cols-4 gap-1.5 overflow-y-auto">
+            {zoneView.cards.map((c) => (
+              <button key={c.instanceId} onClick={() => setInfoCard(cardDb.byId(c.cardId) ?? null)}>
+                <CardFace card={cardDb.byId(c.cardId)!} />
+              </button>
+            ))}
+            {zoneView.cards.length === 0 && <div className="col-span-4 text-xs text-neutral-500">Leer.</div>}
+          </div>
+        </Sheet>
+      )}
+
       {/* Response window when CPU attacks */}
       {respondingToCpuAttack && (
         <Sheet onClose={() => {}} noClose>
@@ -414,25 +434,49 @@ function PlayerBar({ name, state }: { name: string; state: DuelState['player'] }
   )
 }
 
-function FieldRow({
-  slots,
-  spellTrap,
+function ZoneTile({ label, count, onTap, dashed }: { label: string; count?: number; onTap?: () => void; dashed?: boolean }) {
+  const content = (
+    <div
+      className={`relative flex aspect-[59/86] w-full flex-col items-center justify-center rounded-md text-[7px] font-semibold text-neutral-400 ${
+        dashed ? 'border border-dashed border-neutral-700' : 'border border-neutral-600 bg-neutral-800/70'
+      }`}
+    >
+      <span className="leading-tight">{label}</span>
+      {count !== undefined && <span className="mt-0.5 text-[9px] font-bold text-neutral-200">{count}</span>}
+    </div>
+  )
+  return onTap ? (
+    <button onClick={onTap} className="h-full w-full">
+      {content}
+    </button>
+  ) : (
+    content
+  )
+}
+
+function PlayerMat({
+  playerState,
   onTapMonster,
   onTapSpellTrap,
   onInfo,
+  onGraveyard,
+  onExtraDeck,
   hideFaceDown,
 }: {
-  slots: (MonsterSlot | null)[]
-  spellTrap: (SpellTrapSlot | null)[]
+  playerState: DuelState['player']
   onTapMonster: (id: string) => void
   onTapSpellTrap?: (id: string, faceDown: boolean) => void
   onInfo?: (id: string) => void
+  onGraveyard?: () => void
+  onExtraDeck?: () => void
   hideFaceDown?: boolean
 }) {
+  const { spellTrapZones, monsterZones, graveyard, deck, extraDeck } = playerState
   return (
     <div className="flex flex-col gap-1">
-      <div className="grid grid-cols-5 gap-1">
-        {spellTrap.map((slot, i) => (
+      <div className="grid grid-cols-7 gap-1">
+        <ZoneTile label="FELD" dashed />
+        {spellTrapZones.map((slot, i) => (
           <div key={i} className="aspect-[59/86]">
             {slot ? (
               hideFaceDown && slot.faceDown ? (
@@ -451,9 +495,11 @@ function FieldRow({
             )}
           </div>
         ))}
+        <ZoneTile label="GRAB" count={graveyard.length} onTap={onGraveyard} />
       </div>
-      <div className="grid grid-cols-5 gap-1">
-        {slots.map((slot, i) => (
+      <div className="grid grid-cols-7 gap-1">
+        <ZoneTile label="EXTRA" count={extraDeck.length} onTap={onExtraDeck} />
+        {monsterZones.map((slot, i) => (
           <div key={i} className="aspect-[59/86]">
             {slot ? (
               hideFaceDown && slot.faceDown ? (
@@ -472,6 +518,7 @@ function FieldRow({
             )}
           </div>
         ))}
+        <ZoneTile label="DECK" count={deck.length} />
       </div>
     </div>
   )

@@ -2,16 +2,28 @@ import { useState } from 'react'
 import { cardImageUrl } from '../data/types'
 import type { CardDef } from '../data/types'
 
-const FRAME_COLORS: Record<string, string> = {
-  Monster: 'from-amber-700 via-amber-500 to-amber-700',
-  Spell: 'from-emerald-700 via-emerald-500 to-emerald-700',
-  Trap: 'from-fuchsia-800 via-fuchsia-600 to-fuchsia-800',
+interface FrameStyle {
+  gradient: string
+  border: string
 }
 
-const FRAME_BORDER: Record<string, string> = {
-  Monster: 'border-amber-500',
-  Spell: 'border-emerald-500',
-  Trap: 'border-fuchsia-500',
+const MONSTER_FRAME: Record<string, FrameStyle> = {
+  Normal: { gradient: 'from-amber-600 via-amber-300 to-amber-600', border: 'border-amber-400' },
+  Effect: { gradient: 'from-orange-800 via-orange-500 to-orange-800', border: 'border-orange-500' },
+  Ritual: { gradient: 'from-blue-950 via-blue-700 to-blue-950', border: 'border-blue-600' },
+  Fusion: { gradient: 'from-purple-900 via-purple-600 to-purple-900', border: 'border-purple-500' },
+  Synchro: { gradient: 'from-neutral-200 via-white to-neutral-200', border: 'border-neutral-300' },
+  Xyz: { gradient: 'from-neutral-950 via-neutral-700 to-neutral-950', border: 'border-neutral-400' },
+  Link: { gradient: 'from-sky-600 via-sky-300 to-sky-600', border: 'border-sky-400' },
+}
+
+const SPELL_FRAME: FrameStyle = { gradient: 'from-emerald-700 via-emerald-500 to-emerald-700', border: 'border-emerald-500' }
+const TRAP_FRAME: FrameStyle = { gradient: 'from-pink-800 via-pink-500 to-pink-800', border: 'border-pink-500' }
+
+function frameStyleFor(card: CardDef): FrameStyle {
+  if (card.category === 'Spell') return SPELL_FRAME
+  if (card.category === 'Trap') return TRAP_FRAME
+  return MONSTER_FRAME[card.kind] ?? MONSTER_FRAME.Effect
 }
 
 const RARITY_GLOW: Record<string, string> = {
@@ -38,10 +50,11 @@ interface CardFaceProps {
 export function CardFace({ card, className = '', variant = 'full', rarityGlow = false, onInfo }: CardFaceProps) {
   const [imgFailed, setImgFailed] = useState(false)
   const glowClass = rarityGlow ? RARITY_GLOW[card.rarity] : ''
+  const frame = frameStyleFor(card)
 
   if (variant === 'field') {
     return (
-      <div className={`relative aspect-[59/86] w-full overflow-hidden rounded-md border-2 ${FRAME_BORDER[card.category]} bg-neutral-900 shadow-lg ${className}`}>
+      <div className={`relative aspect-[59/86] w-full overflow-hidden rounded-md border-2 ${frame.border} bg-neutral-900 shadow-lg ${className}`}>
         {!imgFailed ? (
           <img
             src={cardImageUrl(card.id)}
@@ -52,7 +65,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
             draggable={false}
           />
         ) : (
-          <div className={`absolute inset-0 bg-gradient-to-b ${FRAME_COLORS[card.category]} opacity-80 blur-[3px]`} />
+          <div className={`absolute inset-0 bg-gradient-to-b ${frame.gradient} opacity-80 blur-[3px]`} />
         )}
         <div className="absolute inset-0 bg-black/10" />
         {onInfo && (
@@ -89,10 +102,9 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
     )
   }
 
-  const frame = FRAME_COLORS[card.category]
   return (
     <div
-      className={`aspect-[59/86] w-full rounded-md bg-gradient-to-b ${frame} p-[3px] shadow-lg ${glowClass} ${className}`}
+      className={`aspect-[59/86] w-full rounded-md bg-gradient-to-b ${frame.gradient} p-[3px] shadow-lg ${glowClass} ${className}`}
       title={`${card.name} (Vorschau-Platzhalter – echtes Artwork lädt auf deinem Gerät mit Internet)`}
     >
       <div className="flex h-full w-full flex-col rounded-[4px] bg-neutral-900 p-1.5 text-left">
