@@ -25,7 +25,8 @@ import { validateDeck } from '../engine/deckRules'
 import { getSpellTargets, isScriptedTrap, targetKindForCard } from '../engine/effects'
 import { tributesNeeded } from '../engine/helpers'
 import { useGameStore } from '../store/useGameStore'
-import type { DuelCard, DuelState, MonsterSlot, Side, SpellTrapSlot } from '../engine/types'
+import type { DuelCard, DuelState, MonsterSlot, SpellTrapSlot } from '../engine/types'
+import type { CardDef } from '../data/types'
 
 const PHASE_LABEL: Record<string, string> = {
   Draw: 'Zug-Phase', Standby: 'Standby', Main1: 'Hauptphase 1', Battle: 'Kampfphase', Main2: 'Hauptphase 2', End: 'End-Phase',
@@ -47,6 +48,7 @@ export function DuelScreen() {
   const [tributeMode, setTributeMode] = useState<{ card: DuelCard; needed: number; chosen: string[] } | null>(null)
   const [pendingTargetPick, setPendingTargetPick] = useState<{ cardName: string; resolve: (target?: string) => void } | null>(null)
   const [attackPickMode, setAttackPickMode] = useState<string | null>(null)
+  const [infoCard, setInfoCard] = useState<CardDef | null>(null)
 
   const deck = decks.find((d) => d.id === chosenDeckId)
   const validation = deck ? validateDeck(deck) : null
@@ -240,7 +242,14 @@ export function DuelScreen() {
   return (
     <div className="flex flex-col gap-2 px-2 py-2">
       <PlayerBar name={opponent.name} state={duel.cpu} />
-      <FieldRow slots={duel.cpu.monsterZones} spellTrap={duel.cpu.spellTrapZones} side="cpu" onTapMonster={() => {}} hideFaceDown />
+      <FieldRow
+        slots={duel.cpu.monsterZones}
+        spellTrap={duel.cpu.spellTrapZones}
+        onTapMonster={(id) => setInfoCard(cardOf(duel, id))}
+        onTapSpellTrap={(id, faceDown) => !faceDown && setInfoCard(cardOf(duel, id))}
+        onInfo={(id) => setInfoCard(cardOf(duel, id))}
+        hideFaceDown
+      />
 
       <div className="flex items-center justify-between rounded bg-duel-panel px-2 py-1 text-[11px] text-neutral-300">
         <span>Runde {duel.turn} · {isPlayerTurn ? 'Du' : opponent.name} · {PHASE_LABEL[duel.phase]}</span>
@@ -251,7 +260,13 @@ export function DuelScreen() {
         )}
       </div>
 
-      <FieldRow slots={duel.player.monsterZones} spellTrap={duel.player.spellTrapZones} side="player" onTapMonster={handleFieldMonsterTap} onTapSpellTrap={(id, faceDown) => (faceDown ? setSelectedFieldCard(id) : undefined)} />
+      <FieldRow
+        slots={duel.player.monsterZones}
+        spellTrap={duel.player.spellTrapZones}
+        onTapMonster={handleFieldMonsterTap}
+        onTapSpellTrap={(id, faceDown) => (faceDown ? setSelectedFieldCard(id) : undefined)}
+        onInfo={(id) => setSelectedFieldCard(id)}
+      />
       <PlayerBar name="Du" state={duel.player} />
 
       <div className="max-h-16 overflow-y-auto rounded bg-black/30 px-2 py-1 text-[10px] text-neutral-400">
@@ -359,6 +374,13 @@ export function DuelScreen() {
         />
       )}
 
+      {/* Read-only card info (used for opponent's field cards) */}
+      {infoCard && (
+        <Sheet onClose={() => setInfoCard(null)}>
+          <CardDetail card={infoCard} />
+        </Sheet>
+      )}
+
       {/* Response window when CPU attacks */}
       {respondingToCpuAttack && (
         <Sheet onClose={() => {}} noClose>
@@ -395,16 +417,16 @@ function PlayerBar({ name, state }: { name: string; state: DuelState['player'] }
 function FieldRow({
   slots,
   spellTrap,
-  side,
   onTapMonster,
   onTapSpellTrap,
+  onInfo,
   hideFaceDown,
 }: {
   slots: (MonsterSlot | null)[]
   spellTrap: (SpellTrapSlot | null)[]
-  side: Side
   onTapMonster: (id: string) => void
   onTapSpellTrap?: (id: string, faceDown: boolean) => void
+  onInfo?: (id: string) => void
   hideFaceDown?: boolean
 }) {
   return (
@@ -417,7 +439,11 @@ function FieldRow({
                 <CardBack />
               ) : (
                 <button onClick={() => onTapSpellTrap?.(slot.card.instanceId, slot.faceDown)} className="h-full w-full">
-                  {slot.faceDown ? <CardBack /> : <CardFace card={cardDb.byId(slot.card.cardId)!} />}
+                  {slot.faceDown ? (
+                    <CardBack />
+                  ) : (
+                    <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
+                  )}
                 </button>
               )
             ) : (
@@ -434,7 +460,11 @@ function FieldRow({
                 <CardBack />
               ) : (
                 <button onClick={() => onTapMonster(slot.card.instanceId)} className={`relative h-full w-full ${slot.position === 'Defense' ? 'rotate-90' : ''}`}>
-                  {slot.faceDown ? <CardBack /> : <CardFace card={cardDb.byId(slot.card.cardId)!} />}
+                  {slot.faceDown ? (
+                    <CardBack />
+                  ) : (
+                    <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
+                  )}
                 </button>
               )
             ) : (
@@ -443,7 +473,6 @@ function FieldRow({
           </div>
         ))}
       </div>
-      {side === 'player' ? null : null}
     </div>
   )
 }
@@ -458,11 +487,21 @@ function Sheet({ children, onClose, noClose }: { children: React.ReactNode; onCl
   )
 }
 
+function cardOf(duel: DuelState, instanceId: string): CardDef | null {
+  for (const p of [duel.player, duel.cpu]) {
+    const m = p.monsterZones.find((z) => z?.card.instanceId === instanceId)
+    if (m) return cardDb.byId(m.card.cardId) ?? null
+    const s = p.spellTrapZones.find((z) => z?.card.instanceId === instanceId)
+    if (s) return cardDb.byId(s.card.cardId) ?? null
+  }
+  return null
+}
+
 function CardDetail({ card }: { card: ReturnType<typeof cardDb.byId> }) {
   if (!card) return null
   return (
     <div className="flex gap-3">
-      <div className="w-20 shrink-0">
+      <div className="w-28 shrink-0">
         <CardFace card={card} />
       </div>
       <div>
