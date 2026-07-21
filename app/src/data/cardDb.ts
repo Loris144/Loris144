@@ -15,6 +15,8 @@ const ARCHETYPE_PROTAGONIST: Record<string, CardDef['protagonist']> = {
   Toon: 'Pegasus',
   'Egyptian God': 'Marik',
   Orichalcos: 'Classic',
+  Archfiend: 'Yugi',
+  'Gaia The Fierce Knight': 'Yugi',
 }
 
 /**

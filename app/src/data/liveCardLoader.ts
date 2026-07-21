@@ -16,6 +16,8 @@ const ARCHETYPES = [
   'Toon', // Maximillion Pegasus
   'Egyptian God', // Marik / the Pharaoh's rivals
   'Orichalcos', // Seal of Orichalcos arc
+  'Archfiend', // Summoned Skull's real archetype tag (Yugi)
+  'Gaia The Fierce Knight', // Gaia's real archetype (Yugi)
 ]
 
 /**

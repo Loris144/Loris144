@@ -12,4 +12,6 @@ export const fusionRecipes: FusionRecipe[] = [
   { resultCardId: 221, materialCardIds: [220, 220, 220] }, // Harpie Lady Sisters <- 3x Harpie Lady
   { resultCardId: 273, materialCardIds: [270, 271, 272] }, // Valkyrion the Magna Warrior <- Alpha + Beta + Gamma
   { resultCardId: 200, materialCardIds: [202, 203] }, // Serpent Night Dragon <- Two-Headed King Rex + Uraby
+  { resultCardId: 282, materialCardIds: [4, 3] }, // Black Skull Dragon <- Summoned Skull + Red-Eyes B. Dragon
+  { resultCardId: 283, materialCardIds: [6, 7] }, // Gaia the Dragon Champion <- Gaia the Fierce Knight + Curse of Dragon
 ]
