@@ -636,11 +636,25 @@ function PlayerBar({ name, state }: { name: string; state: DuelState['player'] }
   )
 }
 
-function ZoneTile({ label, count, onTap, dashed }: { label: string; count?: number; onTap?: () => void; dashed?: boolean }) {
+/** Zone colors loosely follow real official playmats: each zone type gets its own distinct color
+ * instead of everything reading as the same neutral black/gray. */
+const ZONE_TONE = {
+  field: 'border-emerald-500 bg-emerald-950/50 text-emerald-300',
+  spelltrap: 'border-teal-400 bg-teal-950/50 text-teal-300',
+  pendulum: 'border-pink-400 bg-pink-950/50 text-pink-300',
+  graveyard: 'border-neutral-400 bg-neutral-700/50 text-neutral-300',
+  extradeck: 'border-purple-400 bg-purple-950/50 text-purple-300',
+  monster: 'border-amber-700 bg-amber-950/50 text-amber-400',
+  deck: 'border-rose-900 bg-rose-950/60 text-rose-400',
+  linkzone: 'border-sky-400 bg-sky-950/50 text-sky-300',
+} as const
+type ZoneTone = keyof typeof ZONE_TONE
+
+function ZoneTile({ label, count, onTap, tone, dashed }: { label: string; count?: number; onTap?: () => void; tone: ZoneTone; dashed?: boolean }) {
   const content = (
     <div
-      className={`relative flex aspect-[59/86] w-full flex-col items-center justify-center rounded-md text-[7px] font-semibold text-neutral-400 ${
-        dashed ? 'border border-dashed border-neutral-700' : 'border border-neutral-600 bg-neutral-800/70'
+      className={`relative flex aspect-[59/86] w-full flex-col items-center justify-center rounded-md border-2 text-[7px] font-semibold ${ZONE_TONE[tone]} ${
+        dashed ? 'border-dashed' : ''
       }`}
     >
       <span className="leading-tight">{label}</span>
@@ -654,6 +668,12 @@ function ZoneTile({ label, count, onTap, dashed }: { label: string; count?: numb
   ) : (
     content
   )
+}
+
+/** A field/monster slot cell, colored by zone type whether empty, face-down, or holding a card —
+ * so the zone's identity stays visible the way it does on a real playmat. */
+function FieldSlot({ tone, children }: { tone: ZoneTone; children: React.ReactNode }) {
+  return <div className={`h-full w-full overflow-hidden rounded-md border-2 ${ZONE_TONE[tone]}`}>{children}</div>
 }
 
 function PlayerMat({
@@ -677,50 +697,54 @@ function PlayerMat({
   return (
     <div className="flex flex-col gap-1">
       <div className="grid grid-cols-7 gap-1">
-        <ZoneTile label="FELD" dashed />
-        {spellTrapZones.map((slot, i) => (
-          <div key={i} className="aspect-[59/86]">
-            {slot ? (
-              hideFaceDown && slot.faceDown ? (
-                <CardBack />
-              ) : (
-                <button onClick={() => onTapSpellTrap?.(slot.card.instanceId, slot.faceDown)} className="h-full w-full">
-                  {slot.faceDown ? (
+        <ZoneTile label="FELD" tone="field" dashed />
+        {spellTrapZones.map((slot, i) => {
+          // The outer 2 of the 5 Spell/Trap Zones double as Pendulum Zones in modern Yu-Gi-Oh.
+          const tone: ZoneTone = i === 0 || i === spellTrapZones.length - 1 ? 'pendulum' : 'spelltrap'
+          return (
+            <div key={i} className="aspect-[59/86]">
+              <FieldSlot tone={tone}>
+                {slot ? (
+                  hideFaceDown && slot.faceDown ? (
                     <CardBack />
                   ) : (
-                    <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
-                  )}
-                </button>
-              )
-            ) : (
-              <div className="h-full w-full rounded-md border border-dashed border-neutral-700" />
-            )}
-          </div>
-        ))}
-        <ZoneTile label="GRAB" count={graveyard.length} onTap={onGraveyard} />
+                    <button onClick={() => onTapSpellTrap?.(slot.card.instanceId, slot.faceDown)} className="h-full w-full">
+                      {slot.faceDown ? (
+                        <CardBack />
+                      ) : (
+                        <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
+                      )}
+                    </button>
+                  )
+                ) : null}
+              </FieldSlot>
+            </div>
+          )
+        })}
+        <ZoneTile label="GRAB" tone="graveyard" count={graveyard.length} onTap={onGraveyard} />
       </div>
       <div className="grid grid-cols-7 gap-1">
-        <ZoneTile label="EXTRA" count={extraDeck.length} onTap={onExtraDeck} />
+        <ZoneTile label="EXTRA" tone="extradeck" count={extraDeck.length} onTap={onExtraDeck} />
         {monsterZones.map((slot, i) => (
           <div key={i} className="aspect-[59/86]">
-            {slot ? (
-              hideFaceDown && slot.faceDown ? (
-                <CardBack />
-              ) : (
-                <button onClick={() => onTapMonster(slot.card.instanceId)} className={`relative h-full w-full ${slot.position === 'Defense' ? 'rotate-90' : ''}`}>
-                  {slot.faceDown ? (
-                    <CardBack />
-                  ) : (
-                    <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
-                  )}
-                </button>
-              )
-            ) : (
-              <div className="h-full w-full rounded-md border border-dashed border-neutral-700" />
-            )}
+            <FieldSlot tone="monster">
+              {slot ? (
+                hideFaceDown && slot.faceDown ? (
+                  <CardBack />
+                ) : (
+                  <button onClick={() => onTapMonster(slot.card.instanceId)} className={`relative h-full w-full ${slot.position === 'Defense' ? 'rotate-90' : ''}`}>
+                    {slot.faceDown ? (
+                      <CardBack />
+                    ) : (
+                      <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
+                    )}
+                  </button>
+                )
+              ) : null}
+            </FieldSlot>
           </div>
         ))}
-        <ZoneTile label="DECK" count={deck.length} />
+        <ZoneTile label="DECK" tone="deck" count={deck.length} />
       </div>
     </div>
   )
@@ -744,17 +768,17 @@ function ExtraZoneRow({
         const onTap = (id: string) => (zone?.controller === 'player' ? onTapPlayer(id) : onTapCpu(id))
         return (
           <div key={i} className="aspect-[59/86] w-14">
-            {zone ? (
-              <button onClick={() => onTap(zone.monster.card.instanceId)} className={`relative h-full w-full ${zone.monster.position === 'Defense' ? 'rotate-90' : ''}`}>
-                {zone.monster.faceDown ? (
-                  <CardBack />
-                ) : (
-                  <CardFace card={cardDb.byId(zone.monster.card.cardId)!} variant="field" onInfo={() => onTap(zone.monster.card.instanceId)} />
-                )}
-              </button>
-            ) : (
-              <div className="h-full w-full rounded-md border border-dashed border-neutral-700" />
-            )}
+            <FieldSlot tone="linkzone">
+              {zone ? (
+                <button onClick={() => onTap(zone.monster.card.instanceId)} className={`relative h-full w-full ${zone.monster.position === 'Defense' ? 'rotate-90' : ''}`}>
+                  {zone.monster.faceDown ? (
+                    <CardBack />
+                  ) : (
+                    <CardFace card={cardDb.byId(zone.monster.card.cardId)!} variant="field" onInfo={() => onTap(zone.monster.card.instanceId)} />
+                  )}
+                </button>
+              ) : null}
+            </FieldSlot>
           </div>
         )
       })}
