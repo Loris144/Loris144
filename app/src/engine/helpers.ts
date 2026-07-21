@@ -1,5 +1,71 @@
 import { cardDb } from '../data/cardDb'
-import type { DuelCard, DuelState, PlayerState, Side } from './types'
+import type { DuelCard, DuelState, MonsterSlot, PlayerState, Side } from './types'
+
+export const EXTRA_DECK_KINDS = new Set(['Fusion', 'Synchro', 'Xyz', 'Link'])
+
+/** Every monster slot a side controls: their 5 Main Monster Zones plus any of the 2 shared Extra
+ * Monster Zones they currently control (Master Rule 5). */
+export function monstersControlledBy(state: DuelState, side: Side): MonsterSlot[] {
+  const p = getPlayer(state, side)
+  const main = p.monsterZones.filter((z): z is MonsterSlot => z !== null)
+  const extra = state.extraMonsterZones.filter((z) => z !== null && z.controller === side).map((z) => z!.monster)
+  return [...main, ...extra]
+}
+
+export interface MonsterLocation {
+  zone: 'main' | 'extra'
+  side: Side
+  idx: number
+  slot: MonsterSlot
+}
+
+/** Finds a monster by instance id anywhere on the field, regardless of which side placed it in a
+ * shared Extra Monster Zone. */
+export function findMonsterAnywhere(state: DuelState, instanceId: string): MonsterLocation | null {
+  for (const side of ['player', 'cpu'] as Side[]) {
+    const p = getPlayer(state, side)
+    const idx = p.monsterZones.findIndex((z) => z?.card.instanceId === instanceId)
+    if (idx >= 0) return { zone: 'main', side, idx, slot: p.monsterZones[idx]! }
+  }
+  const extraIdx = state.extraMonsterZones.findIndex((z) => z?.monster.card.instanceId === instanceId)
+  if (extraIdx >= 0) {
+    const z = state.extraMonsterZones[extraIdx]!
+    return { zone: 'extra', side: z.controller, idx: extraIdx, slot: z.monster }
+  }
+  return null
+}
+
+/** Removes and returns a monster slot from wherever it is on the field. */
+export function removeMonsterAnywhere(state: DuelState, instanceId: string): MonsterSlot | null {
+  const found = findMonsterAnywhere(state, instanceId)
+  if (!found) return null
+  if (found.zone === 'main') {
+    getPlayer(state, found.side).monsterZones[found.idx] = null
+  } else {
+    state.extraMonsterZones[found.idx] = null
+  }
+  return found.slot
+}
+
+/** Places a Special Summoned Extra Deck monster (Fusion/Synchro/Xyz/Link) into a free shared
+ * Extra Monster Zone. Returns false if both are occupied (no Link Monster exists yet to unlock a
+ * Main Monster Zone instead). */
+export function placeInExtraZone(state: DuelState, side: Side, monster: MonsterSlot): boolean {
+  const idx = state.extraMonsterZones.findIndex((z) => z === null)
+  if (idx < 0) return false
+  state.extraMonsterZones[idx] = { controller: side, monster }
+  return true
+}
+
+/** Places a Normal/Ritual-summoned (or otherwise Main-Deck) monster into a free Main Monster
+ * Zone. Returns false if all 5 are occupied. */
+export function placeInMainZone(state: DuelState, side: Side, monster: MonsterSlot): boolean {
+  const p = getPlayer(state, side)
+  const idx = p.monsterZones.findIndex((z) => z === null)
+  if (idx < 0) return false
+  p.monsterZones[idx] = monster
+  return true
+}
 
 export function uid(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)

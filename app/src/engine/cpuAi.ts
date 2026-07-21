@@ -6,10 +6,12 @@ import {
   declareAttack,
   discardKuriboh,
   normalSummon,
+  passPriority,
+  respondToPriorityWithTrap,
   setSpellTrap,
 } from './duelEngine'
 import { getSpellTargets, isScriptedSpell, isScriptedTrap } from './effects'
-import { getPlayer, tributesNeeded } from './helpers'
+import { getPlayer, monstersControlledBy, tributesNeeded } from './helpers'
 import type { DuelState } from './types'
 
 const TRAP_NAMES_ATTACK_WINDOW = new Set(['Mirror Force', 'Magic Cylinder', 'Negate Attack'])
@@ -38,22 +40,22 @@ export function cpuRunMainPhase(input: DuelState): DuelState {
   // Normal summon the strongest playable monster.
   const cpuNow = getPlayer(state, 'cpu')
   if (!cpuNow.normalSummonUsed) {
+    const cpuMonsters = monstersControlledBy(state, 'cpu')
     const candidates = cpuNow.hand
       .map((c) => ({ c, def: cardDb.byId(c.cardId) }))
       .filter((x) => x.def?.category === 'Monster' && !['Fusion', 'Synchro', 'Xyz', 'Link'].includes(x.def.kind))
-      .filter((x) => tributesNeeded(x.def!.level) <= cpuNow.monsterZones.filter((z) => z !== null).length)
+      .filter((x) => tributesNeeded(x.def!.level) <= cpuMonsters.length)
       .sort((a, b) => (b.def!.atk ?? 0) - (a.def!.atk ?? 0))
 
     if (candidates.length > 0 && cpuNow.monsterZones.some((z) => z === null)) {
       const best = candidates[0]
       const needed = tributesNeeded(best.def!.level)
-      const tributeIds = cpuNow.monsterZones
-        .filter((z): z is NonNullable<typeof z> => z !== null)
+      const tributeIds = cpuMonsters
         .sort((a, b) => (cardDb.byId(a.card.cardId)?.atk ?? 0) - (cardDb.byId(b.card.cardId)?.atk ?? 0))
         .slice(0, needed)
         .map((z) => z.card.instanceId)
       if (tributeIds.length === needed) {
-        const opponentField = getPlayer(state, 'player').monsterZones.filter((z) => z !== null)
+        const opponentField = monstersControlledBy(state, 'player')
         const position = opponentField.length > 0 && (best.def!.atk ?? 0) < 1500 ? 'Defense' : 'Attack'
         state = normalSummon(state, 'cpu', best.c.instanceId, position, position === 'Defense', tributeIds)
       }
@@ -78,13 +80,12 @@ export function cpuRunMainPhase(input: DuelState): DuelState {
 }
 
 function nextEligibleAttacker(state: DuelState) {
-  const cpu = getPlayer(state, 'cpu')
-  const attackers = cpu.monsterZones.filter(
-    (z): z is NonNullable<typeof z> => z !== null && !z.hasAttacked && !z.summonedThisTurn && z.position === 'Attack',
+  const attackers = monstersControlledBy(state, 'cpu').filter(
+    (z) => !z.hasAttacked && !z.summonedThisTurn && z.position === 'Attack',
   )
   for (const attacker of attackers) {
     const atk = cardDb.byId(attacker.card.cardId)?.atk ?? 0
-    const opponentMonsters = getPlayer(state, 'player').monsterZones.filter((z): z is NonNullable<typeof z> => z !== null)
+    const opponentMonsters = monstersControlledBy(state, 'player')
     if (opponentMonsters.length === 0) return { attacker, target: 'direct' as const }
     const beatable = opponentMonsters
       .map((z) => ({ z, power: z.position === 'Attack' ? (cardDb.byId(z.card.cardId)?.atk ?? 0) : (cardDb.byId(z.card.cardId)?.def ?? 0) }))
@@ -116,7 +117,7 @@ export function cpuRespondToAttack(input: DuelState): DuelState {
     (z) => z !== null && z.card.turnPlaced !== state.turn && TRAP_NAMES_ATTACK_WINDOW.has(cardDb.byId(z.card.cardId)?.name ?? ''),
   )
 
-  const attackerSlot = getPlayer(state, 'player').monsterZones.find((z) => z?.card.instanceId === state.pendingAttacker)
+  const attackerSlot = monstersControlledBy(state, 'player').find((z) => z.card.instanceId === state.pendingAttacker)
   const incomingAtk = attackerSlot ? cardDb.byId(attackerSlot.card.cardId)?.atk ?? 0 : 0
 
   if (trapSlot) {
@@ -127,6 +128,27 @@ export function cpuRespondToAttack(input: DuelState): DuelState {
     if (kuriboh) return discardKuriboh(state, 'cpu', kuriboh.instanceId)
   }
   return state
+}
+
+/** CPU's answer to the generalized priority window (see `pendingPriority`). Currently only acts
+ * on the highest-value case — Trap Hole against a big monster the player just Normal/Flip
+ * Summoned — and otherwise passes, keeping this bounded to what the card pool needs. */
+export function cpuRespondToPriority(input: DuelState): DuelState {
+  const state = input
+  if (!state.pendingPriority || state.pendingPriority.side !== 'cpu') return state
+  const cpu = getPlayer(state, 'cpu')
+  const contextId = state.pendingPriority.contextInstanceId
+
+  if (state.pendingPriority.reason === 'normal-summon' && contextId) {
+    const target = monstersControlledBy(state, 'player').find((m) => m.card.instanceId === contextId)
+    const trapHoleSlot = cpu.spellTrapZones.find(
+      (z) => z !== null && z.card.turnPlaced !== state.turn && cardDb.byId(z.card.cardId)?.name === 'Trap Hole',
+    )
+    if (target && trapHoleSlot && (cardDb.byId(target.card.cardId)?.atk ?? 0) >= 1000) {
+      return respondToPriorityWithTrap(state, 'cpu', trapHoleSlot.card.instanceId)
+    }
+  }
+  return passPriority(state)
 }
 
 export function isScriptedTrapName(name: string): boolean {

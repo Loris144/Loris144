@@ -48,6 +48,7 @@ export function createDuelState(playerDeck: Deck, cpuPreset: CpuPreset, playerGo
     phase: 'Draw',
     player,
     cpu,
+    extraMonsterZones: [null, null],
     log: [`${playerGoesFirst ? 'Du beginnst' : `${cpuPreset.name} beginnt`}.`],
     chain: [],
     winner: null,
@@ -56,5 +57,6 @@ export function createDuelState(playerDeck: Deck, cpuPreset: CpuPreset, playerGo
     pendingTarget: null,
     damageNegated: false,
     battleResolved: false,
+    pendingPriority: null,
   }
 }

@@ -1,7 +1,19 @@
 import { cardDb } from '../data/cardDb'
 import { fusionRecipes } from './fusion'
-import { getPlayer, log, opponent, sendToGraveyard, uid } from './helpers'
-import type { DuelCard, DuelState, Side } from './types'
+import {
+  EXTRA_DECK_KINDS,
+  findMonsterAnywhere,
+  getPlayer,
+  log,
+  monstersControlledBy,
+  opponent,
+  placeInExtraZone,
+  placeInMainZone,
+  removeMonsterAnywhere,
+  sendToGraveyard,
+  uid,
+} from './helpers'
+import type { DuelCard, DuelState, MonsterSlot, Side } from './types'
 
 export type TargetKind = 'graveyard-monster' | 'spelltrap' | 'face-up-monster' | 'hand-level8' | 'none'
 
@@ -33,13 +45,18 @@ export function isScriptedTrap(name: string): boolean {
   return ['Mirror Force', 'Magic Cylinder', 'Negate Attack', 'Trap Hole'].includes(name)
 }
 
-function findFieldMonster(state: DuelState, instanceId: string) {
-  for (const side of ['player', 'cpu'] as Side[]) {
-    const p = getPlayer(state, side)
-    const idx = p.monsterZones.findIndex((z) => z?.card.instanceId === instanceId)
-    if (idx >= 0) return { side, idx, slot: p.monsterZones[idx]! }
+function destroyAllMonsters(state: DuelState, side: Side): void {
+  for (const slot of monstersControlledBy(state, side)) {
+    sendToGraveyard(state, side, slot.card)
+    removeMonsterAnywhere(state, slot.card.instanceId)
   }
-  return null
+}
+
+function summonToCorrectZone(state: DuelState, side: Side, monsterCardId: number, card: DuelCard): boolean {
+  const def = cardDb.byId(monsterCardId)
+  const slot: MonsterSlot = { card, position: 'Attack', faceDown: false, hasAttacked: false, summonedThisTurn: true, equips: [], spellCounters: 0 }
+  if (def && EXTRA_DECK_KINDS.has(def.kind)) return placeInExtraZone(state, side, slot)
+  return placeInMainZone(state, side, slot)
 }
 
 export function activateSpellEffect(state: DuelState, side: Side, card: DuelCard, targetInstanceId?: string): string {
@@ -57,26 +74,12 @@ export function activateSpellEffect(state: DuelState, side: Side, card: DuelCard
       return 'Du ziehst 2 Karten.'
     }
     case 'Dark Hole': {
-      for (const side_ of ['player', 'cpu'] as Side[]) {
-        const pl = getPlayer(state, side_)
-        for (let i = 0; i < pl.monsterZones.length; i++) {
-          const slot = pl.monsterZones[i]
-          if (slot) {
-            sendToGraveyard(state, side_, slot.card)
-            pl.monsterZones[i] = null
-          }
-        }
-      }
+      destroyAllMonsters(state, 'player')
+      destroyAllMonsters(state, 'cpu')
       return 'Alle Monster werden zerstört.'
     }
     case 'Raigeki': {
-      for (let i = 0; i < opp.monsterZones.length; i++) {
-        const slot = opp.monsterZones[i]
-        if (slot) {
-          sendToGraveyard(state, opponent(side), slot.card)
-          opp.monsterZones[i] = null
-        }
-      }
+      destroyAllMonsters(state, opponent(side))
       return 'Alle gegnerischen Monster werden zerstört.'
     }
     case 'Swords of Revealing Light': {
@@ -90,17 +93,8 @@ export function activateSpellEffect(state: DuelState, side: Side, card: DuelCard
         const idx = pl.graveyard.findIndex((c) => c.instanceId === targetInstanceId)
         if (idx >= 0) {
           const [revived] = pl.graveyard.splice(idx, 1)
-          const zoneIdx = p.monsterZones.findIndex((z) => z === null)
-          if (zoneIdx < 0) return 'Keine freie Monsterzone.'
-          p.monsterZones[zoneIdx] = {
-            card: revived,
-            position: 'Attack',
-            faceDown: false,
-            hasAttacked: false,
-            summonedThisTurn: true,
-            equips: [],
-            spellCounters: 0,
-          }
+          const placed = summonToCorrectZone(state, side, revived.cardId, revived)
+          if (!placed) return 'Keine freie Monsterzone.'
           return `${cardDb.byId(revived.cardId)?.name} wird wiederbelebt.`
         }
       }
@@ -108,7 +102,7 @@ export function activateSpellEffect(state: DuelState, side: Side, card: DuelCard
     }
     case 'Book of Moon': {
       if (!targetInstanceId) return 'Kein Ziel gewählt.'
-      const found = findFieldMonster(state, targetInstanceId)
+      const found = findMonsterAnywhere(state, targetInstanceId)
       if (!found) return 'Ziel nicht gefunden.'
       found.slot.position = 'Defense'
       found.slot.faceDown = true
@@ -146,22 +140,13 @@ export function activateSpellEffect(state: DuelState, side: Side, card: DuelCard
         }
         if (usedInstances.length === needed.length) {
           const extraIdx = p.extraDeck.findIndex((c) => c.cardId === recipe.resultCardId)
-          const zoneIdx = p.monsterZones.findIndex((z) => z === null)
-          if (extraIdx < 0 || zoneIdx < 0) continue
+          if (extraIdx < 0 || !state.extraMonsterZones.some((z) => z === null)) continue
           for (const used of usedInstances) {
             p.hand = p.hand.filter((c) => c.instanceId !== used.instanceId)
             sendToGraveyard(state, side, used)
           }
           const [fused] = p.extraDeck.splice(extraIdx, 1)
-          p.monsterZones[zoneIdx] = {
-            card: fused,
-            position: 'Attack',
-            faceDown: false,
-            hasAttacked: false,
-            summonedThisTurn: true,
-            equips: [],
-            spellCounters: 0,
-          }
+          summonToCorrectZone(state, side, fused.cardId, fused)
           return `${cardDb.byId(fused.cardId)?.name} wird fusionsbeschworen!`
         }
       }
@@ -205,11 +190,10 @@ export function activateTrapEffect(
 
   switch (name) {
     case 'Mirror Force': {
-      for (let i = 0; i < opp.monsterZones.length; i++) {
-        const slot = opp.monsterZones[i]
-        if (slot && slot.position === 'Attack') {
+      for (const slot of monstersControlledBy(state, opponent(side))) {
+        if (slot.position === 'Attack') {
           sendToGraveyard(state, opponent(side), slot.card)
-          opp.monsterZones[i] = null
+          removeMonsterAnywhere(state, slot.card.instanceId)
         }
       }
       state.pendingAttacker = null
@@ -217,7 +201,7 @@ export function activateTrapEffect(
       return 'Alle gegnerischen Angriffsmonster werden zerstört.'
     }
     case 'Magic Cylinder': {
-      const found = context.attackerInstanceId ? findFieldMonster(state, context.attackerInstanceId) : null
+      const found = context.attackerInstanceId ? findMonsterAnywhere(state, context.attackerInstanceId) : null
       if (!found) return 'Kein Angreifer gefunden.'
       const atk = cardDb.byId(found.slot.card.cardId)?.atk ?? 0
       opp.lifePoints = Math.max(0, opp.lifePoints - atk)
@@ -232,12 +216,12 @@ export function activateTrapEffect(
       return 'Angriff negiert, Battle Phase beendet.'
     }
     case 'Trap Hole': {
-      const found = context.summonedInstanceId ? findFieldMonster(state, context.summonedInstanceId) : null
+      const found = context.summonedInstanceId ? findMonsterAnywhere(state, context.summonedInstanceId) : null
       if (!found) return 'Kein gültiges Ziel.'
       const atk = cardDb.byId(found.slot.card.cardId)?.atk ?? 0
       if (atk < 1000) return 'Zielmonster hat weniger als 1000 ATK.'
       sendToGraveyard(state, found.side, found.slot.card)
-      getPlayer(state, found.side).monsterZones[found.idx] = null
+      removeMonsterAnywhere(state, found.slot.card.instanceId)
       return 'Beschworenes Monster wird zerstört.'
     }
     default:
@@ -250,39 +234,28 @@ export function resolveFlipEffect(state: DuelState, side: Side, card: DuelCard):
   const name = cardDb.byId(card.cardId)?.name
   if (name === 'Man-Eater Bug') {
     const oppSide = opponent(side)
-    const opp = getPlayer(state, oppSide)
-    const idx = opp.monsterZones.findIndex((z) => z !== null)
-    if (idx >= 0) {
-      const slot = opp.monsterZones[idx]!
-      sendToGraveyard(state, oppSide, slot.card)
-      opp.monsterZones[idx] = null
-      log(state, `Man-Eater Bug zerstört ${cardDb.byId(slot.card.cardId)?.name}.`)
+    const target = monstersControlledBy(state, oppSide)[0]
+    if (target) {
+      sendToGraveyard(state, oppSide, target.card)
+      removeMonsterAnywhere(state, target.card.instanceId)
+      log(state, `Man-Eater Bug zerstört ${cardDb.byId(target.card.cardId)?.name}.`)
     }
   }
 }
 
 export function activateTimeWizard(state: DuelState, side: Side, card: DuelCard): void {
-  const self = getPlayer(state, side)
   const success = Math.random() < 0.5
   if (success) {
-    for (const s of ['player', 'cpu'] as Side[]) {
-      const p = getPlayer(state, s)
-      for (let i = 0; i < p.monsterZones.length; i++) {
-        const slot = p.monsterZones[i]
-        if (slot) {
-          sendToGraveyard(state, s, slot.card)
-          p.monsterZones[i] = null
-        }
-      }
-    }
+    destroyAllMonsters(state, 'player')
+    destroyAllMonsters(state, 'cpu')
     log(state, 'Time Wizard: Erfolg! Alle Monster auf dem Feld werden zerstört.')
   } else {
-    const idx = self.monsterZones.findIndex((z) => z?.card.instanceId === card.instanceId)
-    if (idx >= 0) {
-      sendToGraveyard(state, side, self.monsterZones[idx]!.card)
-      self.monsterZones[idx] = null
+    const found = findMonsterAnywhere(state, card.instanceId)
+    if (found) {
+      sendToGraveyard(state, side, found.slot.card)
+      removeMonsterAnywhere(state, card.instanceId)
     }
-    self.lifePoints = Math.max(0, self.lifePoints - 1000)
+    getPlayer(state, side).lifePoints = Math.max(0, getPlayer(state, side).lifePoints - 1000)
     log(state, 'Time Wizard: Fehlschlag! Time Wizard wird zerstört, 1000 Schaden.')
   }
 }
@@ -299,8 +272,9 @@ export function getSpellTargets(state: DuelState, side: Side, cardName: string):
     return all.map((z) => z!.card.instanceId)
   }
   if (kind === 'face-up-monster') {
-    const all = [...state.player.monsterZones, ...state.cpu.monsterZones].filter((z) => z !== null && !z.faceDown)
-    return all.map((z) => z!.card.instanceId)
+    const main = [...state.player.monsterZones, ...state.cpu.monsterZones].filter((z) => z !== null && !z.faceDown)
+    const extra = state.extraMonsterZones.filter((z) => z !== null && !z.monster.faceDown).map((z) => z!.monster)
+    return [...main.map((z) => z!.card.instanceId), ...extra.map((m) => m.card.instanceId)]
   }
   if (kind === 'hand-level8') {
     const p = getPlayer(state, side)

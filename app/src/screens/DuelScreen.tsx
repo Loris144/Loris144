@@ -6,6 +6,7 @@ import {
   cpuDeclareNextAttack,
   cpuHasMoreAttacks,
   cpuRespondToAttack,
+  cpuRespondToPriority,
   cpuRunMainPhase,
 } from '../engine/cpuAi'
 import { createDuelState } from '../engine/deckSetup'
@@ -18,14 +19,19 @@ import {
   declareAttack,
   discardKuriboh,
   normalSummon,
+  passPriority,
   passResponse,
+  respondToPriorityWithQuickPlay,
+  respondToPriorityWithTrap,
+  ritualSummon,
   setSpellTrap,
+  synchroSummon,
 } from '../engine/duelEngine'
 import { validateDeck } from '../engine/deckRules'
-import { getSpellTargets, isScriptedTrap, targetKindForCard } from '../engine/effects'
-import { tributesNeeded } from '../engine/helpers'
+import { getSpellTargets, isScriptedSpell, isScriptedTrap, targetKindForCard } from '../engine/effects'
+import { findMonsterAnywhere, monstersControlledBy, tributesNeeded } from '../engine/helpers'
 import { useGameStore } from '../store/useGameStore'
-import type { DuelCard, DuelState, MonsterSlot, SpellTrapSlot } from '../engine/types'
+import type { DuelCard, DuelState, ExtraZoneSlot, MonsterSlot, SpellTrapSlot } from '../engine/types'
 import type { CardDef } from '../data/types'
 
 const PHASE_LABEL: Record<string, string> = {
@@ -50,6 +56,8 @@ export function DuelScreen() {
   const [attackPickMode, setAttackPickMode] = useState<string | null>(null)
   const [infoCard, setInfoCard] = useState<CardDef | null>(null)
   const [zoneView, setZoneView] = useState<{ title: string; cards: DuelCard[] } | null>(null)
+  const [ritualMode, setRitualMode] = useState<{ spellInstanceId: string; monsterInstanceId: string; neededLevel: number; chosen: string[] } | null>(null)
+  const [synchroMode, setSynchroMode] = useState<{ tunerInstanceId: string; extraDeckCardId: number; neededLevel: number; chosen: string[] } | null>(null)
 
   const deck = decks.find((d) => d.id === chosenDeckId)
   const validation = deck ? validateDeck(deck) : null
@@ -60,6 +68,11 @@ export function DuelScreen() {
     const timer = setTimeout(() => {
       setDuel((prev) => {
         if (!prev || prev.winner) return prev
+
+        if (prev.pendingPriority) {
+          if (prev.pendingPriority.side === 'cpu') return cpuRespondToPriority(prev)
+          return prev // waits for the player's response UI
+        }
 
         if (prev.phase === 'Draw' || prev.phase === 'Standby') {
           return advancePhase(prev)
@@ -99,6 +112,21 @@ export function DuelScreen() {
     return duel.player.spellTrapZones.filter(
       (z): z is SpellTrapSlot => z !== null && z.card.turnPlaced !== duel.turn && isScriptedTrap(cardDb.byId(z.card.cardId)?.name ?? ''),
     )
+  }, [duel])
+
+  const eligiblePriorityTraps = useMemo(() => {
+    if (!duel || duel.pendingPriority?.side !== 'player') return []
+    return duel.player.spellTrapZones.filter(
+      (z): z is SpellTrapSlot => z !== null && z.card.turnPlaced !== duel.turn && isScriptedTrap(cardDb.byId(z.card.cardId)?.name ?? ''),
+    )
+  }, [duel])
+
+  const eligiblePriorityQuickPlay = useMemo(() => {
+    if (!duel || duel.pendingPriority?.side !== 'player') return []
+    return duel.player.hand.filter((c) => {
+      const d = cardDb.byId(c.cardId)
+      return d?.category === 'Spell' && d.kind === 'Quick-Play' && isScriptedSpell(d.name)
+    })
   }, [duel])
 
   if (!duel) {
@@ -207,13 +235,48 @@ export function DuelScreen() {
   function handleFieldMonsterTap(instanceId: string) {
     if (!duel) return
     if (duel.phase === 'Battle' && isPlayerTurn) {
-      const slot = duel.player.monsterZones.find((z) => z?.card.instanceId === instanceId)
-      if (slot && !slot.hasAttacked && !slot.summonedThisTurn && slot.position === 'Attack') {
+      const found = findMonsterAnywhere(duel, instanceId)
+      if (found?.side === 'player' && !found.slot.hasAttacked && !found.slot.summonedThisTurn && found.slot.position === 'Attack') {
         setAttackPickMode(instanceId)
         return
       }
     }
     setSelectedFieldCard(instanceId)
+  }
+
+  function openRitualMode(spellCard: DuelCard) {
+    if (!duel) return
+    const ritualMonster = duel.player.hand.find((c) => {
+      const d = cardDb.byId(c.cardId)
+      return d?.category === 'Monster' && d.kind === 'Ritual'
+    })
+    if (!ritualMonster) return
+    const monsterDef = cardDb.byId(ritualMonster.cardId)!
+    setSelectedHandCard(null)
+    setRitualMode({ spellInstanceId: spellCard.instanceId, monsterInstanceId: ritualMonster.instanceId, neededLevel: monsterDef.level ?? 0, chosen: [] })
+  }
+
+  function confirmRitualSummon() {
+    if (!ritualMode) return
+    setDuel((prev) => (prev ? ritualSummon(prev, 'player', ritualMode.spellInstanceId, ritualMode.monsterInstanceId, ritualMode.chosen) : prev))
+    setRitualMode(null)
+  }
+
+  function openSynchroMode(tunerInstanceId: string) {
+    if (!duel) return
+    const synchroCard = duel.player.extraDeck.find((c) => cardDb.byId(c.cardId)?.kind === 'Synchro')
+    const tunerSlot = monstersControlledBy(duel, 'player').find((m) => m.card.instanceId === tunerInstanceId)
+    if (!synchroCard || !tunerSlot) return
+    const targetDef = cardDb.byId(synchroCard.cardId)!
+    const tunerLevel = cardDb.byId(tunerSlot.card.cardId)?.level ?? 0
+    setSelectedFieldCard(null)
+    setSynchroMode({ tunerInstanceId, extraDeckCardId: synchroCard.cardId, neededLevel: (targetDef.level ?? 0) - tunerLevel, chosen: [] })
+  }
+
+  function confirmSynchroSummon() {
+    if (!synchroMode) return
+    setDuel((prev) => (prev ? synchroSummon(prev, 'player', synchroMode.tunerInstanceId, synchroMode.chosen, synchroMode.extraDeckCardId) : prev))
+    setSynchroMode(null)
   }
 
   async function handleActivateSetSpell(zoneInstanceId: string, cardName: string) {
@@ -240,6 +303,20 @@ export function DuelScreen() {
     setDuel((prev) => (prev ? passResponse(prev) : prev))
   }
 
+  function respondPriorityWithTrapCard(zoneInstanceId: string) {
+    setDuel((prev) => (prev ? respondToPriorityWithTrap(prev, 'player', zoneInstanceId) : prev))
+  }
+
+  async function respondPriorityWithQuickPlayCard(card: DuelCard) {
+    const def = cardDb.byId(card.cardId)!
+    const target = await requestTarget(def.name)
+    setDuel((prev) => (prev ? respondToPriorityWithQuickPlay(prev, 'player', card.instanceId, target) : prev))
+  }
+
+  function passThePriority() {
+    setDuel((prev) => (prev ? passPriority(prev) : prev))
+  }
+
   return (
     <div className="flex flex-col gap-1.5 px-1.5 py-1.5">
       <PlayerBar name={opponent.name} state={duel.cpu} />
@@ -251,6 +328,12 @@ export function DuelScreen() {
         onGraveyard={() => setZoneView({ title: `${opponent.name} · Friedhof`, cards: duel.cpu.graveyard })}
         onExtraDeck={undefined}
         hideFaceDown
+      />
+
+      <ExtraZoneRow
+        zones={duel.extraMonsterZones}
+        onTapPlayer={handleFieldMonsterTap}
+        onTapCpu={(id) => setInfoCard(cardOf(duel, id))}
       />
 
       <div className="flex items-center justify-between rounded bg-duel-panel px-2 py-1 text-[11px] text-neutral-300">
@@ -299,6 +382,17 @@ export function DuelScreen() {
                 <button onClick={() => handleNormalSummon(selectedHandCard, 'Attack')} disabled={duel.player.normalSummonUsed} className="rounded bg-duel-blue py-2 text-xs font-semibold text-white disabled:opacity-40">Beschwören (Angriff)</button>
                 <button onClick={() => handleNormalSummon(selectedHandCard, 'Defense')} disabled={duel.player.normalSummonUsed} className="rounded bg-neutral-700 py-2 text-xs font-semibold text-white disabled:opacity-40">Verdeckt setzen (Verteidigung)</button>
               </>
+            ) : cardDb.byId(selectedHandCard.cardId)!.kind === 'Ritual' ? (
+              <>
+                <button
+                  onClick={() => openRitualMode(selectedHandCard)}
+                  disabled={!duel.player.hand.some((c) => cardDb.byId(c.cardId)?.kind === 'Ritual' && cardDb.byId(c.cardId)?.category === 'Monster')}
+                  className="rounded bg-duel-blue py-2 text-xs font-semibold text-white disabled:opacity-40"
+                >
+                  Ritual-Beschwören
+                </button>
+                <button onClick={() => handleSetSpellTrap(selectedHandCard)} className="rounded bg-neutral-700 py-2 text-xs font-semibold text-white">Verdeckt legen</button>
+              </>
             ) : (
               <>
                 <button onClick={() => handleActivateFromHand(selectedHandCard)} className="rounded bg-duel-blue py-2 text-xs font-semibold text-white">Aktivieren</button>
@@ -314,7 +408,7 @@ export function DuelScreen() {
         <Sheet onClose={() => setTributeMode(null)}>
           <div className="mb-2 text-xs text-neutral-300">Wähle {tributeMode.needed} Tribut-Monster ({tributeMode.chosen.length}/{tributeMode.needed})</div>
           <div className="grid grid-cols-4 gap-1.5">
-            {duel.player.monsterZones.filter((z): z is MonsterSlot => z !== null).map((slot) => {
+            {monstersControlledBy(duel, 'player').map((slot) => {
               const chosen = tributeMode.chosen.includes(slot.card.instanceId)
               return (
                 <button
@@ -341,6 +435,92 @@ export function DuelScreen() {
         </Sheet>
       )}
 
+      {/* Ritual Summon: Tribute picker (combined Level must reach the Ritual Monster's Level) */}
+      {ritualMode && (() => {
+        const controlled = monstersControlledBy(duel, 'player')
+        const levelOf = (id: string) => cardDb.byId(controlled.find((m) => m.card.instanceId === id)!.card.cardId)?.level ?? 0
+        const chosenLevel = ritualMode.chosen.reduce((sum, id) => sum + levelOf(id), 0)
+        return (
+          <Sheet onClose={() => setRitualMode(null)}>
+            <div className="mb-2 text-xs text-neutral-300">
+              Tribut-Monster wählen (benötigt Level {ritualMode.neededLevel}) — gewählt: {chosenLevel}
+            </div>
+            <div className="grid grid-cols-4 gap-1.5">
+              {controlled.map((slot) => {
+                const chosen = ritualMode.chosen.includes(slot.card.instanceId)
+                return (
+                  <button
+                    key={slot.card.instanceId}
+                    onClick={() =>
+                      setRitualMode((prev) => {
+                        if (!prev) return prev
+                        const already = prev.chosen.includes(slot.card.instanceId)
+                        const next = already ? prev.chosen.filter((id) => id !== slot.card.instanceId) : [...prev.chosen, slot.card.instanceId]
+                        return { ...prev, chosen: next }
+                      })
+                    }
+                    className={`rounded ${chosen ? 'ring-2 ring-duel-gold' : ''}`}
+                  >
+                    <CardFace card={cardDb.byId(slot.card.cardId)!} />
+                  </button>
+                )
+              })}
+            </div>
+            <button
+              onClick={confirmRitualSummon}
+              disabled={chosenLevel < ritualMode.neededLevel}
+              className="mt-3 w-full rounded bg-duel-blue py-2 text-xs font-semibold text-white disabled:opacity-40"
+            >
+              Ritualbeschwören
+            </button>
+          </Sheet>
+        )
+      })()}
+
+      {/* Synchro Summon: material picker (combined Level must exactly match what's still needed) */}
+      {synchroMode && (() => {
+        const controlled = monstersControlledBy(duel, 'player')
+        const levelOf = (id: string) => cardDb.byId(controlled.find((m) => m.card.instanceId === id)!.card.cardId)?.level ?? 0
+        const chosenLevel = synchroMode.chosen.reduce((sum, id) => sum + levelOf(id), 0)
+        return (
+          <Sheet onClose={() => setSynchroMode(null)}>
+            <div className="mb-2 text-xs text-neutral-300">
+              Nicht-Tuner-Material wählen (benötigt genau Level {synchroMode.neededLevel}) — gewählt: {chosenLevel}
+            </div>
+            <div className="grid grid-cols-4 gap-1.5">
+              {controlled
+                .filter((slot) => slot.card.instanceId !== synchroMode.tunerInstanceId && cardDb.byId(slot.card.cardId)?.kind !== 'Tuner')
+                .map((slot) => {
+                  const chosen = synchroMode.chosen.includes(slot.card.instanceId)
+                  return (
+                    <button
+                      key={slot.card.instanceId}
+                      onClick={() =>
+                        setSynchroMode((prev) => {
+                          if (!prev) return prev
+                          const already = prev.chosen.includes(slot.card.instanceId)
+                          const next = already ? prev.chosen.filter((id) => id !== slot.card.instanceId) : [...prev.chosen, slot.card.instanceId]
+                          return { ...prev, chosen: next }
+                        })
+                      }
+                      className={`rounded ${chosen ? 'ring-2 ring-duel-gold' : ''}`}
+                    >
+                      <CardFace card={cardDb.byId(slot.card.cardId)!} />
+                    </button>
+                  )
+                })}
+            </div>
+            <button
+              onClick={confirmSynchroSummon}
+              disabled={chosenLevel !== synchroMode.neededLevel}
+              className="mt-3 w-full rounded bg-duel-blue py-2 text-xs font-semibold text-white disabled:opacity-40"
+            >
+              Synchrobeschwören
+            </button>
+          </Sheet>
+        )
+      })()}
+
       {/* Target picker */}
       {pendingTargetPick && (
         <Sheet onClose={() => { pendingTargetPick.resolve(undefined); setPendingTargetPick(null) }}>
@@ -354,7 +534,7 @@ export function DuelScreen() {
         <Sheet onClose={() => setAttackPickMode(null)}>
           <div className="mb-2 text-xs text-neutral-300">Angriffsziel wählen</div>
           <div className="grid grid-cols-4 gap-1.5">
-            {duel.cpu.monsterZones.filter((z): z is MonsterSlot => z !== null).map((slot) => (
+            {monstersControlledBy(duel, 'cpu').map((slot) => (
               <button key={slot.card.instanceId} onClick={() => declarePlayerAttack(slot.card.instanceId)}>
                 {slot.faceDown ? <CardBack /> : <CardFace card={cardDb.byId(slot.card.cardId)!} />}
               </button>
@@ -374,6 +554,7 @@ export function DuelScreen() {
           onClose={() => setSelectedFieldCard(null)}
           onChangePosition={(id) => { setDuel((prev) => (prev ? changePosition(prev, 'player', id) : prev)); setSelectedFieldCard(null) }}
           onActivateSetSpell={handleActivateSetSpell}
+          onSynchroSummon={openSynchroMode}
         />
       )}
 
@@ -417,6 +598,27 @@ export function DuelScreen() {
               </button>
             ))}
             <button onClick={passTheResponse} className="rounded bg-neutral-800 py-2 text-xs font-semibold text-neutral-300">Passen</button>
+          </div>
+        </Sheet>
+      )}
+
+      {/* Generalized priority window: opponent may respond to a Normal Summon or Spell activation
+          with a Quick-Play Spell or Set Trap before play continues. */}
+      {duel.pendingPriority?.side === 'player' && !pendingTargetPick && (
+        <Sheet onClose={() => {}} noClose>
+          <div className="mb-2 text-xs font-semibold text-sky-300">Möchtest du reagieren?</div>
+          <div className="flex flex-col gap-2">
+            {eligiblePriorityTraps.map((z) => (
+              <button key={z.card.instanceId} onClick={() => respondPriorityWithTrapCard(z.card.instanceId)} className="rounded bg-duel-blue py-2 text-xs font-semibold text-white">
+                {cardDb.byId(z.card.cardId)?.name} aktivieren
+              </button>
+            ))}
+            {eligiblePriorityQuickPlay.map((c) => (
+              <button key={c.instanceId} onClick={() => respondPriorityWithQuickPlayCard(c)} className="rounded bg-duel-blue py-2 text-xs font-semibold text-white">
+                {cardDb.byId(c.cardId)?.name} aktivieren
+              </button>
+            ))}
+            <button onClick={passThePriority} className="rounded bg-neutral-800 py-2 text-xs font-semibold text-neutral-300">Passen</button>
           </div>
         </Sheet>
       )}
@@ -524,6 +726,42 @@ function PlayerMat({
   )
 }
 
+/** The 2 shared Extra Monster Zones (Master Rule 5) — sit between the two players' Main Monster
+ * Zone rows and can hold either player's Fusion/Synchro/Xyz/Link monster. */
+function ExtraZoneRow({
+  zones,
+  onTapPlayer,
+  onTapCpu,
+}: {
+  zones: (ExtraZoneSlot | null)[]
+  onTapPlayer: (id: string) => void
+  onTapCpu: (id: string) => void
+}) {
+  return (
+    <div className="flex items-center justify-center gap-2 py-0.5">
+      <span className="text-[7px] font-semibold uppercase tracking-wide text-neutral-500">Extra-MZ</span>
+      {zones.map((zone, i) => {
+        const onTap = (id: string) => (zone?.controller === 'player' ? onTapPlayer(id) : onTapCpu(id))
+        return (
+          <div key={i} className="aspect-[59/86] w-14">
+            {zone ? (
+              <button onClick={() => onTap(zone.monster.card.instanceId)} className={`relative h-full w-full ${zone.monster.position === 'Defense' ? 'rotate-90' : ''}`}>
+                {zone.monster.faceDown ? (
+                  <CardBack />
+                ) : (
+                  <CardFace card={cardDb.byId(zone.monster.card.cardId)!} variant="field" onInfo={() => onTap(zone.monster.card.instanceId)} />
+                )}
+              </button>
+            ) : (
+              <div className="h-full w-full rounded-md border border-dashed border-neutral-700" />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function Sheet({ children, onClose, noClose }: { children: React.ReactNode; onClose: () => void; noClose?: boolean }) {
   return (
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/70" onClick={noClose ? undefined : onClose}>
@@ -535,9 +773,9 @@ function Sheet({ children, onClose, noClose }: { children: React.ReactNode; onCl
 }
 
 function cardOf(duel: DuelState, instanceId: string): CardDef | null {
+  const found = findMonsterAnywhere(duel, instanceId)
+  if (found) return cardDb.byId(found.slot.card.cardId) ?? null
   for (const p of [duel.player, duel.cpu]) {
-    const m = p.monsterZones.find((z) => z?.card.instanceId === instanceId)
-    if (m) return cardDb.byId(m.card.cardId) ?? null
     const s = p.spellTrapZones.find((z) => z?.card.instanceId === instanceId)
     if (s) return cardDb.byId(s.card.cardId) ?? null
   }
@@ -563,8 +801,13 @@ function CardDetail({ card }: { card: ReturnType<typeof cardDb.byId> }) {
 
 function TargetGrid({ duel, cardName, onPick }: { duel: DuelState; cardName: string; onPick: (id: string) => void }) {
   const ids = getSpellTargets(duel, 'player', cardName)
+  const extraMonsters = duel.extraMonsterZones.filter((z): z is ExtraZoneSlot => z !== null).map((z) => z.monster)
   const findCard = (id: string): DuelCard | undefined =>
-    [...duel.player.graveyard, ...duel.cpu.graveyard, ...duel.player.monsterZones, ...duel.cpu.monsterZones, ...duel.player.spellTrapZones, ...duel.cpu.spellTrapZones]
+    [
+      ...duel.player.graveyard, ...duel.cpu.graveyard,
+      ...duel.player.monsterZones, ...duel.cpu.monsterZones, ...extraMonsters,
+      ...duel.player.spellTrapZones, ...duel.cpu.spellTrapZones,
+    ]
       .filter((x): x is DuelCard | MonsterSlot | SpellTrapSlot => x !== null)
       .map((x) => ('card' in x ? x.card : x))
       .find((c) => c.instanceId === id)
@@ -591,17 +834,24 @@ function FieldCardSheet({
   onClose,
   onChangePosition,
   onActivateSetSpell,
+  onSynchroSummon,
 }: {
   duel: DuelState
   instanceId: string
   onClose: () => void
   onChangePosition: (id: string) => void
   onActivateSetSpell: (zoneInstanceId: string, cardName: string) => void
+  onSynchroSummon: (tunerInstanceId: string) => void
 }) {
-  const monsterSlot = duel.player.monsterZones.find((z) => z?.card.instanceId === instanceId)
+  const found = findMonsterAnywhere(duel, instanceId)
+  const monsterSlot = found?.side === 'player' ? found.slot : undefined
   const spellSlot = duel.player.spellTrapZones.find((z) => z?.card.instanceId === instanceId)
   const cardDefM = monsterSlot ? cardDb.byId(monsterSlot.card.cardId) : null
   const cardDefS = spellSlot ? cardDb.byId(spellSlot.card.cardId) : null
+  const canSynchro =
+    cardDefM?.kind === 'Tuner' &&
+    !monsterSlot!.summonedThisTurn &&
+    duel.player.extraDeck.some((c) => cardDb.byId(c.cardId)?.kind === 'Synchro')
 
   return (
     <Sheet onClose={onClose}>
@@ -615,6 +865,11 @@ function FieldCardSheet({
           >
             Position wechseln
           </button>
+          {canSynchro && (
+            <button onClick={() => onSynchroSummon(instanceId)} className="mt-2 w-full rounded bg-sky-700 py-2 text-xs font-semibold text-white">
+              Synchro-Beschwören
+            </button>
+          )}
         </>
       )}
       {cardDefS && (
