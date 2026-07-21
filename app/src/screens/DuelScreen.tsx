@@ -38,6 +38,18 @@ const PHASE_LABEL: Record<string, string> = {
   Draw: 'Zug-Phase', Standby: 'Standby', Main1: 'Hauptphase 1', Battle: 'Kampfphase', Main2: 'Hauptphase 2', End: 'End-Phase',
 }
 
+/** Duel-arena backdrop: a deep-blue stadium gradient with a faint diamond/checker grid, instead
+ * of flat black — evoking the glowing arena lighting from the anime rather than a plain void. */
+const ARENA_BG_STYLE: React.CSSProperties = {
+  backgroundColor: '#050b1c',
+  backgroundImage: [
+    'repeating-linear-gradient(45deg, rgba(80,160,255,0.08) 0, rgba(80,160,255,0.08) 1px, transparent 1px, transparent 26px)',
+    'repeating-linear-gradient(-45deg, rgba(80,160,255,0.08) 0, rgba(80,160,255,0.08) 1px, transparent 1px, transparent 26px)',
+    'radial-gradient(ellipse at 50% -10%, rgba(80,160,255,0.28), transparent 60%)',
+    'linear-gradient(180deg, #0d1c42 0%, #081231 45%, #04081a 100%)',
+  ].join(', '),
+}
+
 function CardBack() {
   return <div className="flex aspect-[59/86] w-full items-center justify-center rounded-md bg-gradient-to-br from-indigo-900 to-neutral-900 text-lg shadow">🂠</div>
 }
@@ -131,7 +143,7 @@ export function DuelScreen() {
 
   if (!duel) {
     return (
-      <div className="px-3 py-4">
+      <div className="min-h-full px-3 py-4" style={ARENA_BG_STYLE}>
         <h2 className="mb-3 text-sm font-semibold text-neutral-300">Duell vorbereiten</h2>
 
         <div className="mb-4">
@@ -182,7 +194,7 @@ export function DuelScreen() {
 
   if (duel.winner) {
     return (
-      <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
+      <div className="flex min-h-full flex-col items-center justify-center px-6 py-16 text-center" style={ARENA_BG_STYLE}>
         <div className="mb-2 text-2xl font-bold text-duel-gold">{duel.winner === 'player' ? 'Sieg!' : 'Niederlage'}</div>
         <div className="mb-6 text-sm text-neutral-400">{duel.winReason}</div>
         <button onClick={() => setDuel(null)} className="rounded bg-duel-blue px-6 py-2 text-sm font-semibold text-white">
@@ -318,7 +330,7 @@ export function DuelScreen() {
   }
 
   return (
-    <div className="flex flex-col gap-1.5 px-1.5 py-1.5">
+    <div className="min-h-full flex flex-col gap-1.5 px-1.5 py-1.5" style={ARENA_BG_STYLE}>
       <PlayerBar name={opponent.name} state={duel.cpu} />
       <PlayerMat
         playerState={duel.cpu}
