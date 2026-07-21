@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import type { CSSProperties } from 'react'
 import type { CardDef } from '../data/types'
 
 const GRID = 8
@@ -57,12 +58,26 @@ function generateGrid(seed: number): number[][] {
   return rows
 }
 
-export function PixelSprite({ card, className = '' }: { card: CardDef; className?: string }) {
+export function PixelSprite({
+  card,
+  className = '',
+  style,
+}: {
+  card: CardDef
+  className?: string
+  style?: CSSProperties
+}) {
   const palette = paletteFor(card)
   const grid = useMemo(() => generateGrid(hashString(card.name)), [card.name])
 
   return (
-    <svg viewBox={`0 0 ${GRID} ${GRID}`} className={`h-full w-full ${className}`} shapeRendering="crispEdges" preserveAspectRatio="xMidYMid slice">
+    <svg
+      viewBox={`0 0 ${GRID} ${GRID}`}
+      className={`h-full w-full ${className}`}
+      style={style}
+      shapeRendering="crispEdges"
+      preserveAspectRatio="xMidYMid slice"
+    >
       <rect x={0} y={0} width={GRID} height={GRID} fill={palette[0]} />
       {grid.map((row, y) =>
         row.map((cell, x) =>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Route, HashRouter, Routes } from 'react-router-dom'
 import { AppShell } from './components/AppShell'
+import { GbaFilterDefs } from './components/GbaFilterDefs'
 import { MyShopScreen } from './screens/MyShopScreen'
 import { BoosterScreen } from './screens/BoosterScreen'
 import { BinderScreen } from './screens/BinderScreen'
@@ -15,6 +16,7 @@ function App() {
 
   return (
     <HashRouter>
+      <GbaFilterDefs />
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/shop" replace />} />

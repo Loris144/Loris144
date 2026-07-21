@@ -27,6 +27,11 @@ function frameStyleFor(card: CardDef): FrameStyle {
   return MONSTER_FRAME[card.kind] ?? MONSTER_FRAME.Effect
 }
 
+/** Applied to every piece of card art (real photo or pixel sprite) for a consistent, softly
+ * blurred, limited-palette "old handheld console" look — still clearly recognizable. */
+const GBA_STYLE = { filter: 'url(#gba-retro) saturate(1.35) contrast(1.12) blur(0.5px)' } as const
+const GBA_STYLE_FIELD = { filter: 'url(#gba-retro) saturate(1.35) contrast(1.12) blur(2.5px)' } as const
+
 const RARITY_GLOW: Record<string, string> = {
   Common: '',
   Rare: 'shadow-[0_0_8px_1px_rgba(56,189,248,0.55)] ring-1 ring-sky-400/70',
@@ -62,11 +67,12 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
             alt=""
             aria-hidden="true"
             onError={() => setImgFailed(true)}
-            className="absolute inset-0 h-full w-full scale-110 object-cover blur-[3px]"
+            className="absolute inset-0 h-full w-full scale-110 object-cover"
+            style={GBA_STYLE_FIELD}
             draggable={false}
           />
         ) : (
-          <PixelSprite card={card} className="absolute inset-0 blur-[2px]" />
+          <PixelSprite card={card} className="absolute inset-0" style={GBA_STYLE_FIELD} />
         )}
         <div className="absolute inset-0 bg-black/10" />
         {onInfo && (
@@ -98,6 +104,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
         alt={card.name}
         onError={() => setImgFailed(true)}
         className={`aspect-[59/86] w-full rounded-md object-cover shadow-lg ${glowClass} ${className}`}
+        style={GBA_STYLE}
         draggable={false}
       />
     )
@@ -111,7 +118,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
       <div className="flex h-full w-full flex-col rounded-[4px] bg-neutral-900 p-1 text-left">
         <div className="truncate text-[8px] font-bold leading-tight text-neutral-100">{card.name}</div>
         <div className="my-0.5 flex-1 overflow-hidden rounded-sm" style={{ imageRendering: 'pixelated' }}>
-          <PixelSprite card={card} />
+          <PixelSprite card={card} style={GBA_STYLE} />
         </div>
         {card.category === 'Monster' ? (
           <div className="flex items-center justify-between text-[6.5px] font-semibold text-neutral-200">
