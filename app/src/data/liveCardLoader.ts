@@ -1,8 +1,11 @@
 import { fetchCardsByArchetype, fetchCardsByNames } from './api'
 import { cardDb } from './cardDb'
 import { useCardDbStore } from './cardDbStore'
+import { fixtureCards } from './fixtureCards'
 
-/** Real Konami archetypes covering the classic cast's card lines and their modern support. */
+/** Real Konami archetypes covering the classic cast's card lines and their modern support.
+ * Pulled in addition to the exact-name lookup below so related official cards not yet in the
+ * offline fixture (e.g. brand-new support) can still be discovered automatically. */
 const ARCHETYPES = [
   'Dark Magician', // Yugi
   'Blue-Eyes', // Kaiba
@@ -16,50 +19,21 @@ const ARCHETYPES = [
 ]
 
 /**
- * Specific signature cards for classic duelists whose deck isn't one named Konami archetype —
- * looked up by exact name instead.
- */
-const NAMED_CARDS = [
-  // Egyptian Gods
-  'Slifer the Sky Dragon',
-  'Obelisk the Tormentor',
-  'The Winged Dragon of Ra',
-  'The Winged Dragon of Ra - Sphere Mode',
-  'The Winged Dragon of Ra - Immortal Phoenix',
-  // Rex Raptor (Dinosaur deck)
-  'Serpent Night Dragon',
-  'Black Tyranno',
-  'Two-Headed King Rex',
-  'Uraby',
-  // Weevil Underwood (Insect deck)
-  'Insect Queen',
-  'Man-Eater Bug',
-  'Basic Insect',
-  'Great Moth',
-  'Cocoon of Evolution',
-  // Maximillion Pegasus
-  'Relinquished',
-  'Toon World',
-  'Toon Alligator',
-  // Yami Bakura
-  'Dark Necrofear',
-  'Diabound Kernel',
-  // The Seal of Orichalcos arc
-  'The Seal of Orichalcos',
-]
-
-/**
- * Fetches the full official card pool for the archetypes/cards this app cares about and merges
- * it into cardDb. Safe to call once at app startup: if there's no network (e.g. this dev
- * sandbox), every fetch rejects and the app just keeps using the bundled offline fixture — no
- * error is thrown up to the caller.
+ * Fetches official data — including each card's real artwork — for EVERY card in the offline
+ * fixture, by exact name, plus a handful of whole archetypes for extra coverage. Merges the
+ * result into cardDb so each card gets its own correct `officialId`, instead of only a curated
+ * subset. Safe to call once at app startup: if there's no network (e.g. this dev sandbox), every
+ * fetch rejects and the app just keeps using the bundled offline fixture — no error is thrown up
+ * to the caller.
  */
 export async function loadLiveCardData(): Promise<void> {
   useCardDbStore.getState().markLoading()
 
+  const allNames = fixtureCards.map((c) => c.name)
+
   const [archetypeResults, namedCards] = await Promise.all([
     Promise.allSettled(ARCHETYPES.map((archetype) => fetchCardsByArchetype(archetype))),
-    fetchCardsByNames(NAMED_CARDS).catch(() => []),
+    fetchCardsByNames(allNames).catch(() => []),
   ])
 
   let mergedAny = false
