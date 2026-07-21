@@ -364,6 +364,7 @@ export function DuelScreen() {
         onInfo={(id) => setSelectedFieldCard(id)}
         onGraveyard={() => setZoneView({ title: 'Dein Friedhof', cards: duel.player.graveyard })}
         onExtraDeck={() => setZoneView({ title: 'Dein Extra Deck', cards: duel.player.extraDeck })}
+        monsterRowFirst
       />
       <PlayerBar name="Du" state={duel.player} />
 
@@ -696,6 +697,7 @@ function PlayerMat({
   onGraveyard,
   onExtraDeck,
   hideFaceDown,
+  monsterRowFirst,
 }: {
   playerState: DuelState['player']
   onTapMonster: (id: string) => void
@@ -704,47 +706,27 @@ function PlayerMat({
   onGraveyard?: () => void
   onExtraDeck?: () => void
   hideFaceDown?: boolean
+  /** On a real mat, each player's own Monster Zone row sits closer to the middle of the field and
+   * their Spell/Trap (+ Pendulum) row sits closer to themselves, just above their hand — the
+   * opposite order from how the opponent's rows read top-to-bottom on screen. */
+  monsterRowFirst?: boolean
 }) {
   const { spellTrapZones, monsterZones, graveyard, deck, extraDeck } = playerState
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="grid grid-cols-7 gap-1">
-        <ZoneTile label="FELD" tone="field" dashed />
-        {spellTrapZones.map((slot, i) => {
-          // The outer 2 of the 5 Spell/Trap Zones double as Pendulum Zones in modern Yu-Gi-Oh.
-          const tone: ZoneTone = i === 0 || i === spellTrapZones.length - 1 ? 'pendulum' : 'spelltrap'
-          return (
-            <div key={i} className="aspect-[59/86]">
-              <FieldSlot tone={tone}>
-                {slot ? (
-                  hideFaceDown && slot.faceDown ? (
-                    <CardBack />
-                  ) : (
-                    <button onClick={() => onTapSpellTrap?.(slot.card.instanceId, slot.faceDown)} className="h-full w-full">
-                      {slot.faceDown ? (
-                        <CardBack />
-                      ) : (
-                        <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
-                      )}
-                    </button>
-                  )
-                ) : null}
-              </FieldSlot>
-            </div>
-          )
-        })}
-        <ZoneTile label="GRAB" tone="graveyard" count={graveyard.length} onTap={onGraveyard} />
-      </div>
-      <div className="grid grid-cols-7 gap-1">
-        <ZoneTile label="EXTRA" tone="extradeck" count={extraDeck.length} onTap={onExtraDeck} />
-        {monsterZones.map((slot, i) => (
+
+  const spellTrapRow = (
+    <div className="grid grid-cols-7 gap-1">
+      <ZoneTile label="FELD" tone="field" dashed />
+      {spellTrapZones.map((slot, i) => {
+        // The outer 2 of the 5 Spell/Trap Zones double as Pendulum Zones in modern Yu-Gi-Oh.
+        const tone: ZoneTone = i === 0 || i === spellTrapZones.length - 1 ? 'pendulum' : 'spelltrap'
+        return (
           <div key={i} className="aspect-[59/86]">
-            <FieldSlot tone="monster">
+            <FieldSlot tone={tone}>
               {slot ? (
                 hideFaceDown && slot.faceDown ? (
                   <CardBack />
                 ) : (
-                  <button onClick={() => onTapMonster(slot.card.instanceId)} className={`relative h-full w-full ${slot.position === 'Defense' ? 'rotate-90' : ''}`}>
+                  <button onClick={() => onTapSpellTrap?.(slot.card.instanceId, slot.faceDown)} className="h-full w-full">
                     {slot.faceDown ? (
                       <CardBack />
                     ) : (
@@ -755,9 +737,51 @@ function PlayerMat({
               ) : null}
             </FieldSlot>
           </div>
-        ))}
-        <ZoneTile label="DECK" tone="deck" count={deck.length} />
-      </div>
+        )
+      })}
+      <ZoneTile label="GRAB" tone="graveyard" count={graveyard.length} onTap={onGraveyard} />
+    </div>
+  )
+
+  const monsterRow = (
+    <div className="grid grid-cols-7 gap-1">
+      <ZoneTile label="EXTRA" tone="extradeck" count={extraDeck.length} onTap={onExtraDeck} />
+      {monsterZones.map((slot, i) => (
+        <div key={i} className="aspect-[59/86]">
+          <FieldSlot tone="monster">
+            {slot ? (
+              hideFaceDown && slot.faceDown ? (
+                <CardBack />
+              ) : (
+                <button onClick={() => onTapMonster(slot.card.instanceId)} className={`relative h-full w-full ${slot.position === 'Defense' ? 'rotate-90' : ''}`}>
+                  {slot.faceDown ? (
+                    <CardBack />
+                  ) : (
+                    <CardFace card={cardDb.byId(slot.card.cardId)!} variant="field" onInfo={() => onInfo?.(slot.card.instanceId)} />
+                  )}
+                </button>
+              )
+            ) : null}
+          </FieldSlot>
+        </div>
+      ))}
+      <ZoneTile label="DECK" tone="deck" count={deck.length} />
+    </div>
+  )
+
+  return (
+    <div className="flex flex-col gap-1">
+      {monsterRowFirst ? (
+        <>
+          {monsterRow}
+          {spellTrapRow}
+        </>
+      ) : (
+        <>
+          {spellTrapRow}
+          {monsterRow}
+        </>
+      )}
     </div>
   )
 }
