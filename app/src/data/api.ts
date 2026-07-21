@@ -105,12 +105,34 @@ export async function fetchCardsByArchetype(archetype: string): Promise<CardDef[
   return json.data.map(toCardDef)
 }
 
+/** Runs `fn` over `items` with at most `limit` requests in flight at once, so a large batch (e.g.
+ * dozens of archetypes plus a full card-name list at app startup) can't burst past YGOPRODeck's
+ * documented ~20 requests/second rate limit. */
+export async function runThrottled<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<PromiseSettledResult<R>[]> {
+  const results: PromiseSettledResult<R>[] = new Array(items.length)
+  let nextIndex = 0
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const i = nextIndex++
+      try {
+        results[i] = { status: 'fulfilled', value: await fn(items[i]) }
+      } catch (error) {
+        results[i] = { status: 'rejected', reason: error }
+      }
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  return results
+}
+
 /** Looks up a curated list of specific card names — used for classic duelists whose signature
  * cards aren't grouped under one named Konami archetype (e.g. Rex Raptor's Dinosaurs, Marik's
  * Egyptian God cards). Each name is looked up individually so one bad/renamed entry can't fail
- * the whole batch. */
+ * the whole batch, throttled to stay under the API's rate limit. */
 export async function fetchCardsByNames(names: string[]): Promise<CardDef[]> {
-  const results = await Promise.allSettled(names.map((name) => fetchCardByName(name)))
+  const results = await runThrottled(names, 8, (name) => fetchCardByName(name))
   const cards: CardDef[] = []
   for (const r of results) {
     if (r.status === 'fulfilled' && r.value) cards.push(r.value)

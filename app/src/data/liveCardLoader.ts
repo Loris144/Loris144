@@ -1,11 +1,20 @@
-import { fetchCardsByArchetype, fetchCardsByNames } from './api'
+import { fetchCardsByArchetype, fetchCardsByNames, runThrottled } from './api'
 import { cardDb } from './cardDb'
 import { useCardDbStore } from './cardDbStore'
 import { fixtureCards } from './fixtureCards'
 
-/** Real Konami archetypes covering the classic cast's card lines and their modern support.
+/**
+ * Real Konami archetypes covering the classic cast's card lines and their modern support.
  * Pulled in addition to the exact-name lookup below so related official cards not yet in the
- * offline fixture (e.g. brand-new support) can still be discovered automatically. */
+ * offline fixture (e.g. brand-new support) can still be discovered automatically.
+ *
+ * The bulk of this list (from "Magician Girl" down) comes from a curated
+ * `classic_archetypes.json` the user supplied — every `api_archetype` string from its `core` and
+ * `optional_deep_cuts` sections, verified against https://db.ygoprodeck.com/api/v7/archetypes.php.
+ * Its `breit_mit_vorsicht` section (Magician / Magnet / Chaos) is deliberately left out: those are
+ * umbrella tags the file itself flags as pulling in non-classic cards (e.g. ARC-V Pendulum
+ * magicians), so they're opt-in rather than automatic.
+ */
 const ARCHETYPES = [
   'Dark Magician', // Yugi
   'Blue-Eyes', // Kaiba
@@ -18,6 +27,52 @@ const ARCHETYPES = [
   'Orichalcos', // Seal of Orichalcos arc
   'Archfiend', // Summoned Skull's real archetype tag (Yugi)
   'Gaia The Fierce Knight', // Gaia's real archetype (Yugi)
+  'Magician Girl',
+  'Skilled Magician',
+  'Silent Magician',
+  'Silent Swordsman',
+  'Kuriboh',
+  'Magna Warrior',
+  'Black Luster Soldier',
+  'Gaia Knight',
+  'Gandora',
+  'Curse of Dragon',
+  'Mokey Mokey',
+  'Exodd',
+  'Ra',
+  'Wicked God',
+  'Timaeus',
+  'Legendary Knight',
+  'with Eyes of Blue',
+  'Flame Swordsman',
+  'Dark Time Wizard',
+  'Amazoness',
+  'Relinquished',
+  'Eyes Restrict',
+  'Millennium',
+  "Gravekeeper's",
+  'Slime',
+  'Gate Guardian',
+  'Sangen',
+  'Labyrinth Wall',
+  'Spirit Message',
+  'Dark Scorpion',
+  'Jinzo',
+  'Gadget',
+  'Skull Servant',
+  'Wight',
+  'Sphinx',
+  // optional_deep_cuts
+  'Umi',
+  'Atlantis, the Dragon City',
+  'The Sanctuary in the Sky',
+  'Temple of the Kings',
+  'Daedalus',
+  'Doriado',
+  'Man-Eater Bug',
+  'Parasite',
+  'Guardian',
+  'Horus the Black Flame Dragon',
 ]
 
 /**
@@ -34,7 +89,7 @@ export async function loadLiveCardData(): Promise<void> {
   const allNames = fixtureCards.map((c) => c.name)
 
   const [archetypeResults, namedCards] = await Promise.all([
-    Promise.allSettled(ARCHETYPES.map((archetype) => fetchCardsByArchetype(archetype))),
+    runThrottled(ARCHETYPES, 8, (archetype) => fetchCardsByArchetype(archetype)),
     fetchCardsByNames(allNames).catch(() => []),
   ])
 

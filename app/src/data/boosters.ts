@@ -37,7 +37,7 @@ export const boosterSets: BoosterSet[] = [
   withBoxEconomics({
     id: 'dragons-roar',
     name: "Dragon's Roar",
-    cardPool: [3, 70, 71, 72, 73, 74, 75, 76, 77, 78, 120, 121, 122, 123],
+    cardPool: [3, 70, 71, 72, 73, 74, 75, 76, 77, 78, 120, 121, 122, 123, 306],
     rarityWeights: defaultWeights,
   }),
   withBoxEconomics({
@@ -87,6 +87,30 @@ export const boosterSets: BoosterSet[] = [
     name: 'Magnet Force',
     cardPool: [270, 271, 272, 273, 274, 275, 276, 277, 278, 279],
     rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'tomb-of-the-pharaoh',
+    name: 'Tomb of the Pharaoh',
+    cardPool: [293, 294, 295],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'amazon-warriors',
+    name: 'Amazon Warriors',
+    cardPool: [296, 297, 298],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'battle-city-rivals',
+    name: 'Battle City Rivals',
+    cardPool: [22, 300, 301, 302, 303, 304, 305, 307, 308, 315],
+    rarityWeights: defaultWeights,
+  }),
+  withBoxEconomics({
+    id: 'legend-of-the-envoy',
+    name: 'Legend of the Envoy',
+    cardPool: [299, 309, 310, 311, 312, 313, 314],
+    rarityWeights: { Common: 20, Rare: 30, 'Super Rare': 25, 'Ultra Rare': 15, 'Secret Rare': 10 },
   }),
 ]
 

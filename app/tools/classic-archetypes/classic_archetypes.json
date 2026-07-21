@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "description": "Kuratierte Liste der Archetypen aus dem klassischen Yu-Gi-Oh (Original-Serie 'Duel Monsters' / fruehe TCG-Aera, ca. 2002-2008). Jeder api_archetype-String entspricht EXAKT dem Wert aus https://db.ygoprodeck.com/api/v7/archetypes.php und kann direkt an cardinfo.php?archetype= uebergeben werden. Das Skript fetch_classic_support.py zieht damit alle Mitglieder + designierten Support-Karten (inkl. moderner Xyz/Fusion/Synchro/Link-Retrains).",
+    "status_legende": {
+      "classic_group": "War in der klassischen Aera bereits als Themen-/Gruppen-Set konzipiert und funktionierte als Archetyp.",
+      "retro_archetype": "Einzelne klassische Karte(n), die erst spaeter durch modernen Support zum vollen Archetyp gemacht wurden.",
+      "broad_mixed": "Breiter Umbrella-Tag, der auch NICHT-klassische Karten (z.B. ARC-V-Pendulum) enthaelt. Bewusst pruefen, ob gewuenscht."
+    },
+    "hinweis_horus": "'Horus' ist ein NEUER, unabhaengiger Archetyp von 2023 und hat mit dem klassischen 'Horus the Black Flame Dragon' nichts zu tun. Fuer die klassische Linie NUR 'Horus the Black Flame Dragon' verwenden.",
+    "hinweis_magician": "Der Tag 'Magician' enthaelt auch die ARC-V-Pendulum-Magier (Yuya). Fuer klassischen Dark-Magician-Support sind 'Dark Magician', 'Magician Girl' und 'Skilled Magician' praeziser."
+  },
+
+  "core": [
+    { "name": "Dark Magician",             "origin": "Yugi",             "status": "classic_group",   "api_archetype": "Dark Magician" },
+    { "name": "Magician Girl",             "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Magician Girl" },
+    { "name": "Skilled Magician",          "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Skilled Magician" },
+    { "name": "Silent Magician",           "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Silent Magician" },
+    { "name": "Silent Swordsman",          "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Silent Swordsman" },
+    { "name": "Kuriboh",                   "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Kuriboh" },
+    { "name": "Magnet Warrior",            "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Magnet Warrior" },
+    { "name": "Magna Warrior",             "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Magna Warrior" },
+    { "name": "Black Luster Soldier",      "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Black Luster Soldier" },
+    { "name": "Gaia The Fierce Knight",    "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Gaia The Fierce Knight" },
+    { "name": "Gaia Knight",               "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Gaia Knight" },
+    { "name": "Gandora",                   "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Gandora" },
+    { "name": "Curse of Dragon",           "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Curse of Dragon" },
+    { "name": "Mokey Mokey",               "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Mokey Mokey" },
+    { "name": "Exodia",                    "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Exodia" },
+    { "name": "Exodd",                     "origin": "Yugi",             "status": "retro_archetype", "api_archetype": "Exodd" },
+    { "name": "Egyptian God",              "origin": "Yugi/Marik",       "status": "classic_group",   "api_archetype": "Egyptian God" },
+    { "name": "Ra",                        "origin": "Marik",            "status": "retro_archetype", "api_archetype": "Ra" },
+    { "name": "Wicked God",                "origin": "Manga",            "status": "retro_archetype", "api_archetype": "Wicked God" },
+    { "name": "Timaeus (Legendary Dragon)","origin": "Doma-Arc",         "status": "retro_archetype", "api_archetype": "Timaeus" },
+    { "name": "Legendary Knight",          "origin": "Doma-Arc",         "status": "retro_archetype", "api_archetype": "Legendary Knight" },
+
+    { "name": "Blue-Eyes",                 "origin": "Kaiba",            "status": "classic_group",   "api_archetype": "Blue-Eyes" },
+    { "name": "with Eyes of Blue",         "origin": "Kaiba",            "status": "retro_archetype", "api_archetype": "with Eyes of Blue" },
+
+    { "name": "Red-Eyes",                  "origin": "Joey",             "status": "classic_group",   "api_archetype": "Red-Eyes" },
+    { "name": "Flame Swordsman",           "origin": "Joey",             "status": "retro_archetype", "api_archetype": "Flame Swordsman" },
+    { "name": "Dark Time Wizard",          "origin": "Joey",             "status": "retro_archetype", "api_archetype": "Dark Time Wizard" },
+
+    { "name": "Harpie",                    "origin": "Mai",              "status": "classic_group",   "api_archetype": "Harpie" },
+    { "name": "Amazoness",                 "origin": "Mai",              "status": "classic_group",   "api_archetype": "Amazoness" },
+
+    { "name": "Toon",                      "origin": "Pegasus",          "status": "classic_group",   "api_archetype": "Toon" },
+    { "name": "Relinquished",              "origin": "Pegasus",          "status": "retro_archetype", "api_archetype": "Relinquished" },
+    { "name": "Eyes Restrict",             "origin": "Pegasus",          "status": "retro_archetype", "api_archetype": "Eyes Restrict" },
+    { "name": "Millennium",                "origin": "Pegasus",          "status": "retro_archetype", "api_archetype": "Millennium" },
+
+    { "name": "Gravekeeper's",             "origin": "Ishizu/Marik",     "status": "classic_group",   "api_archetype": "Gravekeeper's" },
+    { "name": "Slime",                     "origin": "Marik",            "status": "retro_archetype", "api_archetype": "Slime" },
+
+    { "name": "Gate Guardian",             "origin": "Paradox Brothers", "status": "retro_archetype", "api_archetype": "Gate Guardian" },
+    { "name": "Sangen",                    "origin": "Paradox Brothers", "status": "retro_archetype", "api_archetype": "Sangen" },
+    { "name": "Labyrinth Wall",            "origin": "Paradox Brothers", "status": "retro_archetype", "api_archetype": "Labyrinth Wall" },
+
+    { "name": "Spirit Message",            "origin": "Bakura",           "status": "retro_archetype", "api_archetype": "Spirit Message" },
+
+    { "name": "Archfiend",                 "origin": "Yugi/Joey",        "status": "classic_group",   "api_archetype": "Archfiend" },
+    { "name": "Dark Scorpion",             "origin": "Don Zaloog",       "status": "classic_group",   "api_archetype": "Dark Scorpion" },
+    { "name": "Jinzo",                     "origin": "klassisch",        "status": "retro_archetype", "api_archetype": "Jinzo" },
+    { "name": "Gadget",                    "origin": "klassisch",        "status": "retro_archetype", "api_archetype": "Gadget" },
+    { "name": "Skull Servant",             "origin": "klassisch",        "status": "retro_archetype", "api_archetype": "Skull Servant" },
+    { "name": "Wight",                     "origin": "klassisch",        "status": "retro_archetype", "api_archetype": "Wight" },
+    { "name": "Sphinx",                    "origin": "Anubis (Film)",    "status": "retro_archetype", "api_archetype": "Sphinx" }
+  ],
+
+  "optional_deep_cuts": [
+    { "name": "Umi",                         "origin": "Mako/Feld",      "status": "retro_archetype", "api_archetype": "Umi" },
+    { "name": "Atlantis, the Dragon City",   "origin": "Feld",           "status": "retro_archetype", "api_archetype": "Atlantis, the Dragon City" },
+    { "name": "The Sanctuary in the Sky",    "origin": "Feld",           "status": "retro_archetype", "api_archetype": "The Sanctuary in the Sky" },
+    { "name": "Temple of the Kings",         "origin": "Marik/Feld",     "status": "retro_archetype", "api_archetype": "Temple of the Kings" },
+    { "name": "Daedalus",                    "origin": "Mako",           "status": "retro_archetype", "api_archetype": "Daedalus" },
+    { "name": "Doriado",                     "origin": "klassisch",      "status": "retro_archetype", "api_archetype": "Doriado" },
+    { "name": "Man-Eater Bug",               "origin": "klassisch",      "status": "retro_archetype", "api_archetype": "Man-Eater Bug" },
+    { "name": "Parasite",                    "origin": "Weevil",         "status": "retro_archetype", "api_archetype": "Parasite" },
+    { "name": "Guardian",                    "origin": "TCG (LOD)",      "status": "classic_group",   "api_archetype": "Guardian" },
+    { "name": "Horus the Black Flame Dragon","origin": "TCG (2004)",     "status": "retro_archetype", "api_archetype": "Horus the Black Flame Dragon" }
+  ],
+
+  "breit_mit_vorsicht": [
+    { "name": "Magician", "status": "broad_mixed", "api_archetype": "Magician", "warnung": "Enthaelt auch ARC-V-Pendulum-Magier (nicht klassisch)." },
+    { "name": "Magnet",   "status": "broad_mixed", "api_archetype": "Magnet",   "warnung": "Breiter als nur die Magnet Warrior." },
+    { "name": "Chaos",    "status": "broad_mixed", "api_archetype": "Chaos",    "warnung": "Sehr breit; nur ueber Black-Luster-Soldier/Envoy klassisch verbunden." }
+  ]
+}

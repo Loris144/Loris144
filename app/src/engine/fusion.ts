@@ -14,4 +14,5 @@ export const fusionRecipes: FusionRecipe[] = [
   { resultCardId: 200, materialCardIds: [202, 203] }, // Serpent Night Dragon <- Two-Headed King Rex + Uraby
   { resultCardId: 282, materialCardIds: [4, 3] }, // Black Skull Dragon <- Summoned Skull + Red-Eyes B. Dragon
   { resultCardId: 283, materialCardIds: [6, 7] }, // Gaia the Dragon Champion <- Gaia the Fierce Knight + Curse of Dragon
+  { resultCardId: 305, materialCardIds: [302, 303, 304] }, // Gate Guardian <- Sanga of the Thunder + Kazejin + Suijin
 ]

@@ -194,6 +194,49 @@ export const fixtureCards: CardDef[] = [
 
   // ---- More Kuriboh support (Joey) ----
   { id: 292, name: 'Multiply', category: 'Spell', kind: 'Normal', desc: 'Special Summon as many "Kuriboh Tokens" (Fiend/DARK/Level 1/ATK 300/DEF 200) as possible, up to the number of "Kuriboh" you control.', protagonist: 'Joey', rarity: 'Rare', price: 130 },
+
+  // ---- Gravekeeper's (Marik / Ishizu, Battle City) ----
+  { id: 293, name: 'Necrovalley', category: 'Spell', kind: 'Field', desc: '"Gravekeeper\'s" monsters you control gain 500 ATK/DEF. Cards in either GY cannot be banished, and their effects that activate in the GY are negated.', protagonist: 'Marik', archetype: "Gravekeeper's", rarity: 'Super Rare', price: 350 },
+  { id: 294, name: "Gravekeeper's Spy", category: 'Monster', kind: 'Effect', desc: 'FLIP: Special Summon 1 "Gravekeeper\'s" monster with 1500 or less ATK from your Deck.', protagonist: 'Marik', archetype: "Gravekeeper's", attribute: 'EARTH', race: 'Spellcaster', level: 2, atk: 500, def: 500, rarity: 'Rare', price: 140 },
+  { id: 295, name: "Gravekeeper's Chief", category: 'Monster', kind: 'Effect', desc: 'When Tribute Summoned: You can Special Summon 1 "Gravekeeper\'s" monster from your GY, except "Gravekeeper\'s Chief".', protagonist: 'Marik', archetype: "Gravekeeper's", attribute: 'EARTH', race: 'Spellcaster', level: 4, atk: 1900, def: 1600, rarity: 'Rare', price: 180 },
+
+  // ---- Amazoness (Mai Valentine) ----
+  { id: 296, name: 'Amazoness Swords Woman', category: 'Monster', kind: 'Effect', desc: 'If this card is attacked, it gains 500 ATK during damage calculation only. Any battle damage you take from a battle involving this card is halved.', protagonist: 'Mai', archetype: 'Amazoness', attribute: 'EARTH', race: 'Warrior', level: 4, atk: 1500, def: 1600, rarity: 'Rare', price: 150 },
+  { id: 297, name: 'Amazoness Queen', category: 'Monster', kind: 'Effect', desc: 'While you control another "Amazoness" monster, this card cannot be destroyed by battle. If this card destroys an opponent\'s monster by battle: You can add 1 "Amazoness" card from your Deck to your hand.', protagonist: 'Mai', archetype: 'Amazoness', attribute: 'EARTH', race: 'Warrior', level: 4, atk: 1400, def: 1800, rarity: 'Super Rare', price: 300 },
+  { id: 298, name: 'Amazoness Village', category: 'Spell', kind: 'Continuous', desc: '"Amazoness" monsters you control gain 300 ATK. Monsters your opponent controls lose 300 ATK during damage calculation against an "Amazoness" monster.', protagonist: 'Mai', archetype: 'Amazoness', rarity: 'Rare', price: 150 },
+
+  // ---- Black Luster Soldier (Yugi) ----
+  { id: 299, name: 'Black Luster Soldier - Envoy of the Beginning', category: 'Monster', kind: 'Effect', desc: 'Cannot be Normal Summoned or Set. Must be Special Summoned by banishing 1 LIGHT and 1 DARK monster from your GY. Once per turn, banish 1 monster on the field, or attack twice in a row if it destroys a monster by battle.', protagonist: 'Yugi', archetype: 'Black Luster Soldier', attribute: 'LIGHT', race: 'Warrior', level: 8, atk: 3000, def: 2500, rarity: 'Secret Rare', price: 2000 },
+
+  // ---- Dark Scorpion (Battle City side duelists) ----
+  { id: 300, name: 'Don Zaloog', category: 'Monster', kind: 'Effect', desc: 'If this card inflicts battle damage to your opponent: Choose 1 - Your opponent discards 1 random card from their hand; or you draw 1 card, but you take 1000 damage.', archetype: 'Dark Scorpion', attribute: 'DARK', race: 'Warrior', level: 4, atk: 1900, def: 700, rarity: 'Rare', price: 160 },
+  { id: 301, name: 'Dark Scorpion Combination', category: 'Spell', kind: 'Normal', desc: 'Requires all 5 "Dark Scorpion" members face-up on your field. This turn, each of them can attack directly, and their battle damage to your opponent becomes 400 for each.', archetype: 'Dark Scorpion', rarity: 'Rare', price: 130 },
+
+  // ---- Gate Guardian (Paradox Brothers) ----
+  { id: 302, name: 'Sanga of the Thunder', category: 'Monster', kind: 'Effect', desc: 'As long as this card remains face-up, monsters your opponent controls cannot declare an attack, except monsters with the same name.', archetype: 'Gate Guardian', attribute: 'WIND', race: 'Thunder', level: 6, atk: 2600, def: 2200, rarity: 'Rare', price: 200 },
+  { id: 303, name: 'Kazejin', category: 'Monster', kind: 'Effect', desc: 'As long as this card remains face-up, monsters your opponent controls cannot declare an attack, except monsters with the same name.', archetype: 'Gate Guardian', attribute: 'WIND', race: 'Spellcaster', level: 6, atk: 2400, def: 2200, rarity: 'Rare', price: 200 },
+  { id: 304, name: 'Suijin', category: 'Monster', kind: 'Effect', desc: 'As long as this card remains face-up, monsters your opponent controls cannot declare an attack, except monsters with the same name.', archetype: 'Gate Guardian', attribute: 'WATER', race: 'Aqua', level: 6, atk: 2500, def: 2400, rarity: 'Rare', price: 200 },
+  { id: 305, name: 'Gate Guardian', category: 'Monster', kind: 'Fusion', desc: 'Fusion Summoned using "Sanga of the Thunder" + "Kazejin" + "Suijin". Its ATK/DEF are each half the combined original ATK/DEF of its 3 materials.', archetype: 'Gate Guardian', attribute: 'EARTH', race: 'Thunder', level: 10, atk: 3750, def: 3400, rarity: 'Ultra Rare', price: 1200 },
+
+  // ---- Flame Swordsman (Joey) ----
+  { id: 306, name: 'Fighting Flame Swordsman', category: 'Monster', kind: 'Effect', desc: 'You can send 1 "Flame Swordsman" card you control to the GY; add 1 "Flame Swordsman" or Equip Spell that mentions it from your Deck to your hand.', protagonist: 'Joey', archetype: 'Flame Swordsman', attribute: 'FIRE', race: 'Warrior', level: 4, atk: 1800, def: 1600, rarity: 'Rare', price: 160 },
+
+  // ---- Skull Servant (classic joke monster turned archetype) ----
+  { id: 307, name: 'Skull Servant', category: 'Monster', kind: 'Normal', desc: 'This monster is a low-powered zombie made of bare bones. Its ferocity is only a bluff.', archetype: 'Skull Servant', attribute: 'DARK', race: 'Zombie', level: 1, atk: 300, def: 200, rarity: 'Common', price: 30 },
+  { id: 308, name: 'King of the Skull Servants', category: 'Monster', kind: 'Effect', desc: 'This card\'s ATK is 1000 x the number of "King of the Skull Servants" and "Skull Servant" in your GY. If this card is destroyed by battle: You can banish 1 "Skull Servant" from your GY to Special Summon this card.', archetype: 'Skull Servant', attribute: 'DARK', race: 'Zombie', level: 1, atk: 300, def: 200, rarity: 'Super Rare', price: 350 },
+
+  // ---- Silent Magician / Silent Swordsman (Yugi, later manga/GX support) ----
+  { id: 309, name: 'Silent Magician LV4', category: 'Monster', kind: 'Effect', desc: 'Each time your opponent draws a card, place 1 Spell Counter on this card (max. 5). Gains 500 ATK per Spell Counter. With 5 Spell Counters, you can send this card to the GY to Special Summon "Silent Magician LV8".', protagonist: 'Yugi', archetype: 'Silent Magician', attribute: 'LIGHT', race: 'Spellcaster', level: 4, atk: 1000, def: 1000, rarity: 'Rare', price: 180 },
+  { id: 310, name: 'Silent Magician LV8', category: 'Monster', kind: 'Effect', desc: 'Cannot be Normal Summoned/Set. Must be Special Summoned by "Silent Magician LV4". Unaffected by your opponent\'s Spell Cards. Once while face-up, you can negate a Spell that targets exactly 1 of your monsters.', protagonist: 'Yugi', archetype: 'Silent Magician', attribute: 'LIGHT', race: 'Spellcaster', level: 8, atk: 3500, def: 1000, rarity: 'Ultra Rare', price: 700 },
+  { id: 311, name: 'Silent Swordsman LV3', category: 'Monster', kind: 'Effect', desc: 'Cannot be destroyed in battle with a DEF Position monster. Gains a Spell Counter each time your opponent draws a card; with enough, Special Summon "Silent Swordsman LV5" from your hand or Deck.', protagonist: 'Yugi', archetype: 'Silent Swordsman', attribute: 'LIGHT', race: 'Warrior', level: 3, atk: 1000, def: 1000, rarity: 'Rare', price: 150 },
+  { id: 312, name: 'Silent Swordsman LV7', category: 'Monster', kind: 'Effect', desc: 'When Normal Summoned: You can add 1 "Silent Swordsman LV3" or "Silent Magician LV4" from your Deck to your hand. Once while face-up, you can negate a Spell that targets exactly 1 of your monsters.', protagonist: 'Yugi', archetype: 'Silent Swordsman', attribute: 'LIGHT', race: 'Warrior', level: 7, atk: 2800, def: 1000, rarity: 'Ultra Rare', price: 650 },
+
+  // ---- Timaeus / Legendary Knight (Yugi, Waking the Dragons / Doma arc) ----
+  { id: 313, name: 'The Eye of Timaeus', category: 'Spell', kind: 'Equip', desc: 'Equip only to a Dragon-Type monster. It gains 2000 ATK. If it would be destroyed by battle or card effect, banish this card instead and Special Summon it from the GY, ignoring its Summoning conditions.', protagonist: 'Yugi', archetype: 'Timaeus', rarity: 'Ultra Rare', price: 700 },
+  { id: 314, name: 'Legendary Knight Timaeus', category: 'Monster', kind: 'Effect', desc: 'The true form of "The Eye of Timaeus". Once per turn, you can banish 1 monster from your GY to have this card gain its effect.', protagonist: 'Yugi', archetype: 'Legendary Knight', attribute: 'LIGHT', race: 'Warrior', level: 8, atk: 2800, def: 1800, rarity: 'Ultra Rare', price: 750 },
+
+  // ---- Jinzo (classic staple turned archetype) ----
+  { id: 315, name: 'Jinzo - Returner', category: 'Monster', kind: 'Effect', desc: 'This card can attack your opponent directly. When this card is sent to the GY: You can Special Summon 1 "Jinzo" monster from your GY.', archetype: 'Jinzo', attribute: 'DARK', race: 'Machine', level: 3, atk: 600, def: 1400, rarity: 'Rare', price: 170 },
 ]
 
 export const fixtureCardsById: Record<number, CardDef> = Object.fromEntries(
