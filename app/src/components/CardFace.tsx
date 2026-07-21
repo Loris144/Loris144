@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { cardImageId, cardImageUrl } from '../data/types'
 import type { CardDef } from '../data/types'
+import { PixelSprite } from './PixelSprite'
 
 interface FrameStyle {
   gradient: string
@@ -65,7 +66,7 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
             draggable={false}
           />
         ) : (
-          <div className={`absolute inset-0 bg-gradient-to-b ${frame.gradient} opacity-80 blur-[3px]`} />
+          <PixelSprite card={card} className="absolute inset-0 blur-[2px]" />
         )}
         <div className="absolute inset-0 bg-black/10" />
         {onInfo && (
@@ -105,28 +106,22 @@ export function CardFace({ card, className = '', variant = 'full', rarityGlow = 
   return (
     <div
       className={`aspect-[59/86] w-full rounded-md bg-gradient-to-b ${frame.gradient} p-[3px] shadow-lg ${glowClass} ${className}`}
-      title={`${card.name} (Vorschau-Platzhalter – echtes Artwork lädt auf deinem Gerät mit Internet)`}
+      title={`${card.name} (Original-Pixel-Art-Platzhalter – echtes Artwork lädt auf deinem Gerät mit Internet)`}
     >
-      <div className="flex h-full w-full flex-col rounded-[4px] bg-neutral-900 p-1.5 text-left">
-        <div className="truncate text-[9px] font-bold leading-tight text-neutral-100">{card.name}</div>
-        <div className="mt-0.5 flex-1 rounded bg-neutral-800/70 p-1 text-[6.5px] leading-[1.15] text-neutral-300">
-          {card.category === 'Monster' && (
-            <div className="mb-1 flex items-center justify-between text-[6.5px] text-neutral-400">
-              <span>{card.attribute}</span>
-              <span>{card.kind}</span>
-            </div>
-          )}
-          <div className="line-clamp-5">{card.desc}</div>
+      <div className="flex h-full w-full flex-col rounded-[4px] bg-neutral-900 p-1 text-left">
+        <div className="truncate text-[8px] font-bold leading-tight text-neutral-100">{card.name}</div>
+        <div className="my-0.5 flex-1 overflow-hidden rounded-sm" style={{ imageRendering: 'pixelated' }}>
+          <PixelSprite card={card} />
         </div>
         {card.category === 'Monster' ? (
-          <div className="mt-1 flex items-center justify-between text-[7px] font-semibold text-neutral-200">
-            <span>{'★'.repeat(Math.min(card.level ?? 0, 12))}</span>
+          <div className="flex items-center justify-between text-[6.5px] font-semibold text-neutral-200">
+            <span className="truncate">{card.attribute ?? ''}</span>
             <span>
-              ATK/{card.atk ?? '?'} DEF/{card.def ?? '?'}
+              {card.atk ?? '?'}/{card.def ?? '?'}
             </span>
           </div>
         ) : (
-          <div className="mt-1 text-[7px] font-semibold uppercase text-neutral-300">{card.category}</div>
+          <div className="text-[6.5px] font-semibold uppercase text-neutral-300">{card.category}</div>
         )}
       </div>
     </div>
