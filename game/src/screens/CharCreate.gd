@@ -24,7 +24,7 @@ const STEP_HINT := [
 ]
 
 const FRAME_W := 32
-const FRAME_H := 40
+const FRAME_H := 44
 const SPR_SCALE := 3
 const ANIM_FPS := 5.0
 const MAX_NAME := 12

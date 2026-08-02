@@ -3,6 +3,8 @@ extends Node2D
 ## warps and story triggers.
 
 const TS := 16
+const SPR_W := 32
+const SPR_H := 44
 const VIEW := Vector2(480, 270)
 const WALK_TIME := 0.16
 
@@ -598,7 +600,7 @@ func _draw_char(key: String, pos: Vector2, dir: String, frame: int) -> void:
 	if sheet == null:
 		return
 	var row: int = {"down": 0, "left": 1, "right": 2, "up": 3}.get(dir, 0)
-	# feet sit on the tile, sprite is taller than a tile
-	var draw_pos := pos + Vector2(-8, -24)
-	draw_texture_rect_region(sheet, Rect2(draw_pos, Vector2(32, 40)),
-		Rect2(frame * 32, row * 40, 32, 40))
+	# feet sit on the tile; the sprite is taller than one tile
+	var draw_pos := pos + Vector2(-8, -28)
+	draw_texture_rect_region(sheet, Rect2(draw_pos, Vector2(SPR_W, SPR_H)),
+		Rect2(frame * SPR_W, row * SPR_H, SPR_W, SPR_H))

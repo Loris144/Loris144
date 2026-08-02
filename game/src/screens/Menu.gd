@@ -129,7 +129,7 @@ func _build_preview() -> Control:
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var atlas := AtlasTexture.new()
 	atlas.atlas = Art.char_sheet(Game.sprite_key())
-	atlas.region = Rect2(0, 0, 32, 40)
+	atlas.region = Rect2(0, 0, 32, 44)
 	var t := UI.texture(atlas, Vector2.ZERO, 2.0)
 	t.size = Vector2(64, 80)
 	root.add_child(t)
