@@ -1,0 +1,12 @@
+# Godot
+game/.godot/
+game/android/
+export_presets.cfg
+*.import
+
+# generated previews (regenerate with tools/preview.py)
+preview/
+
+# python
+__pycache__/
+*.pyc

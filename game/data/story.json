@@ -1,0 +1,4440 @@
+{
+ "scenes": {
+  "prolog_intro": {
+   "id": "prolog_intro",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Schwarzer Bildschirm. Leise, geheimnisvolle Musik. Eine ruhige Erzählstimme."
+    },
+    {
+     "t": "say",
+     "who": "narrator",
+     "text": "Es heißt, ein Spiel könne Schicksale entscheiden. Dass in Karten mehr steckt als Papier und Tinte. Die meisten Menschen lachen darüber."
+    },
+    {
+     "t": "say",
+     "who": "narrator",
+     "text": "Du wirst nicht zu ihnen gehören."
+    },
+    {
+     "t": "stage",
+     "text": "Ein einzelnes Kartenmotiv leuchtet kurz auf, dann Schnitt."
+    },
+    {
+     "t": "say",
+     "who": "narrator",
+     "text": "Deine Geschichte beginnt an dem Tag, an dem du nach Domino City kommst."
+    },
+    {
+     "t": "stage",
+     "text": "Titelbild einblenden: YU-GI-OH! Danach Übergang zur Charaktererstellung."
+    },
+    {
+     "t": "stage",
+     "text": "Charaktererstellung. Ruhiger Hintergrund. Der Spieler trifft seine Wahl."
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Wer bist du?"
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "Männlich",
+       "tag": "male"
+      },
+      {
+       "text": "Weiblich",
+       "tag": "female"
+      }
+     ]
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Wie siehst du aus?"
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "{DER_DIE} Ruhige",
+       "tag": "calm"
+      },
+      {
+       "text": "{DER_DIE} Draufgänger{IN}",
+       "tag": "daring"
+      },
+      {
+       "text": "{DER_DIE} Außenseiter{IN}",
+       "tag": "outsider"
+      }
+     ]
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Und wie lautet dein Name?"
+    },
+    {
+     "t": "stage",
+     "text": "Namenseingabe: ________"
+    },
+    {
+     "t": "stage",
+     "text": "Nach der Eingabe:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Also gut, {PLAYER}. Deine Reise beginnt."
+    },
+    {
+     "t": "flag",
+     "set": "character_created",
+     "value": true
+    }
+   ]
+  },
+  "prolog_home": {
+   "id": "prolog_home",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "home_room",
+     "x": 8,
+     "y": 6
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Innen: das kleine Zimmer / die Wohnung von {PLAYER} in Domino City. Morgenlicht fällt herein. {PLAYER} steht gerade auf."
+    },
+    {
+     "t": "stage",
+     "text": "Kurze Einführungsbox: „Dein erster Tag in Domino City.\""
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Domino City. Ich bin erst seit ein paar Tagen hier … aber eins weiß ich schon: In dieser Stadt dreht sich alles um Duel Monsters."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Und wenn ich mitreden will, brauche ich als Erstes ein Deck. Alle sagen, dafür gibt es nur eine Adresse – den Spieleladen von Großvater Muto."
+    },
+    {
+     "t": "stage",
+     "text": "Ziel-Banner blendet ein."
+    },
+    {
+     "t": "mission",
+     "text": "► NEUES ZIEL: Gehe zum Spieleladen von Großvater Muto."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (begrenzt – nur zuhause): frei umherlaufen (kleine Flavor-Texte an Möbeln/Postern), Menü öffnen: Einstellungen, Speichern. Noch kein Deck → keine Duelle, kein Shop."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Der Spieler verlässt das Haus. → Cutscene: Begegnung mit Yugi."
+    }
+   ]
+  },
+  "prolog_street": {
+   "id": "prolog_street",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_street",
+     "x": 12,
+     "y": 20
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Der Spieler tritt aus dem Haus auf die Straße. Sonne, Stadtgeräusche. Direkt vor ihm steht ein Junge mit auffälliger Frisur – Yugi. Er sieht sich suchend um, als hätte er sich gerade verlaufen, und bemerkt {PLAYER}."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Oh – hallo! Entschuldige, wohnst du hier? Ich glaub, ich hab mich verlaufen. Ich such einen Weg, den ich sonst nie gehe …"
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Kein Problem, wo willst du denn hin?\"",
+       "tag": "friendly"
+      },
+      {
+       "text": "„Kann sein. Kommt drauf an, wer fragt.\"",
+       "tag": "cool"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Yugi lächelt unabhängig von der Wahl."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich bin Yugi. Und eigentlich müsste ich zum Laden meines Großvaters – der liegt hier gleich um die Ecke."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} stutzt."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Zum Laden deines Großvaters? Du meinst … den Spieleladen von Großvater Muto?"
+    },
+    {
+     "t": "stage",
+     "text": "Yugi – überrascht, dann strahlend"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Genau den! Dann wolltest du bestimmt sowieso dorthin, oder? So ziemlich jeder, der mit Duel Monsters anfängt, landet früher oder später bei uns."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Stimmt. Ich brauche mein erstes Deck.\"",
+       "tag": "friendly"
+      },
+      {
+       "text": "„Vielleicht. Ich seh mir das mal an.\"",
+       "tag": "cool"
+      }
+     ]
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Perfekt – dann gehen wir zusammen! Zu zweit verläuft man sich schwerer als allein. Komm mit!"
+    },
+    {
+     "t": "stage",
+     "text": "Ein größerer Junge kommt lautstark um die Ecke – Joey, gut gelaunt."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Yugi! Da bist du ja. Ich dachte schon, du lässt mich vor dem Laden versauern."
+    },
+    {
+     "t": "stage",
+     "text": "Joey mustert {PLAYER}"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Und wer is'n das?"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Neu in der Stadt. {ER_SIE_CAP} will sich ein Deck holen."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Neu, ja?"
+    },
+    {
+     "t": "stage",
+     "text": "Joey grinst breit"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Dann pass auf, Neuling – in Domino zählt nur eine Regel: Wer nicht duellieren kann, hat hier nix zu lachen. Ich bin Joey. Merk dir den Namen, den hörst du noch öfter."
+    },
+    {
+     "t": "stage",
+     "text": "Zwei weitere kommen dazu – Téa und Tristan."
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Joey, lass {IHN_IHR} doch erst mal ankommen."
+    },
+    {
+     "t": "stage",
+     "text": "Téa wendet sich freundlich an {PLAYER}"
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Hör nicht auf ihn. Ich bin Téa. Und der Große da hinten ist Tristan."
+    },
+    {
+     "t": "say",
+     "who": "tristan",
+     "text": "Alles cool. Willkommen im Chaos."
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Wir sind sowieso alle auf dem Weg zum Laden. Halt dich einfach an uns – dann kommst du gar nicht erst vom Weg ab."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Danke, das ist echt nett.\"",
+       "tag": "friendly"
+      },
+      {
+       "text": "„Passt. Solange ihr mir nicht im Weg steht.\"",
+       "tag": "cool"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Joey lacht"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Oho, {ER_SIE} hat Feuer! Das gefällt mir."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Wir gehen schon mal vor zum Laden – er ist gleich hier in der Nähe. Komm einfach nach, wenn du bereit bist. Wir warten auf dich!"
+    },
+    {
+     "t": "stage",
+     "text": "Yugi, Joey, Téa und Tristan gehen Richtung Laden voraus. {PLAYER} bleibt zurück und hat die Kontrolle."
+    },
+    {
+     "t": "mission",
+     "text": "► NEUES ZIEL: Gehe zum Spieleladen von Großvater Muto."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL: Der Spieler kann jetzt frei durch die Straßen von Domino laufen und den Weg zum Laden selbst gehen. Menü: Einstellungen, Speichern. Noch kein Deck → keine Duelle, kein Shop."
+    },
+    {
+     "t": "stage",
+     "text": "Zufalls-Trainer, solange der Spieler noch kein Deck hat, lehnt freundlich ab:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Ohne Deck kann ich dich nicht duellieren. Besorg dir erst mal Karten."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Der Spieler betritt den Spieleladen. → Beginn der durchgehenden Cutscene (Laden → Deck → Tutorial → Kaiba)."
+    }
+   ]
+  },
+  "prolog_shop": {
+   "id": "prolog_shop",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "kame_shop",
+     "x": 6,
+     "y": 8
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Innen: „Kame Game\" – der kleine, gemütliche Spieleladen von Yugis Großvater. Regale voller Spiele und Karten. Warmes Licht. {PLAYER} betritt den Laden; Yugi und die anderen sind schon da."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi winkt"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Da bist du ja! Schön, dass du hergefunden hast. Das hier ist der Laden meines Großvaters – ich wohne oben drüber. Komm, ich will dir was zeigen."
+    },
+    {
+     "t": "stage",
+     "text": "Ein älterer Mann mit freundlichem Gesicht tritt hinter dem Tresen hervor – Großvater."
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Aha! Yugi bringt Besuch mit. Und noch dazu ein neues Gesicht. Herzlich willkommen, junge{R} Duellant{IN}."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Woher wissen Sie, dass ich überhaupt duelliere?"
+    },
+    {
+     "t": "stage",
+     "text": "Großvater lacht leise"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Das weiß ich nicht. Aber ich sehe es dir an. Diesen Blick haben nur Leute, die das Spiel lieben – oder es lieben werden."
+    },
+    {
+     "t": "stage",
+     "text": "Großvater legt eine kleine Sammlung Karten auf den Tresen."
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Duel Monsters. Das beliebteste Kartenspiel der Welt. Zwei Duellanten, zwei Decks, und die Frage: Wer denkt einen Zug weiter als der andere?"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Wenn du hier in Domino bestehen willst, brauchst du ein eigenes Deck. Und ich glaube, ich habe genau das Richtige für dich. Sag mir – was für ein Kämpfer bist du?"
+    },
+    {
+     "t": "stage",
+     "text": "Starter-Deck wählen:"
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "Klinge des Kriegers – „Ich greife an. Immer nach vorn.\"",
+       "tag": "warrior"
+      },
+      {
+       "text": "Zirkel des Magiers – „Ich lasse den Gegner in meine Falle laufen.\"",
+       "tag": "spellcaster"
+      },
+      {
+       "text": "Erbe des Drachen – „Ich warte. Und dann schlage ich mit voller Wucht zu.\"",
+       "tag": "dragon"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Je nach Wahl reagiert Großvater kurz. Bei Krieger:"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Direkt und mutig. Karten für jemanden, der lieber handelt als zögert. Gute Wahl."
+    },
+    {
+     "t": "stage",
+     "text": "Bei Magier:"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Ah – ein Kopf-Mensch. Diese Karten belohnen den, der zwei Züge vorausdenkt. Nicht leicht, aber mächtig."
+    },
+    {
+     "t": "stage",
+     "text": "Bei Drache:"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Geduld und rohe Kraft. Wer damit umgehen kann, gewinnt Duelle, die schon verloren schienen."
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Das Deck gehört jetzt dir. Behandle es gut – Karten spüren, wer sie führt."
+    },
+    {
+     "t": "flag",
+     "set": "has_deck",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Yugi tritt vor, sichtlich aufgeregt."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Und jetzt kommt der Teil, den ich dir zeigen wollte."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi zieht an einer Kette um seinen Hals ein goldenes, pyramidenförmiges Objekt hervor – das Millennium-Puzzle. Es glänzt eigenartig."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das ist das Millennium-Puzzle. Es ist uralt – aus Ägypten. Ich habe acht Jahre gebraucht, um es zusammenzusetzen. Und seit ich es fertig habe … passieren manchmal seltsame Dinge."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Seltsame Dinge?"
+    },
+    {
+     "t": "stage",
+     "text": "Yugi zögert"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Es ist schwer zu erklären. In besonderen Momenten – vor allem beim Duellieren – ist es, als … als wäre da noch jemand. In mir. Jemand Starkes. Jemand sehr, sehr Altes."
+    },
+    {
+     "t": "stage",
+     "text": "Kurzer Moment. Das Puzzle leuchtet ganz schwach auf. Großvater wird ernst."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Es gibt Dinge zwischen Himmel und Erde, für die das Wort „Spiel\" zu klein ist, {PLAYER}. Merk dir das. Vielleicht brauchst du es früher, als dir lieb ist."
+    },
+    {
+     "t": "stage",
+     "text": "Stimmung lockert sich wieder. Joey stößt die Tür auf."
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Da seid ihr!"
+    },
+    {
+     "t": "stage",
+     "text": "Joey grinst"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Neuling, du hast jetzt ein Deck, hab ich gehört? Dann wird's Zeit, dass du's ausprobierst. Was hältst du davon – ein kleines Duell, nur zum Aufwärmen?"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Gute Idee. So lernst du das Spiel am schnellsten kennen."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Klar. Zeig mir, wie das läuft.\"",
+       "tag": "eager"
+      },
+      {
+       "text": "„Von mir aus. Aber unterschätz mich nicht.\"",
+       "tag": "cool"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Übergang zum ersten Duell – das Tutorial."
+    }
+   ]
+  },
+  "prolog_tutorial": {
+   "id": "prolog_tutorial",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Im Laden. Joey stellt sich {PLAYER} gegenüber. Großvater und Yugi sehen zu."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Okay, Neuling – ich mach's dir leicht. Wir spielen eine Runde, und ich erklär dir das Wichtigste nebenbei. Learning by Doing, sozusagen."
+    },
+    {
+     "t": "stage",
+     "text": "Die eigentlichen Regeln (Life Points, Beschwörung, Angriff, Zug-Phasen) werden über kurze UI-Einblendungen / Tooltips erklärt – NICHT über lange Dialoge. Das Duell ist geführt, der Spieler gewinnt am Ende."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "joey_t1",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Duell:"
+    },
+    {
+     "t": "stage",
+     "text": "Joey grinst und wischt sich über die Stirn"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Nicht schlecht für den ersten Versuch! Vielleicht hab ich dich unterschätzt."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Siehst du? Du hast ein Gespür dafür. Das merkt man sofort."
+    },
+    {
+     "t": "stage",
+     "text": "Großvater nickt zufrieden"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Ein guter Anfang. Aber merk dir: Das war nur ein freundschaftliches Spiel. Draußen wird nicht immer so fair gespielt."
+    }
+   ]
+  },
+  "prolog_kaiba": {
+   "id": "prolog_kaiba",
+   "chapter": "prolog",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Die entspannte Stimmung wird unterbrochen. Draußen hält ein teures Auto. Die Ladentür geht auf. Herein tritt ein hochgewachsener Jugendlicher in langem Mantel – kalt, überheblich: Seto Kaiba."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Joey, leise"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Was will der denn hier?"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Kaiba …"
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba sieht sich abschätzig um"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Also das ist der berühmte Laden, von dem alle reden. Kleiner, als ich dachte."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba geht direkt auf Großvater zu."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Alter Mann. Es heißt, Sie besitzen eine Karte, die es nur viermal auf der Welt gibt. Den Blauäugigen Weißen Drachen. Ich bin gekommen, um ihn zu bekommen."
+    },
+    {
+     "t": "stage",
+     "text": "Großvater, ruhig"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Du bist gut informiert, Junge. Ja, ich besitze diese Karte. Aber sie ist nicht zu verkaufen. Sie ist ein Andenken an einen alten Freund – für mich unbezahlbar."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Unbezahlbar?"
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba lacht kalt"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Es gibt nichts, das ich nicht bezahlen kann. Nennen Sie Ihren Preis."
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Du verstehst nicht. Manche Dinge haben einen Wert, der sich nicht in Geld messen lässt. Diese Karte gehört zu meinem Herzen – und die verkaufe ich niemandem."
+    },
+    {
+     "t": "stage",
+     "text": "Kaibas Miene verhärtet sich. Er zieht seine eigene Karte hervor und hält sie {PLAYER} und Yugi kurz entgegen – auch er hat drei Blauäugige Weiße Drachen."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Dann fehlt mir nur noch einer für die Vollständigkeit. Und ich lasse mir das nicht von sentimentalem Gerede eines Ladenbesitzers verderben."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} tritt einen Schritt vor."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„So redet man nicht mit ihm.\"",
+       "tag": "brave"
+      },
+      {
+       "text": "„…\"",
+       "tag": "silent"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba mustert {PLAYER} herablassend"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Und wer bist du? Noch so ein Möchtegern-Duellant. Halt dich da raus – das hier geht dich nichts an."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba wendet sich wieder Großvater zu, ungeduldig."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Ich mache Ihnen ein letztes Angebot, alter Mann. Ein Duell. Gewinne ich, gehört der Drache mir."
+    },
+    {
+     "t": "stage",
+     "text": "Großvater zögert, dann entschlossen"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Also gut. Wenn ein Duell der einzige Weg ist, dir Respekt vor diesem Spiel beizubringen – dann nehme ich an."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "kaiba_t2",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Schnitt / Zeitsprung. Das Duell ist vorbei. Großvater sinkt erschöpft zu Boden – er hat verloren. Kaiba hält den Blauäugigen Weißen Drachen in der Hand."
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Großvater!"
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba betrachtet die Karte – und dann tut er das Unfassbare: Er zerreißt sie vor aller Augen."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Er … er hat die Karte zerrissen!"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "So stelle ich sicher, dass niemand außer mir jemals einen vierten Blauäugigen besitzt. Sentimentaler Ballast."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba dreht sich zum Gehen"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Das Spiel gehört den Starken. Nicht den Schwachen, die an Erinnerungen hängen."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba geht. Großvater ist am Boden, die Gruppe kniet bei ihm. Und dann – das Millennium-Puzzle an Yugis Hals beginnt zu leuchten. Stark. Die Musik kippt. Yugi richtet sich auf … aber es ist nicht mehr Yugi. Seine Haltung, seine Stimme, sein Blick – alles hat sich verändert. Der PHARAO ist erwacht."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "flag",
+     "set": "pharaoh_awakened",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Pharao – ruhig, kalt vor Zorn"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Kaiba. Du hast das Herz eines alten Mannes zertreten und ein kostbares Andenken zerstört – aus reiner Arroganz."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} weicht überrascht zurück."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Was … was ist das? Das ist nicht der Yugi, den ich heute Morgen getroffen habe. Diese Präsenz …"
+    },
+    {
+     "t": "stage",
+     "text": "Pharao zu Kaiba, der in der Tür innehält"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Du glaubst, das Spiel gehört den Starken. Dann lass uns herausfinden, wer von uns wirklich stark ist. Ich fordere dich heraus – zu einem Spiel, das du nie vergessen wirst."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba dreht sich langsam um, ein überhebliches Lächeln – aber ein Funke Unsicherheit in den Augen."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Ein Schattenduell? Interessant. Also gut, Yugi. Zeig mir, was du kannst."
+    },
+    {
+     "t": "stage",
+     "text": "STORY-Duell: Pharao gegen Kaiba. Der Spieler duelliert nicht selbst, sondern sieht zu – kurz, cineastisch, mit ein paar Schlüssel-Momenten."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "kaiba_t2",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Duell. Der Pharao hat gewonnen. Kaiba steht fassungslos da."
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Das Spiel ist entschieden. Du hast heute etwas gelernt, das du mit all deinem Geld nicht kaufen konntest: Wahre Stärke kommt nicht aus Hochmut – sondern aus dem, was man beschützt."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba sagt nichts. Er dreht sich um und geht wortlos. Das Puzzle hört auf zu leuchten – und Yugi ist wieder Yugi, leicht benommen."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi blinzelt"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich … was ist passiert? Großvater – geht es dir gut?"
+    },
+    {
+     "t": "stage",
+     "text": "Großvater lächelt schwach, aufgerichtet von Téa"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Mir geht es gut, Yugi. Dank … dir."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} sieht Yugi eindringlich an."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Er erinnert sich an nichts. Als wäre in diesem Moment jemand völlig anderes in ihm gewesen. Wer war das? Und warum … kommt mir dieses Gefühl so vertraut vor?"
+    },
+    {
+     "t": "stage",
+     "text": "Großvater bemerkt {PLAYER}s Blick und wird ernst."
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Ich sagte dir vorhin, {PLAYER}: Es gibt Dinge zwischen Himmel und Erde, für die das Wort „Spiel\" zu klein ist. Heute hast du eine davon gesehen."
+    },
+    {
+     "t": "stage",
+     "text": "Pause"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Und ich habe das Gefühl, es war nicht das letzte Mal."
+    },
+    {
+     "t": "stage",
+     "text": "Bildschirm blendet ab. Ende des Prologs."
+    },
+    {
+     "t": "flag",
+     "set": "prolog_done",
+     "value": true
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (ab jetzt vollständig): Domino City ist frei begehbar – Deck bearbeiten, Kartensammlung, Einstellungen, Speichern, Zufallsduellanten duellieren, Shop besuchen (Packs kaufen)."
+    },
+    {
+     "t": "stage",
+     "text": "Vorlage Zufallsduell (Beispiel für das knappe Pacing aller Nebenduelle):"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Na los, zeig, was du kannst!"
+    },
+    {
+     "t": "duel",
+     "opponent": "random_t1",
+     "mode": "play",
+     "must_win": false,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Verdammt … du hast mich geschlagen. Hier, meine Sternchips gehören dir."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER (Start Saison 1): Wenn der Spieler zum Spieleladen geht / mit Yugi spricht → Pegasus' Videobotschaft (Beginn Duelist Kingdom)."
+    }
+   ]
+  },
+  "dk_message": {
+   "id": "dk_message",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "kame_shop",
+     "x": 6,
+     "y": 8
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Der Spieleladen, einige Tage nach dem Prolog. Ein Paket ist für Yugi angekommen – eine Videokassette, kein Absender. Die Gruppe versammelt sich vor dem Fernseher."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Kein Absender … nur mein Name. Komisch. Lass es uns trotzdem ansehen."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi legt die Kassette ein. Auf dem Bildschirm erscheint ein Mann mit silbernem Haar, das eine Auge hinter einer Haarsträhne verborgen – Maximillion Pegasus."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Pegasus – lächelnd, gekünstelt höflich"
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Guten Tag, Yugi Muto. Mein Name ist Pegasus. Ich bin der Schöpfer von Duel Monsters – dem Spiel, das du so sehr liebst. Und ich habe von dir gehört. Man sagt, du seist der beste Duellant deiner Generation."
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Wie schön wäre es, das mit eigenen Augen zu sehen. Also … lass uns spielen. Genau hier. Genau jetzt."
+    },
+    {
+     "t": "stage",
+     "text": "Das Millennium-Auge unter Pegasus' Haaren beginnt zu leuchten. Um Yugi herum wird es kalt. Das Millennium-Puzzle antwortet – der Pharao übernimmt."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Ein Duell durch einen Bildschirm? Was auch immer du vorhast, Pegasus – ich nehme an."
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Wunderbar. Aber machen wir es spannend: Du hast nur fünfzehn Sekunden pro Zug. Die Zeit läuft."
+    },
+    {
+     "t": "stage",
+     "text": "Kurze, cineastische Duell-Sequenz – nicht spielbar. Pegasus liest mit dem Millennium-Auge die Gedanken des Pharaos und gewinnt durch das Zeitlimit."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "pegasus_t5",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Die Zeit läuft ab. Der Pharao verliert. Pegasus lächelt kalt."
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Beeindruckend – aber nicht genug. Und nun, mein Freund, zeige ich dir, warum man mich nicht unterschätzen sollte."
+    },
+    {
+     "t": "stage",
+     "text": "Das Millennium-Auge leuchtet grell. Ein Lichtblitz schießt aus dem Fernseher. Im Hintergrund sackt GROSSVATER lautlos zusammen."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi, wieder er selbst, dreht sich um"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Großvater! GROSSVATER!"
+    },
+    {
+     "t": "stage",
+     "text": "Großvater liegt regungslos – seine Augen leer. Auf dem Bildschirm hält Pegasus plötzlich eine Karte hoch, auf der Großvaters entsetztes Gesicht zu sehen ist."
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Keine Sorge, er lebt. Ich habe nur … seine Seele an mich genommen. Ein kleines Unterpfand."
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Das ist Wahnsinn! Was hast du mit ihm gemacht?!"
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Wer sie zurückhaben will, kommt zu mir. Ich lade dich ein, Yugi – und deine Freunde – zu meinem Turnier auf Duelist Kingdom. Gewinne, und du bekommst die Seele deines Großvaters zurück. Verliere … nun ja."
+    },
+    {
+     "t": "stage",
+     "text": "Der Bildschirm wird schwarz. Stille. Yugi kniet bei seinem Großvater."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi – leise, entschlossen"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich hole dich zurück, Großvater. Egal, was es kostet."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} legt Yugi eine Hand auf die Schulter."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Du bist nicht allein. Ich komme mit.\"",
+       "tag": "loyal"
+      },
+      {
+       "text": "„Dann gewinnen wir dieses Turnier eben. Zusammen.\"",
+       "tag": "determined"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Yugi sieht auf, dankbar"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "… Danke. Wirklich. Dann lass uns nach Duelist Kingdom fahren – und gewinnen."
+    },
+    {
+     "t": "flag",
+     "set": "grandpa_soul_taken",
+     "value": true
+    },
+    {
+     "t": "mission",
+     "text": "► NEUES ZIEL: Reise nach Duelist Kingdom und gewinne das Turnier."
+    }
+   ]
+  },
+  "dk_ship": {
+   "id": "dk_ship",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "ship_deck",
+     "x": 10,
+     "y": 10
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Ein Schiff Richtung Insel. Nacht, Meer. An Deck. Ein kleiner Junge mit grüner Frisur und schielendem Grinsen tritt heran – Weevil Underwood, amtierender Regionalmeister."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Weevil Underwood: Der „Insekten-Champion\". Hinterhältig, eingebildet, kämpft mit einem Käfer-Deck voller Fallen. Der erste Rivale der Insel."
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Du bist also Yugi Muto. Der große Favorit."
+    },
+    {
+     "t": "stage",
+     "text": "Weevil kichert"
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Ich bin Weevil – und ich wollte dir nur gratulieren. Sagt man nicht, du besäßest die legendären Exodia-Karten? Die fünf Teile, die unbesiegbar machen?"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das stimmt. Ich habe sie hier."
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Darf ich sie sehen? Nur einen kurzen Blick …"
+    },
+    {
+     "t": "stage",
+     "text": "Yugi reicht ihm arglos die Karten. Weevil schnappt sie sich – und schleudert sie mit einem Lachen über die Reling ins Meer."
+    },
+    {
+     "t": "stage",
+     "text": "Weevil lacht schrill"
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Ohne deine kostbaren Exodia-Karten bist du nur noch halb so gefährlich! Wir sehen uns auf der Insel, Yugi!"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Du mieser kleiner …!"
+    },
+    {
+     "t": "stage",
+     "text": "Joey springt ohne zu zögern hinterher ins Wasser"
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Joey, nein!"
+    },
+    {
+     "t": "stage",
+     "text": "Joey taucht wieder auf – er konnte nur zwei der fünf Karten retten. Yugi hilft ihm an Bord."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Joey … du bist für mich ins Meer gesprungen. Danke."
+    },
+    {
+     "t": "stage",
+     "text": "Joey hustet, grinst schief"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Was Freunde eben so tun. Tut mir leid – ich hab nur zwei gekriegt."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das ist mehr, als ich je erwarten könnte. Weevil … für das, was er getan hat, wird er sich verantworten. Auf der Insel."
+    }
+   ]
+  },
+  "dk_arrive": {
+   "id": "dk_arrive",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_shore",
+     "x": 14,
+     "y": 18
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Das Schiff legt an. Die Gruppe betritt Duelist Kingdom. Ein Turnier-Aufseher erklärt die Regeln."
+    },
+    {
+     "t": "say",
+     "who": "announcer",
+     "text": "Willkommen auf Duelist Kingdom! Jeder Duellant startet mit zwei Sternenchips. Wer alle Chips verliert, scheidet aus. Wer genug sammelt, darf ins Schloss zu Meister Pegasus. Der Rest liegt an euch. Viel Glück."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Also gut. Sammeln wir Sternenchips – und finden wir Weevil."
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Sammle Sternenchips – besiege die vier Duellanten der Insel."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (auf der Insel): Menü (Deck, Einstellungen, Speichern), Shop, Zufallsduellanten für Chips. Die vier Pflicht-Duellanten (Weevil, Rex, Mai, Keith) liegen verteilt und sind in beliebiger Reihenfolge spielbar – Ansprechen des Duellanten startet die Event-Cutscene."
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "dk_weevil": {
+   "id": "dk_weevil",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_forest",
+     "x": 9,
+     "y": 12
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Weevil im Wald ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Tag. Der Wald der Insel. Weevil wartet grinsend zwischen den Bäumen."
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Da bist du ja, Yugi! Bereit, mein erstes Opfer zu werden? Ohne Exodia hast du keine Chance gegen meine Insektenarmee!"
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen Weevil duellieren / 👁 Yugi gegen Weevil duellieren lassen"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles, spielbares Duell gegen Weevils Käfer-Deck."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "weevil_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "yugi",
+      "lines": [
+       {
+        "t": "say",
+        "who": "yugi",
+        "text": "Für das, was du meinen Freunden angetan hast, Weevil – dieses Duell entscheide ich."
+       },
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene, kein volles Duell. Der Pharao dreht Weevils eigene Fallen gegen ihn."
+       },
+       {
+        "t": "stage",
+        "text": "Weevil, besiegt"
+       },
+       {
+        "t": "say",
+        "who": "weevil",
+        "text": "Das … das kann nicht sein!"
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Weevil am Ende, fassungslos:"
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Unmöglich! Meine Insekten … besiegt?!"
+    },
+    {
+     "t": "stage",
+     "text": "In beiden Fällen danach – Weevil flüchtet:"
+    },
+    {
+     "t": "say",
+     "who": "weevil",
+     "text": "Das war nur Glück! Das vergesst ihr noch!"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Und tschüss, Käferkönig. Auf zu den nächsten Sternenchips!"
+    },
+    {
+     "t": "flag",
+     "set": "dk_weevil_done",
+     "value": true
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "dk_rex": {
+   "id": "dk_rex",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_rocks",
+     "x": 22,
+     "y": 9
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Rex auf der felsigen Ebene ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Eine felsige Ebene. Ein Junge mit roter Kappe und Dino-Anhänger stapft heran – Rex Raptor."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Rex Raptor: Der „Dino-Duellant\", ein früherer Vize-Champion. Grobschlächtig, selbstsicher, setzt auf schwere Dinosaurier-Monster mit roher Kraft."
+    },
+    {
+     "t": "say",
+     "who": "rex",
+     "text": "Ihr wollt Sternenchips? Die kriegt ihr nur über meine Dinos. Wer traut sich?"
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen Rex duellieren / 👁 Joey gegen Rex duellieren lassen"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell gegen Rex' Dinosaurier-Deck."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "rex_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "joey",
+      "lines": [
+       {
+        "t": "say",
+        "who": "joey",
+        "text": "Dino-Junge gegen mich? Das wollt ich schon immer mal! Zeit für ein bisschen … Zeit-Magie."
+       },
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Joey dreht das Duell mit einem glücklichen Zug – Rex' schwere Monster laufen ins Leere."
+       },
+       {
+        "t": "stage",
+        "text": "Rex, besiegt"
+       },
+       {
+        "t": "say",
+        "who": "rex",
+        "text": "Verdammt … von dem geschlagen? Nicht schon wieder Zweiter!"
+       },
+       {
+        "t": "stage",
+        "text": "Joey grinst breit"
+       },
+       {
+        "t": "say",
+        "who": "joey",
+        "text": "Schreib's dir hinter die Ohren, Kumpel!"
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Rex verliert:"
+    },
+    {
+     "t": "say",
+     "who": "rex",
+     "text": "Meine Dinos … ausgestorben. Wieder mal."
+    },
+    {
+     "t": "flag",
+     "set": "dk_rex_done",
+     "value": true
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "dk_mai": {
+   "id": "dk_mai",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_hill",
+     "x": 30,
+     "y": 14
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Mai auf dem Hügel ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Ein sonniger Hügel. Eine selbstbewusste junge Frau lehnt lässig da – Mai Valentine."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Mai Valentine: Elegant, schlagfertig, unterschätzt zu Beginn niemanden. Spielt ein Harpyien-Deck. Erst kühle Rivalin – im Verlauf der Geschichte eine echte Verbündete."
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Na, die berühmte Truppe aus Domino. Ich hab von euch gehört."
+    },
+    {
+     "t": "stage",
+     "text": "Mai mustert {PLAYER}"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Und ein neues Gesicht dabei. Glaubt ihr wirklich, ihr kommt an mir vorbei?"
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Wir werden sehen, wer weiterkommt.\"",
+       "tag": "confident"
+      },
+      {
+       "text": "„Ich will keinen Streit – nur die Sternenchips.\"",
+       "tag": "calm"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Mai lächelt"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Mir gefällt Selbstbewusstsein. Aber Reden gewinnt keine Duelle. Zeig's mir."
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen Mai duellieren / 👁 Joey gegen Mai duellieren lassen"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell gegen Mais Harpyien-Deck."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "mai_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "joey",
+      "lines": [
+       {
+        "t": "say",
+        "who": "joey",
+        "text": "Du hältst mich für einen Anfänger, Mai? Dann pass mal auf."
+       },
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Joey durchschaut Mais Tricks und gewinnt mit mehr Herz als Kalkül."
+       },
+       {
+        "t": "stage",
+        "text": "Mai, anerkennend"
+       },
+       {
+        "t": "say",
+        "who": "mai",
+        "text": "… Du bist besser, als du aussiehst, Joey. Das gebe ich zu."
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Mai verliert, überrascht anerkennend:"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "… Nicht schlecht. Wirklich nicht. Vielleicht hab ich dich unterschätzt."
+    },
+    {
+     "t": "stage",
+     "text": "In beiden Fällen danach – Beginn ihrer Wandlung vom Rivalen zur Freundin:"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Weißt du was? Ihr seid anders als der Rest hier. Vielleicht laufen wir uns noch öfter über den Weg."
+    },
+    {
+     "t": "stage",
+     "text": "Mai geht"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Bis dann."
+    },
+    {
+     "t": "flag",
+     "set": "dk_mai_done",
+     "value": true
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "dk_keith": {
+   "id": "dk_keith",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_castle_area",
+     "x": 38,
+     "y": 20
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Keith in der Nähe des Schlossbereichs ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Ein grimmiger Mann mit Stirnband und Sonnenbrille versperrt den Weg – Bandit Keith. Ein berüchtigter Betrüger."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Bandit Keith: Ein ehemaliger amerikanischer Champion, verbittert und skrupellos. Bekannt dafür, bei Duellen zu betrügen. Der fieseste Gegner vor dem Schloss."
+    },
+    {
+     "t": "say",
+     "who": "keith",
+     "text": "Aus dem Weg, Kinder. Diese Sternenchips gehören mir – ob ich sie mir ehrlich hole oder nicht."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Ein Betrüger. Genau der Typ, den ich nicht ausstehen kann."
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen Keith duellieren / 👁 Joey gegen Keith duellieren lassen"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell. Keith versucht zu tricksen – wird aber besiegt."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "keith_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "joey",
+      "lines": [
+       {
+        "t": "say",
+        "who": "joey",
+        "text": "Betrüger wie dich kann ich nicht ausstehen. Das hier mach ich persönlich."
+       },
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Joey durchschaut Keiths Betrug und schlägt ihn mit seinem eigenen Spiel."
+       },
+       {
+        "t": "stage",
+        "text": "Keith, besiegt, tobend"
+       },
+       {
+        "t": "say",
+        "who": "keith",
+        "text": "Unmöglich! So ein Straßenköter kann mich nicht schlagen!"
+       },
+       {
+        "t": "say",
+        "who": "joey",
+        "text": "Doch. Grade eben passiert."
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Keith, wütend:"
+    },
+    {
+     "t": "say",
+     "who": "keith",
+     "text": "Das … das ist nicht möglich! Ich verliere nicht gegen Grünschnäbel!"
+    },
+    {
+     "t": "stage",
+     "text": "Danach – Keith zieht sich zähneknirschend zurück:"
+    },
+    {
+     "t": "say",
+     "who": "keith",
+     "text": "Das ist noch nicht vorbei …"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Betrüger verlieren am Ende immer. Auf zu den nächsten Chips!"
+    },
+    {
+     "t": "flag",
+     "set": "dk_keith_done",
+     "value": true
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "dk_castle_gate": {
+   "id": "dk_castle_gate",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "TRIGGER: Alle vier Pflicht-Events (Weevil, Rex, Mai, Keith) sind gespielt – egal in welcher Reihenfolge und egal, ob der Spieler selbst oder der Anime-Duellant duelliert hat."
+    },
+    {
+     "t": "stage",
+     "text": "Kurze Cutscene. Die Gruppe zählt die gesammelten Chips."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das reicht! Wir haben genug Sternenchips. Jetzt steht uns nichts mehr im Weg – Zeit, ins Schloss zu Pegasus zu gehen."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Endlich. Machen wir Pegasus fertig und holen deinen Großvater zurück, Yugi!"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Mach dich auf den Weg zum Schloss."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (bis zum Schloss): letzte Zufallsduelle, Deck anpassen, Shop, Speichern."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Das Schloss betreten → ab hier durchgehende End-Cutscenes (Kaiba → Pegasus) ohne freies Spiel bis zum Saison-Ende."
+    },
+    {
+     "t": "goto",
+     "map": "dk_castle_gate",
+     "x": 40,
+     "y": 10
+    }
+   ]
+  },
+  "dk_kaiba_cliff": {
+   "id": "dk_kaiba_cliff",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Vor Pegasus' Schloss. Doch am Tor steht überraschend – Seto Kaiba."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba ist hier, um seinen Bruder Mokuba aus Pegasus' Gewalt zu befreien. Das „Klippen-Duell\" läuft als Yugi-Duell (Story) – der entscheidende Beat gehört untrennbar zu Yugi. Der Spieler sieht zu."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Yugi. Bevor du zu Pegasus kommst, musst du an mir vorbei. Ich brauche den Sieg gegen dich – für Mokuba."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Kaiba … auch du bist Pegasus' Opfer geworden."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba stellt sich provokant an den Rand einer hohen Schlossmauer."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Wenn du deinen stärksten Angriff einsetzt, verliere ich – und falle. Trau dich, Yugi. Oder bist du zu weich?"
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "kaiba_t3",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Der Pharao holt zum entscheidenden Angriff aus … und hält im letzten Moment inne."
+    },
+    {
+     "t": "stage",
+     "text": "Pharao senkt die Hand"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Nein. Ich gewinne kein Duell um den Preis eines Lebens. Das ist nicht das Spiel, das ich spiele."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi kommt wieder zu sich, erschüttert von der Nähe zum Abgrund. Kaiba tritt von der Kante – er hat sein Ticket zu Pegasus erzwungen, aber etwas an Yugis Entscheidung lässt ihn nicht los."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Er hätte gewinnen können. Und hat es nicht getan – um Kaiba zu retten. Das ist die wahre Stärke des Pharaos."
+    }
+   ]
+  },
+  "dk_pegasus": {
+   "id": "dk_pegasus",
+   "chapter": "dk",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "dk_castle_hall",
+     "x": 12,
+     "y": 6
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Im Inneren des Schlosses. Der große Duell-Saal. Pegasus erwartet die Gruppe – gelassen, das Weinglas in der Hand. Auf einem Podest: die Karte mit Großvaters Seele."
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Ihr habt es also bis hierher geschafft. Beeindruckend. Aber der letzte Schritt ist immer der schwerste."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi tritt vor – doch {PLAYER} hält ihn zurück."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Lass mich, Yugi. Diesmal duelliere ich.\"",
+       "tag": "determined"
+      },
+      {
+       "text": "„Deinen Großvater hole ich zurück. Vertrau mir.\"",
+       "tag": "loyal"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Yugi sieht {PLAYER} lange an, dann ein Nicken"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "… Ich vertraue dir. Zeig ihm, was in dir steckt."
+    },
+    {
+     "t": "stage",
+     "text": "Pegasus, amüsiert"
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Oh? Nicht der große Yugi, sondern sein Freund? Wie … erfrischend. Nun gut. Wenn du gewinnst, gebe ich die Seele des alten Mannes frei. Verlierst du, gehört deine mir. Einverstanden?"
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Einverstanden. Für Großvater – und für Yugi."
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "Dann lass uns spielen. Aber ich warne dich: Ich sehe mehr, als du glaubst."
+    },
+    {
+     "t": "stage",
+     "text": "Volles, spielbares Duell gegen Pegasus. Sein Millennium-Auge (Gedankenlesen) deckt anfangs deine Handkarten auf; Yugi und die Freunde helfen dir, das Auge auszutricksen (Blickkontakt unterbrechen). Ausnahme: Das Finale gegen Pegasus duelliert immer der Spieler selbst – keine Wahl."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "pegasus_t5",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Sieg des Spielers – Pegasus legt das Glas ab, ein müdes Lächeln:"
+    },
+    {
+     "t": "say",
+     "who": "pegasus",
+     "text": "… Verloren. Und das gegen jemanden, dessen Namen die Welt noch nicht kennt. Vielleicht … war es das wert."
+    },
+    {
+     "t": "stage",
+     "text": "Pegasus gibt die Karte frei. Ein Lichtschein – in Domino öffnet Großvater die Augen."
+    },
+    {
+     "t": "flag",
+     "set": "grandpa_freed",
+     "value": true
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Großvater ist zurück …"
+    },
+    {
+     "t": "stage",
+     "text": "Yugi wendet sich {PLAYER} zu"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das hast du geschafft. Du. Ich hätte mir keinen besseren Freund an meiner Seite wünschen können."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Wir haben es zusammen geschafft.\"",
+       "tag": "modest"
+      },
+      {
+       "text": "„Das war erst der Anfang.\"",
+       "tag": "confident"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Die Gruppe verlässt die Insel. Sonnenuntergang über dem Meer."
+    },
+    {
+     "t": "flag",
+     "set": "dk_done",
+     "value": true
+    },
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (zurück in Domino): Deck, Shop, Zufallsduelle, Speichern."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER (Start Saison 2): Battle City wird ausgerufen (Kaibas Ankündigung / ein Story-Punkt in der Stadt) → Beginn von Saison 2."
+    }
+   ]
+  },
+  "bc_intro": {
+   "id": "bc_intro",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "Domino City, einige Zeit nach Duelist Kingdom. Ein riesiges Hologramm von Kaiba erscheint über der Stadt."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "An alle Duellanten Dominos! Ich, Seto Kaiba, rufe hiermit das größte Turnier aller Zeiten aus: Battle City. Nur die Stärksten qualifizieren sich. Und der Preis … ist mehr wert als alles, was ihr euch vorstellen könnt."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Battle City … Kaiba meint es ernst."
+    },
+    {
+     "t": "stage",
+     "text": "Ein Mann in Kapuze taucht in einer Seitengasse auf – ein Rare Hunter."
+    },
+    {
+     "t": "say",
+     "who": "rare_hunter",
+     "text": "Gib mir deine seltenste Karte, Junge. So sind die Regeln von Battle City: Der Verlierer verliert seine beste Karte. Und du wirst verlieren."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Rare Hunters. Die stehlen seltene Karten im großen Stil. Und jemand zieht im Hintergrund die Fäden …"
+    },
+    {
+     "t": "stage",
+     "text": "Später. Ishizu Ishtar, eine Frau mit ägyptischem Schmuck und dem Millennium-Halsband, tritt an die Gruppe heran."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Yugi Muto. Und …"
+    },
+    {
+     "t": "stage",
+     "text": "Ishizu blickt {PLAYER} lange an"
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "… auch du. Euer Schicksal ist mit einer Macht verbunden, die 3000 Jahre alt ist."
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Es gibt drei Karten von göttlicher Kraft – die Ägyptischen Götterkarten: Slifer der Himmelsdrache, Obelisk der Peiniger und der Geflügelte Drache von Ra. Mein Bruder Marik will sie an sich reißen, um den Pharao zu vernichten, dessen Geist in diesem Puzzle wohnt."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Der Pharao … in mir."
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Battle City ist in Wahrheit ein Kampf um diese Götter – und um das Schicksal des Pharaos. Ihr müsst die Götterkarten vor Marik beschützen."
+    },
+    {
+     "t": "mission",
+     "text": "► NEUES ZIEL: Qualifiziere dich für Battle City (6 Lokalisierungskarten) und beschütze die Ägyptischen Götter."
+    },
+    {
+     "t": "stage",
+     "text": "Ante-Regel (Battle City): Wer verliert, gibt seine seltenste Karte ab. Für die Qualifikation braucht man 6 Lokalisierungskarten."
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (Stadt): Menü, Deck, Shop, Zufallsduelle."
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Stell dich den Rare Hunters und sammle deine ersten Lokalisierungskarten."
+    },
+    {
+     "t": "stage",
+     "text": "Vorlage Zufallsduellanten – jeder sagt eine kurze Zeile, wenn du gewinnst, und eine, wenn du verlierst."
+    },
+    {
+     "t": "stage",
+     "text": "Straßen-Rowdy – du gewinnst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Tch … besser als du aussiehst. Hier, nimm die Lokalisierungskarte und hau ab."
+    },
+    {
+     "t": "stage",
+     "text": "Straßen-Rowdy – du verlierst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Ha! Komm wieder, wenn du duellieren gelernt hast."
+    },
+    {
+     "t": "stage",
+     "text": "Schüler-Duellant – du gewinnst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Wow, du bist echt stark! Meine Karte gehört dir."
+    },
+    {
+     "t": "stage",
+     "text": "Schüler-Duellant – du verlierst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Ich hab gewonnen?! Ich hab wirklich gewonnen!"
+    },
+    {
+     "t": "stage",
+     "text": "Rare-Hunter-Handlanger – du gewinnst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Unmöglich … Meister Marik wird das nicht gefallen."
+    },
+    {
+     "t": "stage",
+     "text": "Rare-Hunter-Handlanger – du verlierst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Deine seltene Karte gehört jetzt den Rare Hunters."
+    },
+    {
+     "t": "stage",
+     "text": "Möchtegern-Profi – du gewinnst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Unfassbar. Ich dachte, ich hätte dich durchschaut."
+    },
+    {
+     "t": "stage",
+     "text": "Möchtegern-Profi – du verlierst:"
+    },
+    {
+     "t": "say",
+     "who": "system",
+     "text": "Amateure sollten zu Hause bleiben."
+    },
+    {
+     "t": "duel",
+     "opponent": "random_t2",
+     "mode": "play",
+     "must_win": false,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "bc_rare_hunter": {
+   "id": "bc_rare_hunter",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_alley",
+     "x": 7,
+     "y": 15
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Den Rare Hunter in der Seitenstraße ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Eine Seitenstraße. Ein Rare Hunter in Kapuze grinst selbstsicher."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Rare Hunters: Mariks Handlanger. Sie stehlen mit der Ante-Regel seltene Karten und setzen sogar verbotene Kombos ein."
+    },
+    {
+     "t": "say",
+     "who": "rare_hunter",
+     "text": "Ich brauche kein Glück, Kleiner. Ich habe etwas, das jedes Duell sofort beendet: die fünf Teile von Exodia. Gegen die Unbesiegbarkeit hast du keine Chance."
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen den Rare Hunter duellieren / 👁 Yugi gegen den Rare Hunter duellieren lassen (Anime-Duellant)"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell. Der Rare Hunter versucht, Exodia zusammenzusetzen – du musst ihn stoppen, bevor alle fünf Teile auf dem Feld sind."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "rare_hunter_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "yugi",
+      "lines": [
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Der Pharao zerschlägt die Exodia-Strategie, bevor sie vollständig ist."
+       },
+       {
+        "t": "stage",
+        "text": "Rare Hunter, besiegt"
+       },
+       {
+        "t": "say",
+        "who": "rare_hunter",
+        "text": "Niemand schlägt Exodia … niemand!"
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Rare Hunter, fassungslos:"
+    },
+    {
+     "t": "say",
+     "who": "rare_hunter",
+     "text": "Meine Exodia … zerstört?! Das ist unmöglich!"
+    },
+    {
+     "t": "stage",
+     "text": "Danach:"
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Die Rare Hunters setzen sogar verbotene Kombos ein. Marik meint es todernst."
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Triff Ishizu im Domino-Museum."
+    }
+   ]
+  },
+  "bc_museum": {
+   "id": "bc_museum",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_museum",
+     "x": 10,
+     "y": 12
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Das Domino-Museum betreten."
+    },
+    {
+     "t": "stage",
+     "text": "Das Domino-Museum. Ishizu führt Kaiba (und die Gruppe) vor eine uralte ägyptische Steintafel."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Sieh diese Tafel, Kaiba. 3000 Jahre alt. Sie zeigt zwei Männer im Duell – ein namenloser Pharao … und ein Priester an seiner Seite."
+    },
+    {
+     "t": "stage",
+     "text": "Auf der Tafel: der Priester sieht Kaiba zum Verwechseln ähnlich. Beide beschwören einen weißen Drachen."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba starrt, verunsichert"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Das … das ist Zufall. Ich glaube nicht an solchen Aberglauben."
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Glaube, was du willst. Aber die Vergangenheit lässt euch beide nicht los. Auch dich nicht, Kaiba."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Ein namenloser Pharao vor 3000 Jahren … und dieser Priester, der aussieht wie Kaiba. Was hat das alles zu bedeuten?"
+    },
+    {
+     "t": "stage",
+     "text": "Bewusster Vorboten auf Saison 3 (Erinnerungswelt) – hier nicht auflösen, nur säen. Hier zeigt Ishizu Kaiba außerdem die Götterkarte Obelisk und übergibt sie ihm."
+    },
+    {
+     "t": "flag",
+     "set": "kaiba_has_obelisk",
+     "value": true
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (kurze Bakura-Sichtung möglich)"
+    },
+    {
+     "t": "stage",
+     "text": "Optionaler Kurz-Moment im freien Spiel: Der unheimliche Bakura mit dem Millennium-Ring taucht am Rand auf, wirkt harmlos – doch der Ring verfolgt eigene Ziele. Nur eine kurze Sichtung, kein Duell. (Wichtig für Saison 3 – präsent halten, nicht auflösen.)"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Spür Mariks Marionette auf und sichere die Götterkarte Slifer."
+    }
+   ]
+  },
+  "bc_strings": {
+   "id": "bc_strings",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_plaza",
+     "x": 16,
+     "y": 9
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Strings auf dem leeren Platz ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Ein leerer Platz. Ein stummer, leerer Duellant steht bereit – „Strings\", ein Werkzeug, das Marik über den Millennium-Stab fernsteuert. Er trägt Slifer."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Marik (über Strings): Marik selbst zeigt sich noch nicht. Er kontrolliert andere über den Millennium-Stab und lässt sie für sich duellieren. Strings ist seine willenlose Marionette – und trägt eine der Götterkarten."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Marik – durch Strings, kalte Stimme"
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Pharao … ich weiß, dass du in diesem Jungen steckst. Zeig dich. Nimm dir Slifer – wenn du kannst."
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen Strings duellieren / 👁 Yugi gegen Strings duellieren lassen (Anime-Duellant)"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell gegen Strings' Deck inkl. Slifer."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "strings_t3",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "yugi",
+      "lines": [
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Der Pharao durchschaut Mariks Fernsteuerung und besiegt Strings mit Slifers Macht."
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "In beiden Fällen danach – Marik durch Strings, ehe er zusammenbricht:"
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Das ändert nichts, Pharao. Ich nehme mir, was mir zusteht. Und ich beginne mit deinen Freunden."
+    },
+    {
+     "t": "stage",
+     "text": "Slifer geht an Yugi über."
+    },
+    {
+     "t": "flag",
+     "set": "yugi_has_slifer",
+     "value": true
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Eine der drei Götterkarten … Wir müssen vorsichtig sein. Marik gibt nicht auf."
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Marik schlägt zu – eile nachts zum Hafen."
+    }
+   ]
+  },
+  "bc_joey_harbor": {
+   "id": "bc_joey_harbor",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "domino_harbor",
+     "x": 24,
+     "y": 30
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Nachts zum Hafen gehen."
+    },
+    {
+     "t": "stage",
+     "text": "Nacht. Ein Hafen. Marik hat mit dem Millennium-Stab die Kontrolle über Joey übernommen – und zwingt ihn, gegen Yugi zu duellieren. An beiden sind Fesseln mit einem Gewicht befestigt: Der Verlierer wird ins Wasser gezogen."
+    },
+    {
+     "t": "stage",
+     "text": "Dieses Duell ist fest – der Spieler duelliert NICHT. Zwei beste Freunde, gezwungen, gegeneinander anzutreten. Der Spieler sieht hilflos zu."
+    },
+    {
+     "t": "stage",
+     "text": "Marik – durch Joey"
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Duelliert. Der Verlierer sinkt auf den Grund des Hafens. Wie … poetisch."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Joey! Wehr dich gegen ihn! Das bist nicht du!"
+    },
+    {
+     "t": "stage",
+     "text": "Joey kämpft gegen die Kontrolle, mit brechender Stimme"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Yugi … ich … ich kann meinen Körper nicht … lauf weg!"
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} ruft"
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Joey! Du bist stärker als dieser Stab! Erinnere dich, wer du bist!"
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "joey_t2",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Das Duell tobt. Am Ende bricht Mariks Kontrolle – Joey erkennt Yugi im letzten Moment wieder. Der Schlüssel zu seinen Fesseln versinkt, beide drohen unterzugehen, doch sie retten sich gemeinsam ans Ufer."
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "stage",
+     "text": "Joey keuchend"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Ich hätt dich fast … Yugi, es tut mir so leid."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Du hast Mariks Kontrolle gebrochen, Joey. Aus eigener Kraft. Das ist Freundschaft."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} denkt mit kalter Wut"
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Marik. Du benutzt Menschen wie Spielfiguren. Dafür wirst du bezahlen."
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (letzte Vorbereitung): Letzte Gelegenheit für Zufallsduelle, Deck-Feinschliff und Shop, bevor die Qualifikation abgeschlossen ist."
+    },
+    {
+     "t": "free"
+    }
+   ]
+  },
+  "bc_qualify": {
+   "id": "bc_qualify",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "TRIGGER: Genug Lokalisierungskarten gesammelt / Stadt-Events abgeschlossen."
+    },
+    {
+     "t": "stage",
+     "text": "Kurze Cutscene. Die Gruppe hat sich qualifiziert. Mai schließt auf – stärker geworden. Kaiba und Mokuba kündigen an, dass das Finale auf Kaibas gewaltigem Luftschiff/Turm stattfindet."
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Ihr habt es also auch geschafft. Dann sehen wir uns oben – im Finale."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Die acht Besten treffen sich an Bord. Dort entscheidet sich alles. Und diesmal … gehört der Sieg mir."
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Begib dich zu Kaibas Turm / Luftschiff – das Finale beginnt."
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Turm/Luftschiff betreten → ab hier durchgehende Finals-Cutscenes ohne freies Spiel bis zum Saison-Ende."
+    },
+    {
+     "t": "goto",
+     "map": "kaiba_airship",
+     "x": 10,
+     "y": 10
+    },
+    {
+     "t": "stage",
+     "text": "DAS FINALE – „Das Multiduel\" (Kaibas Turm / Luftschiff). Die letzten Duellanten treffen sich zum Finale. Im Zentrum stehen vier Legenden: Kaiba, Yugi, Joey und Marik."
+    },
+    {
+     "t": "stage",
+     "text": "Design-Hinweis: Es gibt kein echtes Multiduell – alles läuft als 1-gegen-1. Duelliert der Spieler selbst, ersetzt er Joey als vierte Legende. Die Marik-nahen Duelle (Odion, Mais Duell) bleiben fest bei ihren Anime-Duellanten; das einzige Marik-Duell des Spielers ist das große Finale."
+    }
+   ]
+  },
+  "bc_finals_masked": {
+   "id": "bc_finals_masked",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Auf der Duell-Plattform. Marik zwingt zwei maskierte Rare Hunters gegen die Helden an – im Anime ein Tag-Duell von Yugi & Kaiba gegen die Masken-Duellanten, auf einer einstürzenden Konstruktion."
+    },
+    {
+     "t": "stage",
+     "text": "Auflösung als zwei aufeinanderfolgende 1-gegen-1-Duelle (Yugi vs Masken-Duellant 1, danach Kaiba vs Masken-Duellant 2). Der Spieler kann eines der beiden 1v1 selbst übernehmen."
+    },
+    {
+     "t": "say",
+     "who": "rare_hunter",
+     "text": "Im Namen von Meister Marik – ihr kommt hier nicht lebend vorbei!"
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "rare_hunter_t2",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "yugi",
+      "lines": [
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Yugi übernimmt das erste 1-gegen-1 und besiegt den Masken-Duellanten."
+       }
+      ]
+     }
+    },
+    {
+     "t": "stage",
+     "text": "Zweites 1-gegen-1: Kaiba gegen den zweiten Masken-Duellanten."
+    },
+    {
+     "t": "duel",
+     "opponent": "rare_hunter_t2",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Nach den beiden 1v1-Duellen sind die Masken-Rare-Hunters besiegt. Das eigentliche Finale beginnt."
+    }
+   ]
+  },
+  "bc_finals_round1": {
+   "id": "bc_finals_round1",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Finale-Runde 1 – Die Ausscheidungen (Mischung aus Wahl & festen Duellen)."
+    },
+    {
+     "t": "stage",
+     "text": "Joey vs „Marik\" (Odion) – festes Story-Duell. Der „Marik\", gegen den Joey antritt, ist in Wahrheit Odion, Mariks treuer Diener, der sich als Marik ausgibt. Als Odion verliert und zusammenbricht, erwacht der echte, wahnsinnige Yami Marik."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "odion_t3",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Odion, besiegt, flüsternd"
+    },
+    {
+     "t": "say",
+     "who": "odion",
+     "text": "Vergib mir, Meister Marik … ich konnte dich nicht länger schützen …"
+    },
+    {
+     "t": "stage",
+     "text": "Yami Marik erwacht, mit irrem Lächeln"
+    },
+    {
+     "t": "say",
+     "who": "yami_marik",
+     "text": "Endlich frei. Jetzt beginnt das wahre Spiel."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Mai vs Yami Marik – festes Story-Duell (tragisch). Mai fordert Yami Marik heraus – und verliert. Yami Marik verbannt ihre Seele ins Schattenreich. Ein Schock für die ganze Gruppe, besonders für Joey."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "yami_marik_t4",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "stage",
+     "text": "Mai, ehe sie verschwindet"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Joey … hilf mir …"
+    },
+    {
+     "t": "stage",
+     "text": "Joey, verzweifelt"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "MAI! … Das zahl ich ihm heim. Das schwöre ich."
+    },
+    {
+     "t": "flag",
+     "set": "mai_soul_lost",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba vs Ishizu – kurz. Kaiba besiegt Ishizu. In diesem Moment verändert sich die von ihr vorhergesehene Zukunft – ein leiser Hinweis, dass Schicksal veränderbar ist."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "ishizu_t3",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    }
+   ]
+  },
+  "bc_kaiba_yugi": {
+   "id": "bc_kaiba_yugi",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Die Plattform hoch über den Wolken. Kaiba und Yugi – Obelisk gegen Slifer. Gott gegen Gott."
+    },
+    {
+     "t": "stage",
+     "text": "Dieses Duell bleibt fest wie im Anime und wird als cineastisches Story-Duell gezeigt. Yugi gewinnt."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Ich habe auf diesen Moment hingearbeitet, Yugi. Obelisk wird dich zermalmen!"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Deine Kraft ist gewaltig, Kaiba – aber du kämpfst nur für dich selbst. Ich kämpfe für alle, die auf mich zählen. Slifer – beende es!"
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "kaiba_t4",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "stage",
+     "text": "Yugi gewinnt. Kaiba steht geschlagen, doch mit Respekt."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba, leise"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "… Noch nicht gut genug. Dieses Mal."
+    }
+   ]
+  },
+  "bc_player_yugi": {
+   "id": "bc_player_yugi",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Nur noch drei stehen: Yugi, {PLAYER} und Yami Marik. Bevor es gegen die Finsternis geht, müssen die zwei Freunde untereinander ausmachen, wer das letzte Duell führt."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi sieht {PLAYER} ernst an"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Wir sind gemeinsam bis hierher gekommen. Aber nur einer von uns kann Marik gegenübertreten. Und ich glaube … es sollst du sein. Beweise es mir. Gib alles."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Ich werde dich nicht enttäuschen, Yugi.\"",
+       "tag": "determined"
+      },
+      {
+       "text": "„Dann zeig mir, warum du der Beste bist – damit ich dich übertreffe.\"",
+       "tag": "ambitious"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Yugi lächelt"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Genau die Antwort, die ich hören wollte. Los geht's – kein Zurückhalten!"
+    },
+    {
+     "t": "stage",
+     "text": "Volles, spielbares Duell gegen Yugi. Der Spieler MUSS gewinnen, um weiterzukommen (bei Niederlage: Wiederholung). Yugi spielt hier stark – ein echter Härtetest kurz vor dem Finale."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "yugi_t4",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Sieg des Spielers – Yugi, erschöpft, stolz:"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Du hast mich geschlagen. Fair und mit allem, was du hast."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi reicht {PLAYER} Slifer"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Nimm Slifer. Gegen Mariks Gott von Ra wirst du jede Kraft brauchen. Beende das für uns alle."
+    },
+    {
+     "t": "give",
+     "cards": [
+      10000020
+     ],
+     "dp": 0
+    },
+    {
+     "t": "flag",
+     "set": "player_has_slifer",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba, der seit seiner Niederlage schweigend zugesehen hat, tritt vor. Er hält Obelisk in der Hand – und drückt ihn {PLAYER} widerwillig, aber entschlossen in die Hand."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Versteh das nicht falsch. Ich gebe meine Karte nicht her, weil ich weich geworden bin. Ich lasse nur nicht zu, dass ein Wahnsinniger wie Marik mit einem Gott davonkommt."
+    },
+    {
+     "t": "stage",
+     "text": "Kaiba, knapp"
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Nimm Obelisk. Und mach ihn fertig. Für mich zählt am Ende nur, dass Marik verliert."
+    },
+    {
+     "t": "give",
+     "cards": [
+      10000000
+     ],
+     "dp": 0
+    },
+    {
+     "t": "flag",
+     "set": "player_has_obelisk",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} nimmt Obelisk"
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "… Danke, Kaiba. Das vergesse ich dir nicht."
+    },
+    {
+     "t": "say",
+     "who": "kaiba",
+     "text": "Spar dir den Dank. Gewinn einfach."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Ich bringe Mai zurück. Und alle anderen. Das verspreche ich."
+    }
+   ]
+  },
+  "bc_marik": {
+   "id": "bc_marik",
+   "chapter": "bc",
+   "steps": [
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Die Plattform, umgeben von Schatten. Yami Marik wartet, den Geflügelten Drachen von Ra in der Hand. In den verbannten Seelen: Mai und andere."
+    },
+    {
+     "t": "say",
+     "who": "yami_marik",
+     "text": "Du also. Nicht der Pharao, sondern sein kleiner Freund."
+    },
+    {
+     "t": "stage",
+     "text": "Yami Marik lacht"
+    },
+    {
+     "t": "say",
+     "who": "yami_marik",
+     "text": "Umso besser. Wenn ich dich breche, breche ich seinen Willen gleich mit."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Du hast Menschen als Werkzeuge missbraucht. Du hast Mai ins Schattenreich verbannt. Das endet hier – heute, mit diesem Duell."
+    },
+    {
+     "t": "say",
+     "who": "yami_marik",
+     "text": "Große Worte. Mal sehen, ob du sie halten kannst, wenn Ra vom Himmel herabsteigt!"
+    },
+    {
+     "t": "stage",
+     "text": "Schlüssel-Momente des Duells – voll ausspielbar: Yami Marik beschwört Ra in seiner mächtigsten Form. Der Spieler stellt ihm Slifer und Obelisk entgegen – alle drei Ägyptischen Götter auf einem Feld. Jeder verlorene Lebenspunkt kostet Yami Marik ein Stück seiner selbst – der gute Marik kämpft von innen gegen ihn. Mit der geballten Kraft zweier Götter und dem richtigen Kalkül dreht der Spieler das Duell."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "yami_marik_t4",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "Der Spieler gewinnt. Yami Marik löst sich auf – der echte, geläuterte Marik kehrt zurück."
+    },
+    {
+     "t": "give",
+     "cards": [
+      10000010
+     ],
+     "dp": 0
+    },
+    {
+     "t": "flag",
+     "set": "player_has_ra",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Marik, wieder er selbst, ruhig"
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Es ist vorbei. Mein anderes Ich … meine Rachsucht … ihr habt beide besiegt. Danke. Du hast mich von mir selbst befreit."
+    },
+    {
+     "t": "stage",
+     "text": "Die verbannten Seelen kehren zurück – Mai öffnet die Augen."
+    },
+    {
+     "t": "stage",
+     "text": "Mai, schwach"
+    },
+    {
+     "t": "say",
+     "who": "mai",
+     "text": "Joey …? Bin ich … zurück?"
+    },
+    {
+     "t": "stage",
+     "text": "Joey stürzt zu ihr"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Mai! Du bist wieder da!"
+    },
+    {
+     "t": "stage",
+     "text": "Joey zu {PLAYER}"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Das … das hast du geschafft. Danke. Wirklich."
+    },
+    {
+     "t": "stage",
+     "text": "Marik tritt vor, das Millennium-Halsband und den Stab in der Hand."
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Meine Familie hütet seit Jahrtausenden ein Geheimnis: den Weg zurück zur Vergangenheit des Pharaos. Zu seinem wahren Namen. Ihr habt bewiesen, dass ihr würdig seid. Es ist Zeit, dass der Pharao erfährt, wer er wirklich war."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Der wahre Name des Pharaos … Dann ist unsere Reise noch nicht zu Ende."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Wir bringen ihn nach Hause. Wohin auch immer das führt.\"",
+       "tag": "determined"
+      },
+      {
+       "text": "„Was auch kommt – wir stehen das gemeinsam durch.\"",
+       "tag": "loyal"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Bildschirm blendet über die Wolken ab."
+    },
+    {
+     "t": "flag",
+     "set": "bc_done",
+     "value": true
+    },
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (zurück in Domino): Deck, Shop, Zufallsduelle, Speichern."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER (Start Saison 3): Die Reise nach Ägypten beginnt (Story-Punkt in der Stadt / bei den Ishtars) → Beginn von Saison 3."
+    }
+   ]
+  },
+  "mem_travel": {
+   "id": "mem_travel",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "egypt_desert",
+     "x": 18,
+     "y": 22
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "stage",
+     "text": "Ägypten, Gegenwart. Wüste, gleißende Sonne. Die Gruppe – {PLAYER}, Yugi, Téa, Joey, Tristan – steht mit den Ishtars vor dem Eingang eines verborgenen unterirdischen Heiligtums."
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Hier endet die Reise, die vor 3000 Jahren begann. Unter uns liegt das Grab, das das Geheimnis des Pharaos bewahrt."
+    },
+    {
+     "t": "say",
+     "who": "marik",
+     "text": "Meine Familie hat diesen Ort ihr Leben lang gehütet. Jetzt gehört das Geheimnis euch. Geht hinunter."
+    },
+    {
+     "t": "goto",
+     "map": "egypt_shrine",
+     "x": 10,
+     "y": 14
+    },
+    {
+     "t": "stage",
+     "text": "Unten: eine gewaltige Steintafel mit drei leeren Vertiefungen – exakt in Form der Ägyptischen Götterkarten."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Drei Vertiefungen … für Slifer, Obelisk und Ra."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Dann setzen wir die Götter ein – gemeinsam."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} und Yugi legen die drei Götterkarten in die Tafel. Sie beginnen zu leuchten. Der Boden bebt."
+    },
+    {
+     "t": "stage",
+     "text": "Pharao – aus dem Puzzle, ehrfürchtig"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Ich spüre es … meine Vergangenheit ruft. Hinter diesem Tor liegt, wer ich einst war."
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Das Tor öffnet sich → Übergang in die Erinnerungswelt."
+    }
+   ]
+  },
+  "mem_enter": {
+   "id": "mem_enter",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Ein greller Lichtschein. Die Gruppe fällt durch das Tor – und findet sich im alten Ägypten vor 3000 Jahren wieder. Eine lebendige Stadt, Palmen, der Nil, ein gewaltiger Palast am Horizont."
+    },
+    {
+     "t": "goto",
+     "map": "memory_city",
+     "x": 24,
+     "y": 20
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Das ist … kein Traum. Wir sind wirklich hier. In der Vergangenheit des Pharaos."
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Seht mal – die Menschen bemerken uns kaum. Als wären wir Schatten in ihrer Welt."
+    },
+    {
+     "t": "stage",
+     "text": "Pharao – nun als junger Herrscher sichtbar, getrennt von Yugi"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Das ist mein Reich. Ich war hier … ein Pharao. Doch mein Name … er fehlt mir noch immer."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Dann finden wir ihn. Hier, wo alles begann. Dafür sind wir gekommen."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (Alt-Ägypten): Der Spieler bewegt sich frei über die Karte – Palastbezirk, Dorf, Tempel und die Wüste am Rand. Menü, Deck, optionale Ka-Duelle verfügbar."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Geh zum Palast und tritt vor den Pharao und seinen Hof."
+    }
+   ]
+  },
+  "mem_court": {
+   "id": "mem_court",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_palace",
+     "x": 12,
+     "y": 8
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Den Thronsaal des Palastes betreten."
+    },
+    {
+     "t": "stage",
+     "text": "Der Thronsaal. Der junge Pharao sitzt auf dem Thron, umgeben von seinen sechs Priestern – Trägern der Millennium-Gegenstände. Unter ihnen ein hochgewachsener, kühler Mann, der Kaiba zum Verwechseln ähnlich sieht: Priester Seto. Daneben der weise Mahad und seine junge Schülerin Mana."
+    },
+    {
+     "t": "say",
+     "who": "priest_seto",
+     "text": "Fremde im Palast. Wer wagt es, unangemeldet vor den Pharao zu treten?"
+    },
+    {
+     "t": "say",
+     "who": "mahad",
+     "text": "Ruhig, Seto. Diese hier … tragen ein seltsames Licht in sich. Sie sind keine Feinde."
+    },
+    {
+     "t": "stage",
+     "text": "Mana, neugierig, zu {PLAYER}"
+    },
+    {
+     "t": "say",
+     "who": "mana",
+     "text": "Ihr seht komisch aus! Aber irgendwie … mag ich euch. Seid ihr auch Ka-Beschwörer?"
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} und die Gruppe erkennen: Der Pharao auf dem Thron ist derselbe Geist, der in Yugis Puzzle lebt – nur jung, lebendig, in seiner eigenen Zeit."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Das ist er … der Pharao, wie er einst war. Wir müssen herausfinden, wer er ist – bevor es zu spät ist."
+    },
+    {
+     "t": "stage",
+     "text": "Plötzlich – Alarm. Ein Bote stürzt herein."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "announcer",
+     "text": "Mein Pharao! Ein Grabräuber – er dringt in den Palast! Er nennt sich der König der Diebe!"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (kurz)"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Stell dich dem Diebeskönig im Palasthof."
+    }
+   ]
+  },
+  "mem_thiefking": {
+   "id": "mem_thiefking",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_courtyard",
+     "x": 14,
+     "y": 16
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: In den Palasthof gehen."
+    },
+    {
+     "t": "stage",
+     "text": "Der Palasthof. Auf einem schwarzen Pferd reitet ein wilder Mann mit weißer Mähne und einer Narbe herein – der Diebeskönig Bakura. Hinter ihm wächst ein monströser Schatten: sein Ka, Diabound."
+    },
+    {
+     "t": "stage",
+     "text": "Kurz-Einführung – Diebeskönig Bakura: Ein Grabräuber, getrieben von Rache und einer uralten Finsternis. Er will alle sieben Millennium-Gegenstände an sich reißen, um den Dämon Zorc Necrophades zu erwecken. Sein Gesicht kennst du – es ist Bakura aus der Gegenwart, hier in seiner ursprünglichen Gestalt."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "thiefking",
+     "text": "Pharao! Deine Familie hat ihre Macht auf Blut gebaut. Ich bin gekommen, um alles einzufordern – deine Gegenstände, deinen Thron, deine Welt!"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Wer die Menschen meines Reiches bedroht, bekommt es mit mir zu tun. Zeig dich, Dieb!"
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG: ⚔ Selbst gegen den Diebeskönig duellieren / 👁 Den Pharao gegen ihn duellieren lassen (Anime-Duellant)"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Wenn selbst: Volles Duell gegen Bakuras Ka Diabound – ein zäher, gefährlicher Gegner."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "thiefking_t4",
+      "mode": "play",
+      "must_win": true,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "atem",
+      "lines": [
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Der Pharao stellt sich Diabound mit seinem eigenen Ka."
+       },
+       {
+        "t": "stage",
+        "text": "Diebeskönig Bakura, knurrend"
+       },
+       {
+        "t": "say",
+        "who": "thiefking",
+        "text": "Dieses Mal ziehe ich mich zurück, Pharao. Aber nur dieses Mal."
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "⚔ Nur nach dem selbst gespielten Duell – Diebeskönig Bakura weicht zurück:"
+    },
+    {
+     "t": "say",
+     "who": "thiefking",
+     "text": "Unmöglich … so viel Kraft in einem Fremden?"
+    },
+    {
+     "t": "stage",
+     "text": "In beiden Fällen danach – Diebeskönig Bakura im Rückzug, lachend:"
+    },
+    {
+     "t": "say",
+     "who": "thiefking",
+     "text": "Glaubt nicht, dass es vorbei ist. Ich hole mir jeden einzelnen Gegenstand. Und dann erwacht etwas, das älter ist als euer Reich!"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Er ist stärker, als er wirken will. Und er sucht die Millennium-Gegenstände … Wir müssen wachsam sein."
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Kehr in den Palast zurück – der Hof berät über die Bedrohung."
+    }
+   ]
+  },
+  "mem_mahad": {
+   "id": "mem_mahad",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_palace",
+     "x": 12,
+     "y": 8
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: In den Thronsaal zurückkehren."
+    },
+    {
+     "t": "stage",
+     "text": "Festes Story-Duell – der Spieler duelliert NICHT. Ein bewegender Wendepunkt: Der Priester Mahad geht allein gegen Bakura, um den Pharao zu schützen."
+    },
+    {
+     "t": "stage",
+     "text": "Der Thronsaal. Mahad tritt entschlossen vor den Pharao."
+    },
+    {
+     "t": "say",
+     "who": "mahad",
+     "text": "Mein Pharao, ich werde den Dieb allein stellen. Mein Millennium-Ring darf nicht in seine Hände fallen. Erlaubt mir, Euch ein letztes Mal zu dienen."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Mahad … du weißt, wie gefährlich das ist."
+    },
+    {
+     "t": "say",
+     "who": "mahad",
+     "text": "Ich weiß. Und ich gehe mit stolzem Herzen."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "thiefking_t4",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "stage",
+     "text": "Mahad stellt sich Bakura in den Katakomben. Ein erbitterter Ka-Kampf. Um Bakura für immer ein Stück seiner Macht zu nehmen, verschmilzt Mahad im Sterben seine Seele mit seinem Ka – und wird zu einem neuen, mächtigen Wächter: dem Dunklen Magier."
+    },
+    {
+     "t": "stage",
+     "text": "Mana, unter Tränen"
+    },
+    {
+     "t": "say",
+     "who": "mana",
+     "text": "Meister Mahad … nein …"
+    },
+    {
+     "t": "stage",
+     "text": "Der Dunkle Magier erscheint an der Seite des Pharaos – Mahads Opfer, jetzt ein ewiger Beschützer."
+    },
+    {
+     "t": "stage",
+     "text": "Pharao, leise"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Dein Opfer war nicht umsonst, mein Freund. Du wirst für immer an meiner Seite kämpfen."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Er hat sein Leben gegeben, um den Pharao zu schützen. Diese Welt … ist so echt wie unsere."
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Sammle Hinweise über den Pharao – erkunde Dorf und Tempel."
+    }
+   ]
+  },
+  "mem_search": {
+   "id": "mem_search",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_village",
+     "x": 30,
+     "y": 26
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (mehrere Orte – frei anlaufbar). Der Spieler läuft selbst zu den verschiedenen Orten. Jeder Ort hat ein kleines Event. Reihenfolge egal."
+    },
+    {
+     "t": "stage",
+     "text": "Das Dorf Kul Elna – der Ursprung von Bakuras Rache und der Millennium-Gegenstände. Ein düsteres Geheimnis: Die Gegenstände wurden aus einem grausamen Ritual geschmiedet. (Wichtiger Hinweis-Fund.)"
+    },
+    {
+     "t": "flag",
+     "set": "mem_village_visited",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Der Tempel – Priester und Schriftrollen; hier erfährt man mehr über die Prophezeiung und die drei Götter."
+    },
+    {
+     "t": "flag",
+     "set": "mem_temple_visited",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Die Wüste – optionale Ka-Duelle gegen Grabräuber (DP/Karten). Sie funktionieren wie Zufallsduellanten: kurze Sieg-/Niederlage-Zeilen."
+    },
+    {
+     "t": "duel",
+     "opponent": "random_t3",
+     "mode": "play",
+     "must_win": false,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Dorf und Tempel besucht"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Kehr zum Palast zurück – die Finsternis wächst."
+    }
+   ]
+  },
+  "mem_priest_seto": {
+   "id": "mem_priest_seto",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_palace",
+     "x": 12,
+     "y": 8
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Zum Palast zurückkehren."
+    },
+    {
+     "t": "stage",
+     "text": "Der Palast liegt unter Belagerung. Bakura wird von einer noch dunkleren Macht getrieben. Und im Verborgenen wirkt ein Verräter: Akhenaden, Träger des Millennium-Auges und Vater von Priester Seto, der sich der Finsternis zuwendet."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Priester Seto, erschüttert"
+    },
+    {
+     "t": "say",
+     "who": "priest_seto",
+     "text": "Vater … was habt Ihr getan? Ihr dient dem Dämon?"
+    },
+    {
+     "t": "say",
+     "who": "akhenaden",
+     "text": "Nur die Dunkelheit kann die wahre Macht entfesseln, mein Sohn. Zorc wird auferstehen – und ein neuer Pharao wird herrschen."
+    },
+    {
+     "t": "stage",
+     "text": "Priester Seto stellt sich gegen seinen eigenen Vater und die Finsternis – an der Seite des Pharaos."
+    },
+    {
+     "t": "stage",
+     "text": "ENTSCHEIDUNG (optional): ⚔ An Priester Setos Seite selbst gegen die Schergen der Finsternis duellieren / 👁 Priester Seto / den Pharao duellieren lassen (Anime-Duellant)"
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "choice_duel",
+     "self": {
+      "t": "duel",
+      "opponent": "random_t4",
+      "mode": "play",
+      "must_win": false,
+      "reward_dp": 700,
+      "reward_cards": []
+     },
+     "other": {
+      "who": "priest_seto",
+      "lines": [
+       {
+        "t": "stage",
+        "text": "Kurze Cutscene. Priester Seto und der Pharao schlagen die Schergen der Finsternis zurück."
+       }
+      ]
+     }
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Kampf – Priester Seto zum Pharao:"
+    },
+    {
+     "t": "say",
+     "who": "priest_seto",
+     "text": "Ich kämpfe für dieses Reich – und für dich, mein Pharao. Was auch kommt."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Ich danke dir, Seto. Doch die eigentliche Gefahr steht uns noch bevor."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Priester Seto … dieselbe Seele wie Kaiba. Selbst über 3000 Jahre bleibt diese Rivalität – und dieser Stolz."
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (kurz)"
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Finde den wahren Namen des Pharaos, bevor Zorc erwacht."
+    }
+   ]
+  },
+  "mem_name": {
+   "id": "mem_name",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_chamber",
+     "x": 6,
+     "y": 6
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Die verborgene Kammer unter dem Palast betreten."
+    },
+    {
+     "t": "stage",
+     "text": "Eine geheime Kammer. An der Wand: eine gewaltige Kartusche mit Hieroglyphen – der Name des Pharaos, seit 3000 Jahren verborgen. Die Gruppe steht davor."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Hier … hier steht mein Name. Doch ich kann ihn nicht lesen. Als hätte die Zeit selbst ihn mir verwehrt."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi tritt vor, konzentriert"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Lass mich. Wir sind den ganzen Weg zusammen gegangen, du und ich. Wenn irgendjemand deinen Namen finden kann … dann wir."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi liest die Hieroglyphen – Zeichen für Zeichen. Ein Leuchten. Der Name formt sich."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Dein Name … ist Atem."
+    },
+    {
+     "t": "stage",
+     "text": "Ein gewaltiger Lichtstoß durchflutet die Kammer. Der Pharao – Atem – richtet sich auf, seine volle Macht kehrt zurück."
+    },
+    {
+     "t": "flag",
+     "set": "name_revealed",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Atem, mit fester, klarer Stimme"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Atem. Ja … das ist mein Name. Ich erinnere mich. Ich bin Atem, Pharao von Ägypten."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Wir haben es geschafft. Wir haben ihm seinen Namen zurückgegeben."
+    },
+    {
+     "t": "stage",
+     "text": "Doch im selben Moment – ein Beben. Die Dunkelheit bricht los."
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Bakura … und die Finsternis hinter ihm. Sie beschwören ihn – Zorc. Wir müssen es aufhalten. Jetzt!"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Zur Oberfläche eilen → Beginn des durchgehenden Klimax-Blocks (kein freies Spiel)."
+    }
+   ]
+  },
+  "mem_zorc": {
+   "id": "mem_zorc",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "goto",
+     "map": "memory_sky",
+     "x": 20,
+     "y": 4
+    },
+    {
+     "t": "music",
+     "track": "tense"
+    },
+    {
+     "t": "stage",
+     "text": "Der Himmel über Ägypten wird schwarz. Der Diebeskönig Bakura verschmilzt mit der uralten Finsternis zu einem titanischen Dämon: Zorc Necrophades. Er überragt den Palast, die Welt selbst scheint verloren."
+    },
+    {
+     "t": "stage",
+     "text": "Zorc, donnernde Stimme"
+    },
+    {
+     "t": "say",
+     "who": "zorc",
+     "text": "Ich bin das Ende aller Dinge. Diese Welt gehört der Dunkelheit!"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Nicht, solange ich atme. Ich bin Atem – und ich trage die Kraft der drei Götter in mir!"
+    },
+    {
+     "t": "stage",
+     "text": "Schlüssel-Momente – teils spielbar, teils Cutscene: Atem, gestärkt durch seinen Namen, ruft die drei Ägyptischen Götter an. Priester Seto, Mana (nun die Dunkle Magierin), der Dunkle Magier und der ganze Hof kämpfen an seiner Seite. Yugi und {PLAYER} geben Atem die letzte Kraft – die Kraft der Freundschaft über die Zeit hinweg."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "thiefking_t4",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "Mit vereinter Macht und dem Licht seines Namens vernichtet Atem Zorc Necrophades. Die Finsternis zerbricht. Der Himmel wird wieder klar."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Es ist vollbracht. Die Finsternis ist besiegt – und meine Vergangenheit ist endlich vollständig."
+    },
+    {
+     "t": "stage",
+     "text": "Die Erinnerungswelt beginnt sich aufzulösen. Der Hof, Priester Seto, Mana – sie nicken Atem ein letztes Mal zu."
+    },
+    {
+     "t": "say",
+     "who": "priest_seto",
+     "text": "Geh in Frieden, mein Pharao. Deine Zeit ist erfüllt."
+    }
+   ]
+  },
+  "mem_return": {
+   "id": "mem_return",
+   "chapter": "memory",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Grelles Licht. Die Gruppe kehrt in die Gegenwart zurück – zurück ins Grab unter der ägyptischen Wüste. Die Steintafel verstummt."
+    },
+    {
+     "t": "goto",
+     "map": "egypt_shrine",
+     "x": 10,
+     "y": 14
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Wir sind zurück. Und … du hast jetzt deinen Namen, Atem."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Dank euch. Dank dir, Yugi. Und dir, {PLAYER}. Ihr habt mir gegeben, wonach ich 3000 Jahre gesucht habe."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Dann ist das der Moment, oder? Der Moment, für den das alles war."
+    },
+    {
+     "t": "stage",
+     "text": "Atem, ernst, ruhig"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Ja. Ein Pharao, der seinen Namen kennt, muss weiterziehen. Doch bevor ich gehe … gibt es eine letzte Pflicht. Ein letztes Duell."
+    },
+    {
+     "t": "stage",
+     "text": "Bildschirm blendet ab."
+    },
+    {
+     "t": "flag",
+     "set": "mem_done",
+     "value": true
+    },
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (zurück in Domino): Deck, Shop, Zufallsduelle, Speichern – die letzte Vorbereitung vor dem großen Abschied."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER (Start Finale): Wenn der Spieler bereit ist / den Story-Punkt auslöst → das Zeremonielle Duell."
+    }
+   ]
+  },
+  "fin_ceremonial": {
+   "id": "fin_ceremonial",
+   "chapter": "finale",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "TRIGGER: Der Spieler löst nach Saison 3 den Story-Punkt aus → Reise zum zeremoniellen Ort."
+    },
+    {
+     "t": "goto",
+     "map": "egypt_ceremony",
+     "x": 12,
+     "y": 18
+    },
+    {
+     "t": "music",
+     "track": "egypt"
+    },
+    {
+     "t": "stage",
+     "text": "Ägypten. Eine uralte Zeremonienkammer, tief unter der Erde. In der Mitte: zwei Duellplätze, einander gegenüber. An der Rückwand ein gewaltiges Steintor, verziert mit Hieroglyphen – das Tor ins Jenseits. Die ganze Gruppe ist da: {PLAYER}, Téa, Joey, Tristan, die Ishtars, sogar Kaiba beobachtet aus der Ferne."
+    },
+    {
+     "t": "say",
+     "who": "ishizu",
+     "text": "Dies ist das Zeremonielle Duell. Nach uraltem Gesetz muss ein Pharao, der seinen Namen kennt, von einem lebenden Herausforderer besiegt werden – erst dann findet seine Seele Frieden und darf weiterziehen."
+    },
+    {
+     "t": "stage",
+     "text": "Atem und Yugi treten sich gegenüber. Zwei Seelen, die so lange einen Körper geteilt haben – jetzt getrennt, als Gegner."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Yugi. Von allen Menschen bist du es, gegen den ich dieses letzte Duell führen will. Zeig mir, wie weit du gekommen bist."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi, mit Tränen in den Augen, aber fester Stimme"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich wollte diesen Tag nie kommen sehen. Aber ich verstehe jetzt … wenn ich dich wirklich gehen lassen will, muss ich mit ganzer Kraft gegen dich antreten. Sonst wäre es keine Ehre für dich."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} steht bei den anderen und sieht zu."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Die beiden … der Pharao und der Junge, der ihn erweckt hat. Ich habe die ganze Reise an ihrer Seite erlebt. Und jetzt muss einer den anderen ziehen lassen."
+    },
+    {
+     "t": "stage",
+     "text": "Cineastisches Story-Duell – nicht spielbar. Schlüssel-Momente: Atem greift mit voller Macht an – seine legendären Monster stehen bereit. Yugi durchschaut jeden Zug seines Lehrmeisters; er kämpft nicht gegen Atems Karten, sondern gegen alles, was Atem ihm beigebracht hat. Im letzten Zug besiegt Yugi Atems stärkstes Monster mit einer einfachen, aber perfekten Kombination. Nicht mit roher Kraft – mit allem, was er geworden ist."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "yugi_t5",
+     "mode": "watch",
+     "must_win": false,
+     "reward_dp": 0,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "stage",
+     "text": "Atems letzte Lebenspunkte fallen auf null. Stille. Yugi hat gewonnen."
+    },
+    {
+     "t": "stage",
+     "text": "Atem lächelt, stolz"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "… Du hast mich besiegt. Fair und mit einem Herzen, das keine Angst mehr kennt. Der Schüler hat den Meister übertroffen."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi, unter Tränen"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich wollte nicht gewinnen … und doch musste ich. Für dich."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Genau deshalb hast du es verdient. Weine nicht, Yugi. Das ist kein Verlust. Das ist der Moment, in dem du beweist, dass du mich nie gebraucht hast, um stark zu sein."
+    }
+   ]
+  },
+  "fin_farewell": {
+   "id": "fin_farewell",
+   "chapter": "finale",
+   "steps": [
+    {
+     "t": "music",
+     "track": "sad"
+    },
+    {
+     "t": "stage",
+     "text": "Das gewaltige Steintor beginnt zu leuchten. Es öffnet sich langsam – dahinter ein warmes, blendendes Licht. Das Jenseits ruft."
+    },
+    {
+     "t": "stage",
+     "text": "Atem wendet sich der Gruppe zu, ein letztes Mal"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Meine Freunde. Ihr habt einem namenlosen Geist ein Zuhause gegeben, eine Familie, einen Namen. Ich gehe nicht, weil ich muss – ich gehe, weil ich weiß, dass ihr bereit seid. Ihr alle."
+    },
+    {
+     "t": "stage",
+     "text": "Joey kämpft mit den Tränen"
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Bleib doch … Kumpel. Wir waren ein verdammt gutes Team."
+    },
+    {
+     "t": "stage",
+     "text": "Téa, weinend"
+    },
+    {
+     "t": "say",
+     "who": "tea",
+     "text": "Wir werden dich nie vergessen. Niemals."
+    },
+    {
+     "t": "stage",
+     "text": "Atem tritt vor {PLAYER}."
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Und du. Du bist an meiner Seite gegangen, hast in meinem Namen gekämpft, als ich es nicht konnte. Du bist ein Duellant geworden, der es mit jedem aufnehmen kann – sogar mit mir."
+    },
+    {
+     "t": "stage",
+     "text": "Atem lächelt"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Vielleicht … eines Tages sogar mit Yugi."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Danke für alles, Atem. Ruh in Frieden.\"",
+       "tag": "moved"
+      },
+      {
+       "text": "„Ich werde deinen Weg ehren. Versprochen.\"",
+       "tag": "determined"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Atem nickt"
+    },
+    {
+     "t": "say",
+     "who": "atem",
+     "text": "Das weiß ich. Lebt wohl … meine Freunde."
+    },
+    {
+     "t": "stage",
+     "text": "Atem wendet sich ab und schreitet durch das Tor ins Licht. Als er hindurchgeht, verblasst seine Gestalt. Das Tor schließt sich. Die Millennium-Gegenstände verlieren ihr Leuchten und versinken – die Ära des Pharaos ist zu Ende."
+    },
+    {
+     "t": "flag",
+     "set": "atem_farewell",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "Stille. Yugi steht allein da – zum ersten Mal wirklich allein in seinem eigenen Körper. Doch aufrecht. Stärker."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi, leise, zu sich"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Leb wohl … Pharao. Ich werde dich stolz machen."
+    },
+    {
+     "t": "stage",
+     "text": "Bildschirm blendet langsam ab."
+    }
+   ]
+  },
+  "fin_kog": {
+   "id": "fin_kog",
+   "chapter": "finale",
+   "steps": [
+    {
+     "t": "stage",
+     "text": "Zeittitel: „Einige Zeit später.\" Zurück in Domino City. Ein klarer Tag. Alles wirkt vertraut – und doch hat sich etwas verändert."
+    },
+    {
+     "t": "goto",
+     "map": "domino_city",
+     "x": 20,
+     "y": 24
+    },
+    {
+     "t": "music",
+     "track": "town"
+    },
+    {
+     "t": "stage",
+     "text": "FREIES SPIEL (letzte Vorbereitung): Domino City ist frei begehbar. Letzte Gelegenheit, das Deck zu optimieren, DP im Shop auszugeben und sich auf das schwerste Duell des Spiels vorzubereiten."
+    },
+    {
+     "t": "free"
+    },
+    {
+     "t": "mission",
+     "text": "◎ MISSION: Fordere Yugi zum Duell um den Titel King of Games."
+    },
+    {
+     "t": "stage",
+     "text": "Der Spieler geht zum vertrauten Ort – dem Spieleladen von Großvater Muto, wo alles begann. Yugi wartet bereits."
+    },
+    {
+     "t": "goto",
+     "map": "kame_shop",
+     "x": 6,
+     "y": 8
+    },
+    {
+     "t": "stage",
+     "text": "TRIGGER: Yugi ansprechen."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi lächelt, als er {PLAYER} sieht"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Ich hab mich gefragt, wann du kommst. Seit Atem gegangen ist, sagen die Leute, ich sei jetzt der stärkste Duellant der Welt. Der King of Games."
+    },
+    {
+     "t": "stage",
+     "text": "Pause"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Aber du und ich wissen beide, dass das nicht entschieden ist. Nicht zwischen uns."
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Wir sind die ganze Reise nebeneinander gegangen. Ich habe in Atems Namen gekämpft, ich habe Marik geschlagen, ich habe Zorc gegenübergestanden. Es gibt nur eine Frage, die offen ist."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Wer von uns der Beste ist."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi nimmt sein Deck"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Dann lass sie uns beantworten. Kein Schicksal, keine Millennium-Gegenstände, kein Pharao. Nur du, ich und unsere Decks."
+    },
+    {
+     "t": "choice",
+     "options": [
+      {
+       "text": "„Genau darauf habe ich hingearbeitet.\"",
+       "tag": "determined"
+      },
+      {
+       "text": "„Ich habe größten Respekt vor dir, Yugi. Aber gewinnen will ich trotzdem.\"",
+       "tag": "respectful"
+      }
+     ]
+    },
+    {
+     "t": "stage",
+     "text": "Yugi grinst"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Dann zeig mir alles, was du hast. Ich halte mich nicht zurück – das schulde ich dir. Duellieren wir!"
+    },
+    {
+     "t": "stage",
+     "text": "Volles, spielbares Duell gegen Yugi – der finale Boss des Spiels und der schwerste Kampf. Yugi spielt mit seinem stärksten Deck und ohne Rücksicht. Der Spieler MUSS gewinnen (bei Niederlage: Wiederholung)."
+    },
+    {
+     "t": "music",
+     "track": "duel"
+    },
+    {
+     "t": "duel",
+     "opponent": "yugi_t5",
+     "mode": "play",
+     "must_win": true,
+     "reward_dp": 700,
+     "reward_cards": []
+    },
+    {
+     "t": "music",
+     "track": "victory"
+    },
+    {
+     "t": "stage",
+     "text": "Nach dem Sieg des Spielers – Yugi, atemlos, dann ein breites, ehrliches Lächeln:"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "… Du hast gewonnen. Du hast mich geschlagen – fair, mit allem, was du hast."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi streckt die Hand aus"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Der Titel gehört dir. Du bist der neue King of Games."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} ergreift die Hand"
+    },
+    {
+     "t": "say",
+     "who": "player",
+     "text": "Ich hätte es ohne dich nie so weit geschafft, Yugi. Ohne euch alle."
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Nein. Du hast das aus eigener Kraft erreicht. Atem hätte es geahnt – er hat es sogar gesagt, weißt du noch? Dass du es eines Tages sogar mit mir aufnehmen könntest."
+    },
+    {
+     "t": "stage",
+     "text": "Yugi blickt nach oben"
+    },
+    {
+     "t": "say",
+     "who": "yugi",
+     "text": "Er hatte recht."
+    },
+    {
+     "t": "stage",
+     "text": "Die ganze Gruppe kommt dazu – Joey, Téa, Tristan, Großvater. Jubel, Lachen, Erleichterung."
+    },
+    {
+     "t": "say",
+     "who": "joey",
+     "text": "Das war das beste Duell, das ich je gesehen hab! Ein echter King of Games!"
+    },
+    {
+     "t": "stage",
+     "text": "Großvater lächelt warm"
+    },
+    {
+     "t": "say",
+     "who": "grandpa",
+     "text": "Ich hab es damals gesagt, an dem Tag, als du zum ersten Mal in meinen Laden kamst: Ich sehe dir an, dass du das Spiel liebst – oder es lieben wirst. Sieh dich jetzt an."
+    },
+    {
+     "t": "stage",
+     "text": "{PLAYER} blickt kurz zum Himmel – ein stiller Gruß an Atem, wo auch immer er nun sein mag."
+    },
+    {
+     "t": "think",
+     "who": "player",
+     "text": "Von einem namenlosen Neuling in Domino zum King of Games. Und irgendwo dort oben … lächelt ein Pharao."
+    },
+    {
+     "t": "stage",
+     "text": "Kamera zieht auf – Domino City, die Gruppe zusammen, ein neuer Champion. Bildschirm blendet aus."
+    },
+    {
+     "t": "flag",
+     "set": "king_of_games",
+     "value": true
+    },
+    {
+     "t": "stage",
+     "text": "► ENDE ◄"
+    }
+   ]
+  }
+ }
+}
