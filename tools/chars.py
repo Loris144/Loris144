@@ -1,11 +1,16 @@
 """Overworld character sprites in the Pokemon Gen-5 idiom.
 
-The body is a hand-drawn pixel template (see body_template.py) that gets
-recoloured per character; hair, headgear and accessories are layered on top.
-That combination is what makes the cast readable at 32px: a real drawn
-silhouette with proper shading, not procedural rectangles.
+Three things decide whether a 32px character is recognisable, and none of
+them is colour:
 
-Yu-Gi-Oh signifiers ride on the same system — Duel Disks on the forearm,
+  1. the build — a child, a lanky teen and a broad adult must not share one
+     doll shape (see body_template.BUILDS),
+  2. the silhouette — hair volume, coats and robes have to break the body
+     outline, because that outline is all you see while walking,
+  3. contrast — the ramp in shade.py is deliberately wide so the shading
+     still reads after the sprite is scaled down.
+
+Yu-Gi-Oh signifiers ride on the same system: Duel Disks on the forearm,
 Millennium items on the chest, the blue Domino school jacket.
 
 Sheet layout: 32x44 frames, 4 columns (walk cycle), 4 rows (down/left/right/up).
@@ -37,9 +42,11 @@ class CharSpec:
     bottom: str = "2b3550"
     shoes: str = "35302e"
     coat: str = ""
+    outfit: str = ""          # "", "coat", "robe", "cape"
     accessory: str = ""
     eyes: str = "3a2a55"
     tall: int = 0
+    build: str = "teen"
     skirt: bool = False
     scarf: str = ""
     headgear: str = ""
@@ -85,71 +92,80 @@ def _palette(spec: CharSpec, R: dict) -> dict:
     }
 
 
-def _paint(c: Canvas, spec: CharSpec, d: str, step: int, R: dict) -> None:
-    rows = BT.TEMPLATES["left" if d == "right" else d]
+def _paint(c: Canvas, spec: CharSpec, d: str, step: int, R: dict, M: dict,
+           rows: list) -> None:
     pal = _palette(spec, R)
-    lift = min(spec.tall, 3)          # taller characters sit higher
+    lift = min(spec.tall, 3)
     swing = (0, 1, 0, -1)[step]
     arm = (0, -1, 0, 1)[step]
+    leg_rows = M["leg_rows"]
+    arm_rows = M["arm_rows"]
 
     for y, row in enumerate(rows):
         for x, ch in enumerate(row):
             if ch == "." or ch not in pal:
                 continue
             dy = 0
-            dx = 0
-            if y in BT.LEG_ROWS:
-                # left leg forward on frame 1, right leg on frame 3
+            if y in leg_rows:
                 dy = swing if x < CX else -swing
-            elif y in BT.ARM_ROWS and ch in ("K",):
+            elif y in arm_rows and ch == "K":
                 dy = arm if x < CX else -arm
-            c.set(x + dx, y + dy - lift, pal[ch])
+            c.set(x, y + dy - lift, pal[ch])
 
-    # skirt replaces the trouser block
     if spec.skirt:
         bot: Ramp = R["bottom"]
+        sy = M["leg_rows"].start - 2
         for i in range(7):
-            w = 6 + i
+            w = 5 + i
             for k in range(w * 2):
                 x = CX - w + k
                 lv = 2 if k < 3 else (0 if k > w * 2 - 4 else 1)
-                c.set(x, 32 + i - lift, bot.at(lv))
-        # legs peeking out below
+                c.set(x, sy + i - lift, bot.at(lv))
         sk: Ramp = R["skin"]
         shr: Ramp = R["shoes"]
+        base = sy + 7
         for i, dxx in enumerate((-5, 2)):
             o = swing if i == 0 else -swing
-            for k in range(max(1, 3 + o)):
+            legh = max(1, 2 + o)
+            for k in range(legh):
                 for w in range(3):
-                    c.set(CX + dxx + w, 39 + k - lift, sk.at(1 if w else 2))
+                    c.set(CX + dxx + w, base + k - lift, sk.at(1 if w else 2))
             for w in range(3):
-                c.set(CX + dxx + w, 39 + max(1, 3 + o) - lift, shr.at(1))
+                c.set(CX + dxx + w, base + legh - lift, shr.at(1))
+                c.set(CX + dxx + w, base + legh + 1 - lift, shr.at(0))
 
 
 # =====================================================================
 # hair
 # =====================================================================
 
-def _skull(c: Canvas, r: Ramp, d: str, lift: int, depth: int) -> None:
-    """Hair cap hugging the drawn skull.
+def _geom(M: dict, lift: int) -> tuple:
+    """(crown row, eye row, half width, head height) for the current build."""
+    return (M["head_top"] - lift, M["eye_row"] - lift,
+            M["head_hw"], M["head_h"])
+
+
+def _skull(c: Canvas, r: Ramp, d: str, M: dict, lift: int, hl: int) -> None:
+    """Hair cap hugging the drawn skull, cut off at the hairline row `hl`.
 
     The hairline is not a flat cut — it sits high over the forehead and drops
-    down past the temples, which is what stops it reading as a helmet.
+    down past the temples, which is what stops it reading as a helmet. `hl` is
+    an absolute row so every build keeps the same amount of visible face.
     """
-    top = BT.HEAD_TOP - lift
-    for x in range(CX - 10, CX + 11):
-        t = abs(x - CX) / 10.0
-        # deeper at the sides, shallower in the middle
-        limit = top + depth + int(t * t * 7)
+    top, eye, hw, hh = _geom(M, lift)
+    cy = top + hh * 0.42
+    for x in range(CX - hw - 1, CX + hw + 1):
+        t = abs(x - CX + 0.5) / float(hw)
+        limit = hl + int(t * t * (hh * 0.55))
         if d == "up":
-            limit = top + 15
-        for y in range(top - 3, limit + 1):
-            dx = (x - CX) / 9.2
-            dy = (y - (top + 8)) / 9.0
+            limit = top + hh
+        for y in range(top - 4, limit + 1):
+            dx = (x - CX + 0.5) / (hw + 0.7)
+            dy = (y - cy) / (hh * 0.56)
             if dx * dx + dy * dy > 1.0:
                 continue
             lv = 1
-            if dy < -0.5:
+            if dy < -0.45:
                 lv = 2
             if dx < -0.3 and dy < -0.1:
                 lv = 3
@@ -160,25 +176,87 @@ def _skull(c: Canvas, r: Ramp, d: str, lift: int, depth: int) -> None:
 
 def _spike(c: Canvas, r: Ramp, bx: int, by: int, tipx: int, tipy: int,
            width: int) -> None:
-    steps = max(abs(tipy - by), 1)
+    """A tapering lock of hair. Kept mostly in the base tone — a bright rim
+    on every spike turns a head of hair into a silver crown."""
+    steps = max(abs(tipy - by), abs(tipx - bx), 1)
     for i in range(steps + 1):
         t = i / steps
         x = bx + (tipx - bx) * t
         y = by + (tipy - by) * t
         w = max(1, int(width * (1.0 - t) + 0.5))
         for k in range(w):
-            c.set(int(x - w * 0.5 + k), int(y), r.at(3 if k == 0 else 1))
+            lv = 2 if (k == 0 and w > 2) else 1
+            c.set(int(x - w * 0.5 + k), int(y), r.at(lv))
+            c.set(int(x - w * 0.5 + k), int(y) + 1, r.at(0 if k == w - 1 else lv))
 
 
-def draw_hair_back(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
+def _fringe(c: Canvas, r: Ramp, M: dict, lift: int, hl: int,
+            teeth: tuple = (), depth: int = 2) -> None:
+    """Two rows of hair on the hairline plus optional pointed strands."""
+    _, eye, hw, _ = _geom(M, lift)
+    for x in range(CX - hw, CX + hw):
+        c.set(x, hl, r.at(2))
+        c.set(x, hl + 1, r.at(1))
+    for xo in teeth:
+        for k in range(depth):
+            for w in range(3 - k):
+                c.set(CX + xo + w, hl + 2 + k, r.at(1 if k == 0 else 0))
+
+
+def _side_locks(c: Canvas, r: Ramp, M: dict, lift: int, hl: int, length: int,
+                width: int = 2, flare: int = 0) -> None:
+    """Hair falling past the temples — the cheapest way to widen a head."""
+    _, _, hw, _ = _geom(M, lift)
+    for side in (-1, 1):
+        for i in range(length):
+            spread = int(i * flare / max(1, length))
+            for k in range(width):
+                x = CX + side * (hw - k + spread) - (1 if side < 0 else 0)
+                lv = 2 if side < 0 else 0
+                if k == width - 1:
+                    lv = max(0, lv - 1)
+                c.set(x, hl + i, r.at(lv))
+
+
+def _jag_cap(c: Canvas, r: Ramp, ra: Ramp, M: dict, lift: int, hl: int,
+             amp: int, spread: int, seed: str, step: int = 3) -> None:
+    """A connected mass of spiky hair.
+
+    Drawing separate spikes and outlining them turns a head of hair into a
+    comb, because every gap gets its own keyline. So the spikes are generated
+    as one jagged upper profile and the whole area below it is filled.
+    """
+    top, eye, hw, hh = _geom(M, lift)
+    rng = Rng(seed_of(seed))
+    xs = list(range(CX - hw - spread, CX + hw + spread + 1))
+    peaks = [rng.irange(0, amp) for _ in range(len(xs) // step + 2)]
+    for i, x in enumerate(xs):
+        g, f = divmod(i, step)
+        h = peaks[g] + (peaks[g + 1] - peaks[g]) * f / float(step)
+        t = (x - CX + 0.5) / float(hw + spread)
+        crown = top + 1 + int(abs(t) * 5) - int(h)
+        limit = hl + int(t * t * (hh * 0.7))
+        for y in range(crown, limit + 1):
+            lv = 1
+            if y < crown + 2:
+                lv = 2
+            if t < -0.3 and y < crown + 4:
+                lv = 3
+            elif t > 0.4:
+                lv = 0
+            c.set(x, y, (r if (g % 2 == 0) else ra).at(lv))
+
+
+def draw_hair_back(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                   R: dict) -> None:
     style = spec.hair_style
     r: Ramp = R["hair"]
-    top = BT.HEAD_TOP - lift
-    if style == "long":
-        length = 20
-        for y in range(top + 6, top + 6 + length):
-            t = (y - top - 6) / float(length)
-            w = int(11 - t * 3)
+    top, eye, hw, hh = _geom(M, lift)
+    if style in ("long", "veil", "sidelong"):
+        length = 22 if style != "veil" else 24
+        for y in range(top + 4, top + 4 + length):
+            t = (y - top - 4) / float(length)
+            w = int(hw + 2 - t * (2 if style == "veil" else 4))
             for x in range(CX - w, CX + w + 1):
                 lv = 1
                 if x < CX - w + 2:
@@ -186,186 +264,271 @@ def draw_hair_back(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> Non
                 elif x > CX + w - 3:
                     lv = 0
                 c.set(x, y, r.at(lv))
-        for x in range(CX - 8, CX + 9):
-            c.set(x, top + 6 + length, r.at(0))
+        for x in range(CX - hw + 1, CX + hw):
+            c.set(x, top + 4 + length, r.at(0))
+    elif style == "wave":
+        # big volume that reaches well past the shoulders on both sides
+        length = 24
+        for y in range(top + 3, top + 3 + length):
+            t = (y - top - 3) / float(length)
+            w = int(hw + 1 + t * 4 - (t * t) * 3)
+            for x in range(CX - w, CX + w + 1):
+                lv = 1
+                if x < CX - w + 3:
+                    lv = 2
+                elif x > CX + w - 3:
+                    lv = 0
+                c.set(x, y, r.at(lv))
+        for i, x in enumerate(range(CX - hw - 4, CX + hw + 5)):
+            c.set(x, top + 3 + length + (i % 2), r.at(0))
+    elif style == "mane":
+        shade_ellipse(c, CX - 0.5, top + 8, hw + 4.0, hw + 3.0, r)
+        for i in range(12):
+            t = i / 11.0
+            sx = CX - hw - 3 + int(t * (hw * 2 + 6))
+            _spike(c, r, sx, eye + 2, sx + int((t - 0.5) * 10),
+                   eye + 8 + int(abs(t - 0.5) * 8), 3)
     elif style == "ponytail":
-        tx = CX + (11 if d != "left" else -11)
-        for i in range(15):
-            w = 4 if i < 10 else 3
+        tx = CX + (hw + 2 if d != "left" else -hw - 2)
+        for i in range(16):
+            w = 4 if i < 11 else 3
             for k in range(w):
-                c.set(tx - w // 2 + k, top + 10 + i, r.at(2 if k == 0 else 1))
-        c.set(tx, top + 25, r.at(0))
-    elif style == "wild":
-        shade_ellipse(c, CX, top + 13, 11.0, 11.0, r)
+                c.set(tx - w // 2 + k, top + 6 + i, r.at(2 if k == 0 else 1))
+        c.set(tx, top + 22, r.at(0))
+    elif style in ("wild", "shag"):
+        shade_ellipse(c, CX - 0.5, top + 8, hw + 2.0, hw + 1.5, r)
     elif style == "star":
-        shade_ellipse(c, CX, top + 8, 10.5, 9.0, r)
+        shade_ellipse(c, CX - 0.5, top + 6, hw + 1.0, hw - 1.0, r)
 
 
-def draw_hair_front(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
+def draw_hair_front(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                    R: dict) -> None:
     style = spec.hair_style
     if style == "bald":
         return
     r: Ramp = R["hair"]
     ra: Ramp = R["hair2"]
-    top = BT.HEAD_TOP - lift
+    top, eye, hw, hh = _geom(M, lift)
+    hl = eye - 3          # hairline: two rows of hair, one row of forehead
 
     if style == "star":
-        edge = Ramp(mix(rgb(spec.hair), rgb("7c2c70"), 0.6))
-        _skull(c, r, d, lift, 7)
-        spikes = [(-14, -6), (-10, -13), (-5, -17), (1, -17), (7, -13), (12, -6)]
-        for i, (tx, ty) in enumerate(spikes):
-            _spike(c, r if i % 2 == 0 else edge,
-                   CX + tx // 2, top + 7, CX + tx, top + 7 + ty, 5)
+        edge = Ramp(mix(rgb(spec.hair), rgb("7c2c70"), 0.55))
+        _skull(c, r, d, M, lift, hl)
+        # five big black points — the single most recognisable outline in the
+        # whole franchise, so they get to leave the head by a long way
+        spikes = [(-15, -1), (-13, -5), (-7, -7), (1, -7), (8, -5), (14, -1)]
+        for tx, ty in spikes:
+            _spike(c, r, CX + tx // 2, top + 4, CX + tx, top + 4 + ty, 7)
+        for tx, ty in spikes[1:5]:
+            _spike(c, edge, CX + tx - (1 if tx < 0 else -1), top + 6 + ty,
+                   CX + tx, top + 4 + ty, 3)
         if d != "up":
             blond = ra if spec.hair2 else Ramp("f2d24a")
-            for bx, ty in ((-8, -9), (-3, -12), (2, -10), (7, -7)):
-                _spike(c, blond, CX + bx, top + 10, CX + bx - 1, top + 10 + ty, 4)
-            for sx in (-10, 8):
-                for i in range(8):
-                    c.set(CX + sx, top + 6 + i, blond.at(2 if i < 2 else 1))
-                    c.set(CX + sx + 1, top + 6 + i, blond.at(1))
+            # the bangs hang DOWN over the forehead — they are not spikes,
+            # and they stop at the brow so the eyes stay visible
+            for bx, ln in ((-9, 3), (-6, 4), (-2, 4), (2, 3)):
+                for i in range(ln):
+                    for k in range(3):
+                        lv = 2 if k == 0 else (0 if i == ln - 1 else 1)
+                        c.set(CX + bx + k, hl - 1 + i, blond.at(lv))
+            for sx in (-hw, hw - 2):
+                for i in range(9):
+                    c.set(CX + sx, hl - 1 + i, blond.at(2 if sx < 0 else 1))
+                    c.set(CX + sx + 1, hl - 1 + i, blond.at(1 if sx < 0 else 0))
     elif style == "spiky":
-        _skull(c, r, d, lift, 6)
-        for i in range(8):
-            bx = CX - 10 + i * 3
-            h = 6 + (i % 3) * 3
-            _spike(c, r if i % 2 == 0 else ra, bx, top + 4, bx + 1, top + 4 - h, 4)
+        _skull(c, r, d, M, lift, hl)
+        _jag_cap(c, r, ra, M, lift, hl, 6, 1, spec.key, step=2)
+        if d != "up":
+            _fringe(c, r, M, lift, hl, teeth=(-7, -1, 4))
+    elif style == "shag":
+        _skull(c, r, d, M, lift, hl)
+        _jag_cap(c, r, ra, M, lift, hl, 3, 2, spec.key, step=4)
+        _side_locks(c, r, M, lift, hl, 11, 3, flare=2)
+        if d != "up":
+            _fringe(c, ra, M, lift, hl, teeth=(-8, -4, 1, 5), depth=3)
     elif style == "wild":
-        _skull(c, r, d, lift, 8)
-        rng = Rng(seed_of(spec.key))
-        for i in range(10):
-            t = i / 9.0
-            bx = CX - 10 + int(t * 20)
-            base = top + 3 + int(abs(t - 0.5) * 5)
-            h = rng.irange(4, 8)
-            lean = int((t - 0.5) * 8)
-            _spike(c, r if i % 2 else ra, bx, base, bx + lean, base - h, 4)
+        _skull(c, r, d, M, lift, hl + 1)
+        _jag_cap(c, r, ra, M, lift, hl + 1, 5, 2, spec.key)
         if d != "up":
-            for sx in (-10, 9):
-                for i in range(rng.irange(6, 10)):
-                    c.set(CX + sx, top + 8 + i, r.at(2 if sx < 0 else 1))
-                    c.set(CX + sx + (1 if sx < 0 else -1), top + 8 + i, r.at(0))
-    elif style == "bob":
-        _skull(c, r, d, lift, 6)
-        for sx in (-10, 9):
-            for i in range(12):
-                c.set(CX + sx, top + 5 + i, r.at(2 if sx < 0 else 0))
-                c.set(CX + sx + (1 if sx < 0 else -1), top + 5 + i, r.at(1))
+            _side_locks(c, r, M, lift, hl + 2, 7, 2, flare=2)
+    elif style == "mane":
+        _skull(c, r, d, M, lift, hl)
+        _jag_cap(c, r, ra, M, lift, hl, 4, 5, spec.key, step=4)
         if d != "up":
-            for x in range(CX - 9, CX + 10):
-                c.set(x, top + 6, r.at(2)); c.set(x, top + 7, r.at(1))
-    elif style == "long":
-        _skull(c, r, d, lift, 6)
+            _side_locks(c, r, M, lift, hl, 14, 3, flare=4)
+            _fringe(c, r, M, lift, hl, teeth=(-6, 0, 4))
+    elif style == "wave":
+        _skull(c, r, d, M, lift, hl)
         if d != "up":
-            for x in range(CX - 9, CX - 1):
-                c.set(x, top + 6, r.at(2)); c.set(x, top + 7, r.at(1))
-            for x in range(CX + 2, CX + 10):
-                c.set(x, top + 6, r.at(1)); c.set(x, top + 7, r.at(0))
-            for sx in (-10, 9):
-                for i in range(10):
-                    c.set(CX + sx, top + 6 + i, r.at(2 if sx < 0 else 0))
-    elif style == "flat":
-        _skull(c, r, d, lift, 6)
-        if d != "up":
-            for x in range(CX - 9, CX + 10):
-                c.set(x, top + 5, r.at(2)); c.set(x, top + 6, r.at(1))
-            for i in range(5):
-                c.set(CX - 10, top + 6 + i, r.at(1))
-                c.set(CX + 9, top + 6 + i, r.at(0))
-    else:  # short
-        _skull(c, r, d, lift, 6)
-        if d != "up":
-            for x in range(CX - 9, CX + 10):
-                c.set(x, top + 6, r.at(2))
+            _fringe(c, r, M, lift, hl, teeth=(-7, 3))
             for i in range(4):
-                c.set(CX - 10, top + 6 + i, r.at(1))
-                c.set(CX + 9, top + 6 + i, r.at(0))
+                c.set(CX - hw + 1 + i, hl + 2 + i, r.at(1))
+                c.set(CX + hw - 2 - i, hl + 2 + i, r.at(0))
+        _side_locks(c, r, M, lift, hl, 14, 3, flare=4)
+    elif style == "bowl":
+        _skull(c, r, d, M, lift, hl + 1)
+        if d != "up":
+            for x in range(CX - hw - 1, CX + hw + 1):
+                c.set(x, hl + 1, r.at(2))
+                c.set(x, hl + 2, r.at(1))
+                c.set(x, hl + 3, r.at(0))
+    elif style == "bob":
+        _skull(c, r, d, M, lift, hl)
+        _side_locks(c, r, M, lift, hl, 12, 2, flare=1)
+        if d != "up":
+            _fringe(c, r, M, lift, hl, teeth=(-6, 2))
+    elif style == "veil":
+        _skull(c, r, d, M, lift, hl)
+        _side_locks(c, r, M, lift, hl, 18, 3)
+        if d != "up":
+            _fringe(c, r, M, lift, hl)
+    elif style == "sidelong":
+        _skull(c, r, d, M, lift, hl)
+        _side_locks(c, r, M, lift, hl, 16, 3, flare=1)
+        if d != "up":
+            # a curtain of hair over one eye — Pegasus in one gesture
+            for i in range(7):
+                for k in range(3):
+                    c.set(CX - hw + 1 + i, hl + i + k, r.at(2 - k))
+            for x in range(CX - 1, CX + hw):
+                c.set(x, hl, r.at(1))
+                c.set(x, hl + 1, r.at(0))
+    elif style == "long":
+        _skull(c, r, d, M, lift, hl)
+        _side_locks(c, r, M, lift, hl, 12, 2, flare=2)
+        if d != "up":
+            for x in range(CX - hw, CX - 1):
+                c.set(x, hl, r.at(2))
+                c.set(x, hl + 1, r.at(1))
+            for x in range(CX + 1, CX + hw):
+                c.set(x, hl, r.at(1))
+                c.set(x, hl + 1, r.at(0))
+    elif style == "flat":
+        _skull(c, r, d, M, lift, hl)
+        if d != "up":
+            _fringe(c, r, M, lift, hl, teeth=(-7, -2, 3), depth=2)
+            _side_locks(c, r, M, lift, hl, 8, 2)
+    else:  # short
+        _skull(c, r, d, M, lift, hl)
+        if d != "up":
+            for x in range(CX - hw, CX + hw):
+                c.set(x, hl, r.at(2))
+            _side_locks(c, r, M, lift, hl, 5, 2)
 
 
-def draw_headgear(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
+def draw_headgear(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                  R: dict) -> None:
     if not spec.headgear:
         return
     g = R["gear"]
     k = spec.headgear
-    top = BT.HEAD_TOP - lift
+    top, eye, hw, hh = _geom(M, lift)
+    hl = eye - 3
     if k == "cap":
-        shade_ellipse(c, CX, top + 5, 10.0, 6.0, g)
-        for x in range(CX - 10, CX + 11):
-            c.set(x, top + 4, g.at(2)); c.set(x, top + 5, g.at(1))
-        brim = top + 9
+        shade_ellipse(c, CX - 0.5, top + 3, hw + 0.5, 5.0, g)
+        for x in range(CX - hw, CX + hw):
+            c.set(x, top + 2, g.at(2))
+            c.set(x, top + 3, g.at(1))
+        brim = hl
         if d == "down":
-            for x in range(CX - 11, CX + 12):
-                c.set(x, brim, g.at(0)); c.set(x, brim + 1, g.at(0))
+            for x in range(CX - hw - 2, CX + hw + 2):
+                c.set(x, brim, g.at(0))
+                c.set(x, brim + 1, g.at(0))
         elif d == "up":
-            for x in range(CX - 10, CX + 11):
-                c.set(x, top + 1, g.at(0))
+            for x in range(CX - hw, CX + hw):
+                c.set(x, top, g.at(0))
         else:
-            for x in range(CX + 2, CX + 13):
-                c.set(x, brim, g.at(0)); c.set(x, brim + 1, g.at(0))
+            for x in range(CX + 2, CX + hw + 5):
+                c.set(x, brim, g.at(0))
+                c.set(x, brim + 1, g.at(0))
     elif k == "band":
-        for x in range(CX - 10, CX + 11):
-            c.set(x, top + 6, g.at(2)); c.set(x, top + 7, g.at(1))
-            c.set(x, top + 8, g.at(0))
-        for x in range(CX - 8, CX + 9, 3):
-            c.set(x, top + 7, rgb("f4f4f8"))
+        for x in range(CX - hw - 1, CX + hw + 1):
+            c.set(x, hl, g.at(2))
+            c.set(x, hl + 1, g.at(1))
+        for x in range(CX - hw + 1, CX + hw, 3):
+            c.set(x, hl + 1, rgb("f4f4f8"))
         for i in range(10):
-            c.set(CX - 11, top + 9 + i, g.at(1))
-            c.set(CX - 10, top + 9 + i, g.at(0))
+            c.set(CX - hw - 2, hl + 2 + i, g.at(1))
+            c.set(CX - hw - 1, hl + 2 + i, g.at(0))
     elif k == "hood":
-        shade_ellipse(c, CX, top + 9, 12.0, 11.5, g)
-        for y in range(top + 4, top + 18):
-            for x in range(CX - 8, CX + 9):
-                dx, dy = (x - CX) / 8.0, (y - top - 11) / 7.5
+        shade_ellipse(c, CX - 0.5, top + 7, hw + 3.0, hw + 2.5, g)
+        for y in range(top + 2, eye + 5):
+            for x in range(CX - hw, CX + hw):
+                dx = (x - CX + 0.5) / float(hw - 1)
+                dy = (y - top - hh * 0.5) / (hh * 0.46)
                 if dx * dx + dy * dy <= 1.0:
                     c.set(x, y, rgb("140f1c"))
-        for x in range(CX - 12, CX + 13):
-            c.set(x, top + 18, g.at(1)); c.set(x, top + 19, g.at(0))
+        by = M["body_top"] - lift
+        for x in range(CX - hw - 4, CX + hw + 4):
+            c.set(x, by - 2, g.at(1))
+            c.set(x, by - 1, g.at(0))
     elif k == "egypt":
-        for x in range(CX - 10, CX + 11):
-            c.set(x, top + 3, g.at(2)); c.set(x, top + 4, g.at(1))
-            c.set(x, top + 5, rgb("f0d060")); c.set(x, top + 6, rgb("b89830"))
-        for sx in (-11, 10):
+        for x in range(CX - hw, CX + hw):
+            c.set(x, hl - 2, g.at(2))
+            c.set(x, hl - 1, g.at(1))
+            c.set(x, hl, rgb("f0d060"))
+            c.set(x, hl + 1, rgb("b89830"))
+        for sx in (-hw - 1, hw):
             for i in range(13):
-                c.set(CX + sx, top + 7 + i, g.at(2 if sx < 0 else 0))
-                c.set(CX + sx + (1 if sx < 0 else -1), top + 7 + i, g.at(1))
+                c.set(CX + sx, hl + 2 + i, g.at(2 if sx < 0 else 0))
+                c.set(CX + sx + (1 if sx < 0 else -1), hl + 2 + i, g.at(1))
         if d == "down":
-            _spike(c, Ramp("f0d060"), CX, top + 4, CX, top - 2, 5)
+            _spike(c, Ramp("f0d060"), CX, hl - 1, CX, top - 3, 5)
     elif k == "crown":
-        for x in range(CX - 9, CX + 10):
-            c.set(x, top + 2, rgb("f0d060")); c.set(x, top + 3, rgb("c8a020"))
+        for x in range(CX - hw + 1, CX + hw):
+            c.set(x, top + 1, rgb("f0d060"))
+            c.set(x, top + 2, rgb("c8a020"))
         for i in range(4):
-            _spike(c, Ramp("f0d060"), CX - 7 + i * 5, top + 2,
-                   CX - 7 + i * 5, top - 3, 4)
+            _spike(c, Ramp("f0d060"), CX - 7 + i * 5, top + 1,
+                   CX - 7 + i * 5, top - 4, 4)
 
 
-def draw_face_extras(c: Canvas, spec: CharSpec, d: str, lift: int) -> None:
-    """Shades and headphones sit over the template's eyes."""
-    top = BT.HEAD_TOP - lift
-    ey = top + 9
+def draw_face_extras(c: Canvas, spec: CharSpec, d: str, M: dict,
+                     lift: int) -> None:
+    """Shades, glasses and headphones sit over the template's eyes."""
+    top, eye, hw, hh = _geom(M, lift)
     if d == "up":
         return
     if spec.accessory == "shades":
-        for x in range(CX - 10, CX + 11):
-            c.set(x, ey, rgb("14141c")); c.set(x, ey + 1, rgb("1e1e2a"))
-            c.set(x, ey + 2, rgb("14141c")); c.set(x, ey + 3, rgb("101018"))
-        for x in range(CX - 9, CX - 4):
-            c.set(x, ey + 1, rgb("6a6a8c"))
+        for x in range(CX - hw, CX + hw):
+            c.set(x, eye - 1, rgb("14141c"))
+            c.set(x, eye, rgb("1e1e2a"))
+            c.set(x, eye + 1, rgb("14141c"))
+            c.set(x, eye + 2, rgb("101018"))
+        for x in range(CX - hw + 1, CX - hw + 5):
+            c.set(x, eye, rgb("6a6a8c"))
+    elif spec.accessory == "glasses":
+        rim = rgb("2a2a34")
+        for x in range(CX - hw, CX + hw):
+            c.set(x, eye - 2, rim)
+            c.set(x, eye + 3, rim)
+        for x in (CX - hw, CX - hw + 5, CX - 1, CX + 1, CX + hw - 6, CX + hw - 1):
+            for i in range(6):
+                c.set(x, eye - 2 + i, rim)
+        # a flash of white across the lenses hides the eyes entirely
+        for x in range(CX - hw + 1, CX - hw + 5):
+            for i in range(3):
+                c.set(x, eye - 1 + i, rgb("cfe4f4"))
+        for x in range(CX + hw - 5, CX + hw - 1):
+            for i in range(3):
+                c.set(x, eye - 1 + i, rgb("aac6dc"))
     elif spec.accessory == "headphones":
-        for sx in (-12, 10):
+        for sx in (-hw - 2, hw):
             for i in range(9):
-                c.set(CX + sx, ey - 3 + i, rgb("24242e"))
-                c.set(CX + sx + 1, ey - 3 + i, rgb("34343f"))
-            c.set(CX + sx + 1, ey, rgb("58a8e0"))
-        for x in range(CX - 11, CX + 12):
-            c.set(x, top + 2, rgb("24242e"))
+                c.set(CX + sx, eye - 4 + i, rgb("24242e"))
+                c.set(CX + sx + 1, eye - 4 + i, rgb("34343f"))
+            c.set(CX + sx + 1, eye - 1, rgb("58a8e0"))
+        for x in range(CX - hw - 1, CX + hw + 1):
+            c.set(x, top + 1, rgb("24242e"))
 
 
-def draw_chest_item(c: Canvas, spec: CharSpec, d: str, lift: int) -> None:
+def draw_chest_item(c: Canvas, spec: CharSpec, d: str, M: dict,
+                    lift: int) -> None:
     a = spec.accessory
-    if d == "up" or a in ("", "shades", "headphones"):
+    if d == "up" or a in ("", "shades", "glasses", "headphones"):
         return
     gold = Ramp("e8c246")
-    by = BT.BODY_TOP - lift
+    by = M["body_top"] - lift
     if a == "puzzle":
         for x in range(CX - 6, CX + 7):
             c.set(x, by + 1, rgb("9a7c28"))
@@ -407,68 +570,110 @@ def draw_chest_item(c: Canvas, spec: CharSpec, d: str, lift: int) -> None:
         shade_ellipse(c, hx, by, 3.0, 3.0, gold)
 
 
-def draw_coat(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
-    if not spec.coat:
+def draw_outfit(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                R: dict) -> None:
+    """Clothing that changes the outline, not just the fill colour."""
+    kind = spec.outfit or ("coat" if spec.coat else "")
+    if not kind:
         return
     co: Ramp = R["coat"]
-    by = BT.BODY_TOP - lift
-    tail = 20
+    by = M["body_top"] - lift
+    hw = M["half_w"]
+    foot = M["leg_rows"].stop - lift
+
+    if kind == "robe":
+        # a wide trapezoid that swallows the legs — reads instantly as
+        # "not a schoolkid"
+        h = foot - by - 1
+        for yy in range(h):
+            t = yy / float(h)
+            w = int(8 + t * (hw - 1))
+            for k in range(w * 2):
+                x = CX - w + k
+                lv = 2 if k < 3 else (0 if k > w * 2 - 4 else 1)
+                if yy == h - 1:
+                    lv = 0
+                c.set(x, by + yy, co.at(lv))
+        for x in range(CX - 2, CX + 3):
+            for yy in range(h - 2):
+                c.set(x, by + yy, co.at(0))
+        return
+
+    if kind == "cape":
+        h = foot - by - 6
+        for yy in range(h):
+            t = yy / float(h)
+            w = int(hw - 2 + t * 4)
+            for k in range(w * 2):
+                x = CX - w + k
+                if 6 < k < w * 2 - 7 and yy < h - 2:
+                    continue
+                lv = 2 if k < 3 else (0 if k > w * 2 - 4 else 1)
+                c.set(x, by + yy, co.at(lv))
+        return
+
+    # coat: long panels that flare well outside the body silhouette
+    tail = foot - by - 5
     if d == "up":
         for yy in range(tail):
-            for xx in range(22):
-                x = CX - 11 + xx
-                lv = 2 if xx < 3 else (0 if xx > 18 else 1)
+            t = yy / float(tail)
+            w = int(hw - 1 + t * 3)
+            for k in range(w * 2):
+                x = CX - w + k
+                lv = 2 if k < 3 else (0 if k > w * 2 - 4 else 1)
                 if yy == tail - 1:
                     lv = 0
                 c.set(x, by + yy, co.at(lv))
     else:
-        # an open coat: two narrow panels that flare outward, framing the
-        # torso rather than covering it
-        for side, x0 in ((-1, CX - 11), (1, CX + 8)):
+        for side in (-1, 1):
             for yy in range(tail):
-                flare = 1 if yy > tail - 7 else 0
-                for xx in range(3 + flare):
-                    x = x0 + xx - (flare if side < 0 else 0)
+                t = yy / float(tail)
+                flare = int(t * t * 4)
+                base = hw - 1 + flare
+                for xx in range(3):
+                    x = CX + side * (base - xx) - (1 if side < 0 else 0)
                     lv = 2 if side < 0 else 0
                     if xx == 0 and side < 0:
                         lv = 3
                     if yy == tail - 1:
                         lv = 0
                     c.set(x, by + yy, co.at(lv))
-        # collar only, so the chest and any Millennium item stay visible
-        for xx in range(21):
-            x = CX - 10 + xx
-            c.set(x, by, co.at(2))
-            if xx < 5 or xx > 15:
-                c.set(x, by + 1, co.at(1))
-                c.set(x, by + 2, co.at(1 if xx < 10 else 0))
+        for xx in range(hw * 2 - 3):
+            x = CX - hw + 1 + xx
+            c.set(x, by - 1, co.at(2))
+            if xx < 6 or xx > hw * 2 - 10:
+                c.set(x, by, co.at(2 if xx < hw else 1))
+                c.set(x, by + 1, co.at(1 if xx < hw else 0))
 
 
-def draw_duel_disk(c: Canvas, spec: CharSpec, d: str, lift: int, step: int,
-                   R: dict) -> None:
+def draw_duel_disk(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                   step: int, R: dict) -> None:
     if not spec.duel_disk or d == "up":
         return
     disk = R["disk"]
     arm = (0, -1, 0, 1)[step]
-    by = BT.BODY_TOP - lift
-    ax = CX - 12 if d != "right" else CX + 9
-    ay = by + 9 + arm
-    for yy in range(4):
-        for xx in range(4):
-            lv = 2 if yy == 0 else (0 if yy == 3 else 1)
+    by = M["body_top"] - lift
+    hw = M["half_w"]
+    ax = CX - hw if d != "right" else CX + hw - 5
+    ay = by + 8 + arm
+    for yy in range(5):
+        for xx in range(5):
+            lv = 2 if yy == 0 else (0 if yy == 4 else 1)
             c.set(ax + xx, ay + yy, disk.at(lv))
     blade_dir = -1 if d != "right" else 1
-    bx = ax + (0 if blade_dir < 0 else 3)
-    for i in range(4):
+    bx = ax + (0 if blade_dir < 0 else 4)
+    for i in range(5):
         x = bx + blade_dir * i
         for k in range(2):
             c.set(x, ay - 1 - k, disk.at(2 if k else 1))
-        if i < 3:
+        if i < 4:
             c.set(x, ay - 3, rgb("8ad8ff"))
+            c.set(x, ay - 4, rgb("3a7ab0"))
 
 
-def draw_extras(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
-    by = BT.BODY_TOP - lift
+def draw_extras(c: Canvas, spec: CharSpec, d: str, M: dict, lift: int,
+                R: dict) -> None:
+    by = M["body_top"] - lift
     if spec.scarf:
         sc = Ramp(spec.scarf)
         for xx in range(16):
@@ -480,11 +685,12 @@ def draw_extras(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
                 c.set(CX + 5, by + 2 + i, sc.at(0))
     if spec.belt:
         bl: Ramp = R["belt"]
+        wy = M["leg_rows"].start - lift - 3
         for xx in range(15):
-            c.set(CX - 7 + xx, by + 8, bl.at(2 if xx < 7 else 1))
-            c.set(CX - 7 + xx, by + 9, bl.at(0))
-        c.set(CX, by + 8, rgb("e8c246"))
-        c.set(CX + 1, by + 8, rgb("b8902a"))
+            c.set(CX - 7 + xx, wy, bl.at(2 if xx < 7 else 1))
+            c.set(CX - 7 + xx, wy + 1, bl.at(0))
+        c.set(CX, wy, rgb("e8c246"))
+        c.set(CX + 1, wy, rgb("b8902a"))
 
 
 # =====================================================================
@@ -494,6 +700,7 @@ def draw_extras(c: Canvas, spec: CharSpec, d: str, lift: int, R: dict) -> None:
 def draw_body(c: Canvas, spec: CharSpec, d: str, step: int) -> None:
     R = spec.ramps()
     lift = min(spec.tall, 3)
+    rows, M = BT.template(d, spec.build)
 
     # ground contact shadow
     for yy in range(2):
@@ -503,15 +710,29 @@ def draw_body(c: Canvas, spec: CharSpec, d: str, step: int) -> None:
             if dx * dx + dy * dy <= 1.0:
                 c.set(CX + xx, 41 + yy, (12, 10, 22, 90))
 
-    draw_hair_back(c, spec, d, lift, R)
-    _paint(c, spec, d, step, R)
-    draw_coat(c, spec, d, lift, R)
-    draw_extras(c, spec, d, lift, R)
-    draw_face_extras(c, spec, d, lift)
-    draw_hair_front(c, spec, d, lift, R)
-    draw_headgear(c, spec, d, lift, R)
-    draw_chest_item(c, spec, d, lift)
-    draw_duel_disk(c, spec, d, lift, step, R)
+    # Everything that leaves the body outline is drawn on its own layer and
+    # outlined before it is composited. Without that dark keyline hair and
+    # coats dissolve into the map, which is exactly what a Gen-5 sprite
+    # never does.
+    def layered(fn, *a):
+        lay = Canvas(FW, FH)
+        fn(lay, spec, d, M, lift, *a)
+        lay.outline(OUTLINE)
+        c.blit(lay, 0, 0)
+
+    layered(draw_hair_back, R)
+    _paint(c, spec, d, step, R, M, rows)
+    layered(draw_outfit, R)
+    draw_extras(c, spec, d, M, lift, R)
+    draw_face_extras(c, spec, d, M, lift)
+    layered(draw_hair_front, R)
+    layered(draw_headgear, R)
+    draw_chest_item(c, spec, d, M, lift)
+
+    disk = Canvas(FW, FH)
+    draw_duel_disk(disk, spec, d, M, lift, step, R)
+    disk.outline(OUTLINE)
+    c.blit(disk, 0, 0)
 
 
 def render_sheet(spec: CharSpec) -> Canvas:
@@ -533,8 +754,9 @@ def render_portrait(spec: CharSpec, size: int = 96) -> Canvas:
     c = Canvas(size, size)
     small = Canvas(FW, FH)
     draw_body(small, spec, "down", 0)
+    _, M = BT.template("down", spec.build)
     lift = min(spec.tall, 3)
-    crop = small.sub(1, max(0, BT.HEAD_TOP - lift - 4), 30, 28)
+    crop = small.sub(1, max(0, M["head_top"] - lift - 6), 30, 28)
     scale = max(1, size // 30)
     ox = (size - crop.w * scale) // 2
     for y in range(crop.h):

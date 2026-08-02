@@ -19,13 +19,14 @@ class Ramp:
         b = rgb(base) if isinstance(base, str) else base
         # shadows drift toward blue-violet, lights toward warm yellow —
         # a cheap trick that reads as real lighting instead of grey mixing
-        cool = rgb("2a2450")
-        hot = rgb("fff0c8")
+        cool = rgb("1c1838")
+        hot = rgb("fff6dc")
         self.base = b
-        self.shadow = mix(b, cool, 0.34 if not warm else 0.28)
-        self.light = mix(b, hot, 0.26)
-        self.rim = mix(b, hot, 0.52)
-        self.line = mix(b, rgb("120e1c"), 0.62)
+        # the spread has to be wide: at 32px a subtle ramp reads as flat colour
+        self.shadow = mix(b, cool, 0.52 if not warm else 0.44)
+        self.light = mix(b, hot, 0.36)
+        self.rim = mix(b, hot, 0.68)
+        self.line = mix(b, rgb("120e1c"), 0.66)
 
     def at(self, level: int) -> Color:
         return (self.shadow, self.base, self.light, self.rim)[max(0, min(3, level))]
